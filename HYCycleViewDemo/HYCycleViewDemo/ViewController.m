@@ -24,6 +24,9 @@
 static NSString *const HYContentViewCellID = @"contentView";
 static NSString *const HYImageViewCellID = @"ImageView";
 
+// 判断iPhone6 Plus
+#define iPhone6_Plus ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2208), [[UIScreen mainScreen] currentMode].size) : NO)//适配相关
+
 @implementation ViewController
 
 - (void)viewDidLoad {
@@ -109,7 +112,11 @@ static NSString *const HYImageViewCellID = @"ImageView";
     if (indexPath.section == 1) {
         return 110;
     } else {
-        return 180;
+        if (iPhone6_Plus) {
+            return 200;
+        } else {
+            return 180;
+        }
     }
 }
 

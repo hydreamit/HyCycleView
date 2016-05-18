@@ -53,4 +53,10 @@
     
 }
 
+- (void)setTimeInterval:(NSTimeInterval)timeInterval
+{
+    _timeInterval = timeInterval;
+    _cycleView.timeInterval = timeInterval;
+}
+
 @end

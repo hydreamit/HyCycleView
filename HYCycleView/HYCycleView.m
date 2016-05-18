@@ -32,7 +32,7 @@ typedef enum {
 #define HYMsgSend(...) ((void (*)(void *, SEL, id))objc_msgSend)(__VA_ARGS__)
 #define HYMsgTarget(target) (__bridge void *)(target)
 static int const ContentViewCount = 3;
-
+static NSInteger _lastPage;
 @implementation HYCycleView
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -145,9 +145,30 @@ static int const ContentViewCount = 3;
     }
 }
 
+- (void)ResetScrollViewContentSize
+{
+    switch (self.scrollDirection) {
+        case HYCycleViewScrollLeft :
+            self.scrollView.contentSize = CGSizeMake(ContentViewCount * self.bounds.size.width, 0);
+            break;
+        case HYCycleViewScrollRight :
+            self.scrollView.contentSize = CGSizeMake(ContentViewCount * self.bounds.size.width, 0);
+            break;
+        case HYCycleViewScrollTop :
+            self.scrollView.contentSize = CGSizeMake(0, ContentViewCount * self.bounds.size.height);
+            break;
+        case HYCycleViewScrollBottom :
+            self.scrollView.contentSize = CGSizeMake(0, ContentViewCount * self.bounds.size.height);
+            break;
+        default:
+            break;
+    }
+}
+
+
 - (void)setFrameOfContentViewIndex:(NSInteger)index
 {
-     UIView *contentView = self.scrollView.subviews[index];
+    UIView *contentView = self.scrollView.subviews[index];
     switch (self.scrollDirection) {
         case HYCycleViewScrollLeft:
         case HYCycleViewScrollRight:
@@ -170,16 +191,16 @@ static int const ContentViewCount = 3;
     CGFloat minDistance = MAXFLOAT;
     for (int i = 0; i<self.scrollView.subviews.count; i++) {
         UIView *contentView = self.scrollView.subviews[i];
-         CGFloat distance = 0;
+        CGFloat distance = 0;
         switch (self.scrollDirection) {
             case HYCycleViewScrollLeft:
-               distance = ABS(contentView.frame.origin.x - scrollView.contentOffset.x);
+                distance = ABS(contentView.frame.origin.x - scrollView.contentOffset.x);
                 break;
             case HYCycleViewScrollRight :
                 distance = ABS(scrollView.contentOffset.x - contentView.frame.origin.x );
                 break;
             case HYCycleViewScrollTop :
-                 distance = ABS(contentView.frame.origin.y - scrollView.contentOffset.y);
+                distance = ABS(contentView.frame.origin.y - scrollView.contentOffset.y);
                 break;
             case HYCycleViewScrollBottom :
                 distance = ABS(scrollView.contentOffset.y - contentView.frame.origin.y );
@@ -194,13 +215,14 @@ static int const ContentViewCount = 3;
             page = contentView.tag;
         }
     }
+    
     self.pageControl.currentPage = page;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     if (self.pageControl.numberOfPages >1 && self.timerStyle == HYCycleViewTimerStart) {
-         [self stopTimer];
+        [self stopTimer];
     }
 }
 
@@ -252,10 +274,9 @@ static int const ContentViewCount = 3;
             if (index == self.pageControl.numberOfPages - 1) {
                 self.index = 0;
             } else {
-                 self.index = index + 1;
+                self.index = index + 1;
             }
         }
-        
         if (!self.dateArray.count) {
             return;
         }
@@ -333,7 +354,7 @@ static int const ContentViewCount = 3;
 #pragma mark - 定时器
 - (void)startTimer
 {
-    NSTimer *timer = [NSTimer timerWithTimeInterval:self.timeInterval ? self.timeInterval : 2 target:self selector:@selector(next) userInfo:nil repeats:YES];
+    NSTimer *timer = [NSTimer timerWithTimeInterval:self.timeInterval target:self selector:@selector(next) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
     self.timer = timer;
 }
@@ -389,7 +410,7 @@ static int const ContentViewCount = 3;
     _models = models;
     [self stopTimer];
     [self createCycleViewOfContentViewType:self.contentViewType contentViewClass:self.contentViewClass contentViewNibName:self.ContentViewNibName ContentViewModels:models timerStyle:self.timerStyle resetModel:YES];
-   
+    
 }
 
 - (void)setLocalImageNameArray:(NSMutableArray *)localImageNameArray
@@ -397,7 +418,7 @@ static int const ContentViewCount = 3;
     _localImageNameArray = localImageNameArray;
     [self stopTimer];
     [self createCycleViewOfContentViewType:self.contentViewType contentViewClass:self.contentViewClass contentViewNibName:self.ContentViewNibName ContentViewModels:localImageNameArray timerStyle:self.timerStyle resetModel:YES];
-   
+    
 }
 
 - (void)setNetImageUrlArray:(NSMutableArray *)NetImageUrlArray
@@ -409,9 +430,14 @@ static int const ContentViewCount = 3;
 
 - (void)setTimeInterval:(NSTimeInterval)timeInterval
 {
+    if (timeInterval <= 0) {
+        timeInterval = 2;
+    }
     _timeInterval = timeInterval;
-    [self stopTimer];
-    [self startTimer];
+    if (self.timerStyle == HYCycleViewTimerStart) {
+        [self stopTimer];
+        [self startTimer];
+    }
 }
 
 - (void)setImageViewContentMode:(UIViewContentMode)imageViewContentMode
@@ -446,11 +472,6 @@ static int const ContentViewCount = 3;
                 contentView = [[[NSBundle mainBundle] loadNibNamed:contentViewNibName owner:nil options:nil] lastObject];
             }
             contentView.userInteractionEnabled = YES;
-//            if ([NSStringFromClass(self.contentViewClass) isEqualToString:@"UIImageView"]) {
-//                UIImageView *imageView = (UIImageView *)contentView;
-//                imageView.contentMode = UIViewContentModeScaleAspectFill;
-//                imageView.clipsToBounds = YES;
-//            }
             [self.scrollView addSubview:contentView];
             [self setFrameOfContentViewIndex:i];
         }
@@ -458,12 +479,14 @@ static int const ContentViewCount = 3;
     }
     
     if (self.lastScrollDirection != self.scrollDirection ) {
-        [self setScrollViewContentSize];
         if (self.scrollView.subviews.count) {
             for (int i = 0; i<ContentViewCount; i++) {
                 [self setFrameOfContentViewIndex:i];
+                [self resetContentViewTagIndex:i]; // 改变方向从第一张开始
             }
+            
         }
+        [self setScrollViewContentSize];
     }
     
     if (ContentViewModels.count == 0) {
@@ -478,11 +501,10 @@ static int const ContentViewCount = 3;
         }
         self.pageControl.hidden = NO;
     }
-
+    
     self.pageControl.numberOfPages = ContentViewModels.count;
-
     [self updateContent];
-
+    
     if (ContentViewModels.count == 1) {
         [self stopTimer];
         self.scrollView.scrollEnabled = NO;
@@ -495,6 +517,24 @@ static int const ContentViewCount = 3;
         } else {
             [self stopTimer];
         }
+    }
+}
+
+
+- (void)resetContentViewTagIndex:(NSInteger)index
+{
+    UIView *contentView = self.scrollView.subviews[index];
+    switch (self.scrollDirection) {
+        case HYCycleViewScrollLeft :
+        case HYCycleViewScrollTop :
+            contentView.tag = 0;
+            break;
+        case HYCycleViewScrollRight :
+        case HYCycleViewScrollBottom :
+            contentView.tag = self.dateArray.count - 1;
+            break;
+        default:
+            break;
     }
 }
 

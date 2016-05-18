@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSArray *dictArray;
 @property (nonatomic, strong) NSMutableArray *contentViewModels;
 @property (nonatomic, assign) NSInteger startDirection;
+@property (nonatomic, assign) NSTimeInterval timeInterval;
 @end
 
 static NSString *const HYContentViewCellID = @"contentView";
@@ -31,10 +32,12 @@ static NSString *const HYImageViewCellID = @"ImageView";
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     
+    self.timeInterval = 1.5;
+    
     _HYTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _HYTableView.delegate = self;
     _HYTableView.dataSource = self;
-    _HYTableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
+    _HYTableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
     _HYTableView.scrollIndicatorInsets = _HYTableView.contentInset;
     _HYTableView.backgroundColor = [UIColor clearColor];
     _HYTableView.backgroundView.backgroundColor = [UIColor clearColor];
@@ -52,8 +55,29 @@ static NSString *const HYImageViewCellID = @"ImageView";
     
     [_HYTableView registerClass:[HYImageViewCell class] forCellReuseIdentifier:HYImageViewCellID];
     [_HYTableView registerClass:[HYContentViewCell class] forCellReuseIdentifier:HYContentViewCellID];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - 80) / 2, 20, 80, 35);
+    btn.backgroundColor = [UIColor redColor];
+    [btn setTitle:@"刷新" forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(click) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
 }
 
+- (void)click
+{
+    self.startDirection += 2;
+    
+    if (self.timeInterval <= 1.5) {
+        self.timeInterval -= 0.5;
+        if (self.timeInterval == 0) {
+            self.timeInterval = 1.5;
+        }
+    }
+    
+    [_HYTableView reloadData];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -68,12 +92,14 @@ static NSString *const HYImageViewCellID = @"ImageView";
     if (indexPath.section == 1) {
         HYImageViewCell *cell = [tableView dequeueReusableCellWithIdentifier:HYImageViewCellID];
         cell.images = self.netImages;
-        cell.scrollDirection = (HYCycleViewScrollDirection)(indexPath.row + 2 + self.startDirection);
+        cell.scrollDirection = (HYCycleViewScrollDirection)((indexPath.row + 2 + self.startDirection) % 4);
+        cell.timeInterval = self.timeInterval;
         return cell;
     } else {
         HYContentViewCell *cell = [tableView dequeueReusableCellWithIdentifier:HYContentViewCellID];
         cell.contentViewModels = self.contentViewModels;
-        cell.scrollDirection = (HYCycleViewScrollDirection)(indexPath.row + self.startDirection);
+        cell.scrollDirection = (HYCycleViewScrollDirection)((indexPath.row + self.startDirection) % 4);
+        cell.timeInterval = self.timeInterval;
         return cell;
     }
 }

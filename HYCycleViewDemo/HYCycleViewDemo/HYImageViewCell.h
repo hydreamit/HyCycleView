@@ -12,4 +12,5 @@
 @interface HYImageViewCell : UITableViewCell
 @property (nonatomic, strong) NSArray *images;
 @property (nonatomic, assign) HYCycleViewScrollDirection scrollDirection;
+@property (nonatomic, assign) NSTimeInterval timeInterval;
 @end

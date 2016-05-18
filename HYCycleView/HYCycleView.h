@@ -10,7 +10,7 @@
 
 typedef enum {
     HYCycleViewTimerStart, // 自动轮播模式
-    HYCycleViewTimerStop 
+    HYCycleViewTimerStop
 } HYCycleViewTimerStyle;
 
 typedef enum {             // 滚动方向
@@ -56,15 +56,13 @@ typedef enum {             // 滚动方向
  *
  */
 @property (nonatomic, strong) NSArray *models;
-+ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(nullable Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; //
++ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(nullable Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye;
 + (instancetype)CycleViewWithFrame:(CGRect)frame contentViewNibName:(NSString *)nibName models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; //Xib中加载
-
-
 
 /**************************** 自定义控件数据的赋值 **************************/
 
 /************** 1. 最简单方试 ***************/
- 
+
 /**
  *  在自定义控件中直接实现这个方法，可先在自定义的.m文件里#import "HYCycleView.h", 提示写出这个方法， 最后可把#import "HYCycleView.h"删去, 让contentView更加独立性。
  *
@@ -75,7 +73,7 @@ typedef enum {             // 滚动方向
 
 /************** 2.习惯方式:创建模型属性（默认名：model）(可直接打出set方法)，实现set方法 ***************/
 
-// 根据你自己情况，取的模型属性名不叫model, 可在contentView的.m文件里实现这个方法， 发回自己设定的方法名。
+// 根据你自己情况，取的模型属性名不叫model, 可在contentView的.m文件里实现这个方法， 返回自己设定的方法名。
 /**
  *  重置contentView模型属性名, 可先在自定义的.m文件里#import "HYCycleView.h", 提示写出这个方法， 最后可把#import "HYCycleView.h"删去, 让contentView更加独立性。
  *

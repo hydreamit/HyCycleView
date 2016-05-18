@@ -52,4 +52,10 @@
     _cycleView.scrollDirection = scrollDirection;
 }
 
+- (void)setTimeInterval:(NSTimeInterval)timeInterval
+{
+    _timeInterval = timeInterval;
+    _cycleView.timeInterval = timeInterval;
+}
+
 @end

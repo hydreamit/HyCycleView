@@ -12,4 +12,5 @@
 @interface HYContentViewCell : UITableViewCell
 @property (nonatomic, strong) NSMutableArray *contentViewModels;
 @property (nonatomic, assign) HYCycleViewScrollDirection scrollDirection;
+@property (nonatomic, assign) NSTimeInterval timeInterval;
 @end

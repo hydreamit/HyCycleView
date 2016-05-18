@@ -56,10 +56,8 @@ typedef enum {             // 滚动方向
  *
  */
 @property (nonatomic, strong) NSArray *models;
-+ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(nullable Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; //
++ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(nullable Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye;
 + (instancetype)CycleViewWithFrame:(CGRect)frame contentViewNibName:(NSString *)nibName models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; //Xib中加载
-
-
 
 /**************************** 自定义控件数据的赋值 **************************/
 

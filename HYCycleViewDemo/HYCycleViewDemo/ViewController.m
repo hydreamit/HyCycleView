@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSArray *netImages;
 @property (nonatomic, strong) NSArray *dictArray;
 @property (nonatomic, strong) NSMutableArray *contentViewModels;
+@property (nonatomic, assign) NSInteger startDirection;
 @end
 
 static NSString *const HYContentViewCellID = @"contentView";
@@ -30,8 +31,7 @@ static NSString *const HYImageViewCellID = @"ImageView";
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     
-    _HYTableView = [UITableView new];
-    _HYTableView.frame = self.view.bounds;
+    _HYTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _HYTableView.delegate = self;
     _HYTableView.dataSource = self;
     _HYTableView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
@@ -40,6 +40,9 @@ static NSString *const HYImageViewCellID = @"ImageView";
     _HYTableView.backgroundView.backgroundColor = [UIColor clearColor];
     if ([_HYTableView respondsToSelector:@selector(setSeparatorInset:)]) {
         [_HYTableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    if ([_HYTableView respondsToSelector:@selector(setSeparatorColor:)]) {
+        [_HYTableView setSeparatorColor:[UIColor orangeColor]];
     }
     if ([_HYTableView respondsToSelector:@selector(setLayoutMargins:)]) {
         [_HYTableView setLayoutMargins:UIEdgeInsetsZero];
@@ -65,12 +68,12 @@ static NSString *const HYImageViewCellID = @"ImageView";
     if (indexPath.section == 1) {
         HYImageViewCell *cell = [tableView dequeueReusableCellWithIdentifier:HYImageViewCellID];
         cell.images = self.netImages;
-        cell.scrollDirection = (HYCycleViewScrollDirection)(indexPath.row + 2);
+        cell.scrollDirection = (HYCycleViewScrollDirection)(indexPath.row + 2 + self.startDirection);
         return cell;
     } else {
         HYContentViewCell *cell = [tableView dequeueReusableCellWithIdentifier:HYContentViewCellID];
         cell.contentViewModels = self.contentViewModels;
-        cell.scrollDirection = (HYCycleViewScrollDirection)indexPath.row;
+        cell.scrollDirection = (HYCycleViewScrollDirection)(indexPath.row + self.startDirection);
         return cell;
     }
 }
@@ -91,6 +94,17 @@ static NSString *const HYImageViewCellID = @"ImageView";
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 - (NSArray *)netImages

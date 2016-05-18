@@ -54,7 +54,6 @@
 /**
  *  方式二
  *
- *  @param HYModel <#HYModel description#>
  */
 //- (void)setHYModel:(HYContentViewModel *)HYModel
 //{

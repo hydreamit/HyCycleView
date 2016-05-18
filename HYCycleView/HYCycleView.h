@@ -20,6 +20,8 @@ typedef enum {             // 滚动方向
     HYCycleViewScrollBottom,
 } HYCycleViewScrollDirection;
 
+
+
 @class HYCycleView;
 @protocol HYCycleViewDelegate <NSObject>
 @optional
@@ -27,8 +29,8 @@ typedef enum {             // 滚动方向
 @end
 
 
-@interface HYCycleView : UIView
 
+@interface HYCycleView : UIView
 /**
  *  公有属性
  */
@@ -37,7 +39,6 @@ typedef enum {             // 滚动方向
 @property (nonatomic, assign) NSTimeInterval timeInterval; // 轮播模式间隔时间，默认2秒
 @property (nonatomic, assign) HYCycleViewScrollDirection scrollDirection; // 滚动方向
 @property (nonatomic, weak) id<HYCycleViewDelegate> delegate;
-
 
 /**
  *  默认ImageView
@@ -49,13 +50,12 @@ typedef enum {             // 滚动方向
 + (instancetype)CycleViewWithFrame:(CGRect)frame localImageNameArray:(NSArray *)localImageNameArray  timerStyle:(HYCycleViewTimerStyle)timerStlye; // 本地图片图片
 + (instancetype)CycleViewWithFrame:(CGRect)frame NetImageUrlArray:(NSArray *)NetImageUrlArray placeholderImage:(NSString *)placeholderImage timerStyle:(HYCycleViewTimerStyle)timerStlye; // 网络图片
 
-
 /**
- *  自定义控件
+ *  自定义ContentView
  *
  */
 @property (nonatomic, strong) NSArray *models;
-+ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye;
++ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; // 纯代码
 + (instancetype)CycleViewWithFrame:(CGRect)frame contentViewNibName:(NSString *)nibName models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; //Xib中加载
 
 /**************************** 自定义控件数据的赋值 **************************/
@@ -74,9 +74,7 @@ typedef enum {             // 滚动方向
 
 // 根据你自己情况，取的模型属性名不叫model, 可在contentView的.m文件里实现这个方法， 返回自己设定的方法名。
 /**
- *  重置contentView模型属性名, 可先在自定义的.m文件里#import "HYCycleView.h", 提示写出这个方法， 最后可把#import "HYCycleView.h"删去, 让contentView更加独立性。
- *
- *  @return contentView传入模型属性名(默认名:model, 如果传入属性名叫model就不用再自定义控件中实现这个方法)
+ *  @return contentView模型属性名
  */
 - (NSString *)SetupContentModelName;
 @end

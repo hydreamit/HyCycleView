@@ -32,7 +32,7 @@ typedef enum {
 #define HYMsgSend(...) ((void (*)(void *, SEL, id))objc_msgSend)(__VA_ARGS__)
 #define HYMsgTarget(target) (__bridge void *)(target)
 static int const ContentViewCount = 3;
-static NSInteger _lastPage;
+
 @implementation HYCycleView
 - (instancetype)initWithFrame:(CGRect)frame
 {

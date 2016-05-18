@@ -21,11 +21,11 @@ typedef enum {             // 滚动方向
 } HYCycleViewScrollDirection;
 
 @class HYCycleView;
-
 @protocol HYCycleViewDelegate <NSObject>
 @optional
-- (void)cycleView:( HYCycleView * _Nonnull )cycleView didSelectAtIndex:(NSInteger)index;
+- (void)cycleView:(HYCycleView *)cycleView didSelectAtIndex:(NSInteger)index;
 @end
+
 
 @interface HYCycleView : UIView
 
@@ -37,7 +37,6 @@ typedef enum {             // 滚动方向
 @property (nonatomic, assign) NSTimeInterval timeInterval; // 轮播模式间隔时间，默认2秒
 @property (nonatomic, assign) HYCycleViewScrollDirection scrollDirection; // 滚动方向
 @property (nonatomic, weak) id<HYCycleViewDelegate> delegate;
-
 
 
 /**
@@ -56,7 +55,7 @@ typedef enum {             // 滚动方向
  *
  */
 @property (nonatomic, strong) NSArray *models;
-+ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(nullable Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye;
++ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye;
 + (instancetype)CycleViewWithFrame:(CGRect)frame contentViewNibName:(NSString *)nibName models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; //Xib中加载
 
 /**************************** 自定义控件数据的赋值 **************************/

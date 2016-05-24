@@ -24,9 +24,6 @@
 static NSString *const HYContentViewCellID = @"contentView";
 static NSString *const HYImageViewCellID = @"ImageView";
 
-// 判断iPhone6 Plus
-#define iPhone6_Plus ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2208), [[UIScreen mainScreen] currentMode].size) : NO)//适配相关
-
 @implementation ViewController
 
 - (void)viewDidLoad {
@@ -112,11 +109,14 @@ static NSString *const HYImageViewCellID = @"ImageView";
     if (indexPath.section == 1) {
         return 110;
     } else {
-        if (iPhone6_Plus) {
-            return 200;
-        } else {
-            return 180;
-        }
+        
+        return 80 + ([UIScreen mainScreen].bounds.size.width - 80) / 3;
+        
+//        if (iPhone6_Plus) {
+//            return 200;
+//        } else {
+//            return 180;
+//        }
     }
 }
 
@@ -143,7 +143,7 @@ static NSString *const HYImageViewCellID = @"ImageView";
 - (NSArray *)netImages
 {
     if (!_netImages) {
-        _netImages = @[@"https://img.hdvg.tv//images/b4/49/d5/ed26f99e6e4b8c6f53a0deecde669f45c0e2c1e5.jpg",@"https://img.hdvg.tv//images/e9/ff/d4/622fb30763a708da1993f0e8b5fd2656f6c70de7.jpg", @"https://img.hdvg.tv//images/b9/58/01/1de7e2dda528b6d307bcb095a39ada6d118e0f88.jpg",@"https://img.hdvg.tv//images/b4/49/d5/ed26f99e6e4b8c6f53a0deecde669f45c0e2c1e5.jpg",@"https://img.hdvg.tv//images/e9/ff/d4/622fb30763a708da1993f0e8b5fd2656f6c70de7.jpg", @"https://img.hdvg.tv//images/b9/58/01/1de7e2dda528b6d307bcb095a39ada6d118e0f88.jpg"];
+        _netImages = @[@"https://img.hdvg.tv//images/1c/28/1e/c421065cef4435dc5a75adad8b15f5247ed4be30.jpg",@"https://img.hdvg.tv//images/1c/14/42/4e7e76d15d6cec15c2033ca03530d73c416a22bf.jpg", @"https://img.hdvg.tv//images/b9/58/01/1de7e2dda528b6d307bcb095a39ada6d118e0f88.jpg",@"https://img.hdvg.tv//images/b4/49/d5/ed26f99e6e4b8c6f53a0deecde669f45c0e2c1e5.jpg",@"https://img.hdvg.tv//images/e9/ff/d4/622fb30763a708da1993f0e8b5fd2656f6c70de7.jpg", @"https://img.hdvg.tv//images/b9/58/01/1de7e2dda528b6d307bcb095a39ada6d118e0f88.jpg"];
     }
     return _netImages;
 }

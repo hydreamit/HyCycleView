@@ -31,6 +31,7 @@ typedef enum {             // 滚动方向
 
 
 @interface HYCycleView : UIView
+
 /**
  *  公有属性
  */
@@ -47,7 +48,7 @@ typedef enum {             // 滚动方向
 @property (nonatomic, strong) NSArray *NetImageUrlArray;
 @property (nonatomic, strong) NSArray *localImageNameArray;
 @property (nonatomic, assign) UIViewContentMode imageViewContentMode; // 设置图片内容模式
-+ (instancetype)CycleViewWithFrame:(CGRect)frame localImageNameArray:(NSArray *)localImageNameArray  timerStyle:(HYCycleViewTimerStyle)timerStlye; // 本地图片图片
++ (instancetype)CycleViewWithFrame:(CGRect)frame localImageNameArray:(NSArray *)localImageNameArray  timerStyle:(HYCycleViewTimerStyle)timerStlye; // 本地图片
 + (instancetype)CycleViewWithFrame:(CGRect)frame NetImageUrlArray:(NSArray *)NetImageUrlArray placeholderImage:(NSString *)placeholderImage timerStyle:(HYCycleViewTimerStyle)timerStlye; // 网络图片
 
 /**

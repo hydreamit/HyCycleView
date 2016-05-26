@@ -37,24 +37,38 @@ static int const ContentViewCount = 3;
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        UIScrollView *scrollView = [[UIScrollView alloc] init];
-        scrollView.showsHorizontalScrollIndicator = NO;
-        scrollView.showsVerticalScrollIndicator = NO;
-        scrollView.pagingEnabled = YES;
-        scrollView.bounces = NO;
-        scrollView.delegate = self;
-        scrollView.backgroundColor = [UIColor clearColor];
-        [self addSubview:scrollView];
-        self.scrollView = scrollView;
-        
-        UIPageControl *pageControl = [[UIPageControl alloc] init];
-        [self  insertSubview:pageControl atIndex:100];
-        self.pageControl = pageControl;
-        
-        [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)]];
+       [self initialization];
     }
     return self;
 }
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        [self initialization];
+    }
+    return self;
+}
+
+- (void)initialization
+{
+    UIScrollView *scrollView = [[UIScrollView alloc] init];
+    scrollView.showsHorizontalScrollIndicator = NO;
+    scrollView.showsVerticalScrollIndicator = NO;
+    scrollView.pagingEnabled = YES;
+    scrollView.bounces = NO;
+    scrollView.delegate = self;
+    scrollView.backgroundColor = [UIColor clearColor];
+    [self addSubview:scrollView];
+    self.scrollView = scrollView;
+    
+    UIPageControl *pageControl = [[UIPageControl alloc] init];
+    [self  insertSubview:pageControl atIndex:100];
+    self.pageControl = pageControl;
+    
+    [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)]];
+}
+
 
 + (instancetype)CycleViewWithFrame:(CGRect)frame localImageNameArray:(NSArray *)localImageNameArray timerStyle:(HYCycleViewTimerStyle)timerStlye
 {

@@ -109,14 +109,7 @@ static NSString *const HYImageViewCellID = @"ImageView";
     if (indexPath.section == 1) {
         return 110;
     } else {
-        
         return 80 + ([UIScreen mainScreen].bounds.size.width - 80) / 3;
-        
-//        if (iPhone6_Plus) {
-//            return 200;
-//        } else {
-//            return 180;
-//        }
     }
 }
 

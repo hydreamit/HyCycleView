@@ -67,6 +67,8 @@ static int const ContentViewCount = 3;
     self.pageControl = pageControl;
     
     [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)]];
+    
+    self.timeInterval = 2;
 }
 
 

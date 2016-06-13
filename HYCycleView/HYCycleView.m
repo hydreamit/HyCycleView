@@ -34,24 +34,21 @@ typedef enum {
 static int const ContentViewCount = 3;
 
 @implementation HYCycleView
-- (instancetype)initWithFrame:(CGRect)frame
-{
+- (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self initialization];
     }
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         [self initialization];
     }
     return self;
 }
 
-- (void)initialization
-{
+- (void)initialization {
     UIScrollView *scrollView = [[UIScrollView alloc] init];
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
@@ -71,9 +68,7 @@ static int const ContentViewCount = 3;
     self.timeInterval = 2;
 }
 
-
-+ (instancetype)CycleViewWithFrame:(CGRect)frame localImageNameArray:(NSArray *)localImageNameArray timerStyle:(HYCycleViewTimerStyle)timerStlye
-{
++ (instancetype)CycleViewWithFrame:(CGRect)frame localImageNameArray:(NSArray *)localImageNameArray timerStyle:(HYCycleViewTimerStyle)timerStlye {
     HYCycleView *cycleView = [[self alloc] initWithFrame:frame];
     cycleView.contentViewClass = [UIImageView class];
     cycleView.contentViewType = HYCycleViewContentViewClassType;
@@ -83,8 +78,7 @@ static int const ContentViewCount = 3;
     return cycleView;
 }
 
-+ (instancetype)CycleViewWithFrame:(CGRect)frame NetImageUrlArray:(NSArray *)NetImageUrlArray placeholderImage:(NSString *)placeholderImage timerStyle:(HYCycleViewTimerStyle)timerStlye
-{
++ (instancetype)CycleViewWithFrame:(CGRect)frame NetImageUrlArray:(NSArray *)NetImageUrlArray placeholderImage:(NSString *)placeholderImage timerStyle:(HYCycleViewTimerStyle)timerStlye {
     HYCycleView *cycleView = [[self alloc] initWithFrame:frame];
     cycleView.contentViewClass = [UIImageView class];
     cycleView.timerStyle = timerStlye;
@@ -95,8 +89,7 @@ static int const ContentViewCount = 3;
     return cycleView;
 }
 
-+ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(nullable Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye
-{
++ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(nullable Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye {
     HYCycleView *cycleView = [[self alloc] initWithFrame:frame];
     cycleView.contentViewClass = contentViewClass;
     cycleView.contentViewType = HYCycleViewContentViewClassType;
@@ -105,8 +98,7 @@ static int const ContentViewCount = 3;
     return cycleView;
 }
 
-+ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewNibName:(NSString *)nibName models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye
-{
++ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewNibName:(NSString *)nibName models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye {
     HYCycleView *cycleView = [[self alloc] initWithFrame:frame];
     cycleView.contentViewClass = NSClassFromString(nibName);
     cycleView.contentViewType = HYCycleViewContentViewNibType;
@@ -137,8 +129,7 @@ static int const ContentViewCount = 3;
     [self updateContent];
 }
 
-- (void)setScrollViewContentSize
-{
+- (void)setScrollViewContentSize {
     switch (self.scrollDirection) {
         case HYCycleViewScrollLeft :
             self.pageControl.currentPage = 0;
@@ -161,8 +152,7 @@ static int const ContentViewCount = 3;
     }
 }
 
-- (void)ResetScrollViewContentSize
-{
+- (void)ResetScrollViewContentSize {
     switch (self.scrollDirection) {
         case HYCycleViewScrollLeft :
             self.scrollView.contentSize = CGSizeMake(ContentViewCount * self.bounds.size.width, 0);
@@ -181,9 +171,7 @@ static int const ContentViewCount = 3;
     }
 }
 
-
-- (void)setFrameOfContentViewIndex:(NSInteger)index
-{
+- (void)setFrameOfContentViewIndex:(NSInteger)index {
     UIView *contentView = self.scrollView.subviews[index];
     switch (self.scrollDirection) {
         case HYCycleViewScrollLeft:
@@ -201,8 +189,7 @@ static int const ContentViewCount = 3;
 }
 
 #pragma mark - <UIScrollViewDelegate>
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     NSInteger page = 0;
     CGFloat minDistance = MAXFLOAT;
     for (int i = 0; i<self.scrollView.subviews.count; i++) {
@@ -235,33 +222,28 @@ static int const ContentViewCount = 3;
     self.pageControl.currentPage = page;
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     if (self.pageControl.numberOfPages >1 && self.timerStyle == HYCycleViewTimerStart) {
         [self stopTimer];
     }
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (self.pageControl.numberOfPages >1 && self.timerStyle == HYCycleViewTimerStart) {
         [self startTimer];
     }
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self updateContent];
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     [self updateContent];
 }
 
 #pragma mark - 更新
-- (void)updateContent
-{
+- (void)updateContent {
     for (int i = 0; i<self.scrollView.subviews.count; i++) {
         UIView *contentView = self.scrollView.subviews[i];
         NSInteger index = self.pageControl.currentPage;
@@ -351,8 +333,7 @@ static int const ContentViewCount = 3;
     [self updateScrollViewContentOffset];
 }
 
-- (void)updateScrollViewContentOffset
-{
+- (void)updateScrollViewContentOffset {
     switch (self.scrollDirection) {
         case HYCycleViewScrollLeft:
         case HYCycleViewScrollRight:
@@ -368,31 +349,26 @@ static int const ContentViewCount = 3;
 }
 
 #pragma mark - 定时器
-- (void)startTimer
-{
+- (void)startTimer {
     NSTimer *timer = [NSTimer timerWithTimeInterval:self.timeInterval target:self selector:@selector(next) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
     self.timer = timer;
 }
 
-- (void)stopTimer
-{
+- (void)stopTimer {
     [self.timer invalidate];
     self.timer = nil;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [self stopTimer];
 }
 
-- (void)next
-{
+- (void)next {
     [self setupScrollViewContentOffset];
 }
 
-- (void)setupScrollViewContentOffset
-{
+- (void)setupScrollViewContentOffset {
     switch (self.scrollDirection) {
         case HYCycleViewScrollLeft:
             [self.scrollView setContentOffset:CGPointMake(2 * self.scrollView.frame.size.width, 0) animated:YES];
@@ -412,8 +388,7 @@ static int const ContentViewCount = 3;
     }
 }
 
-- (void)tap
-{
+- (void)tap {
     if (self.dateArray.count) {
         if ([self.delegate respondsToSelector:@selector(cycleView:didSelectAtIndex:)]) {
             [self.delegate cycleView:self didSelectAtIndex:self.index];
@@ -421,31 +396,27 @@ static int const ContentViewCount = 3;
     }
 }
 
-- (void)setModels:(NSMutableArray *)models
-{
+- (void)setModels:(NSMutableArray *)models {
     _models = models;
     [self stopTimer];
     [self createCycleViewOfContentViewType:self.contentViewType contentViewClass:self.contentViewClass contentViewNibName:self.ContentViewNibName ContentViewModels:models timerStyle:self.timerStyle resetModel:YES];
     
 }
 
-- (void)setLocalImageNameArray:(NSMutableArray *)localImageNameArray
-{
+- (void)setLocalImageNameArray:(NSMutableArray *)localImageNameArray {
     _localImageNameArray = localImageNameArray;
     [self stopTimer];
     [self createCycleViewOfContentViewType:self.contentViewType contentViewClass:self.contentViewClass contentViewNibName:self.ContentViewNibName ContentViewModels:localImageNameArray timerStyle:self.timerStyle resetModel:YES];
     
 }
 
-- (void)setNetImageUrlArray:(NSMutableArray *)NetImageUrlArray
-{
+- (void)setNetImageUrlArray:(NSMutableArray *)NetImageUrlArray {
     _NetImageUrlArray = NetImageUrlArray;
     [self stopTimer];
     [self createCycleViewOfContentViewType:self.contentViewType contentViewClass:self.contentViewClass contentViewNibName:self.ContentViewNibName ContentViewModels:NetImageUrlArray timerStyle:self.timerStyle resetModel:YES];
 }
 
-- (void)setTimeInterval:(NSTimeInterval)timeInterval
-{
+- (void)setTimeInterval:(NSTimeInterval)timeInterval {
     if (timeInterval <= 0) {
         timeInterval = 2;
     }
@@ -456,8 +427,7 @@ static int const ContentViewCount = 3;
     }
 }
 
-- (void)setImageViewContentMode:(UIViewContentMode)imageViewContentMode
-{
+- (void)setImageViewContentMode:(UIViewContentMode)imageViewContentMode {
     _imageViewContentMode = imageViewContentMode;
     if ([NSStringFromClass(self.contentViewClass) isEqualToString:@"UIImageView"]) {
         for (UIImageView *imageView in self.scrollView.subviews) {
@@ -467,16 +437,14 @@ static int const ContentViewCount = 3;
     }
 }
 
-- (void)setScrollDirection:(HYCycleViewScrollDirection)scrollDirection
-{
+- (void)setScrollDirection:(HYCycleViewScrollDirection)scrollDirection {
     _scrollDirection = scrollDirection;
     [self stopTimer];
     [self createCycleViewOfContentViewType:self.contentViewType contentViewClass:self.contentViewClass contentViewNibName:self.ContentViewNibName ContentViewModels:self.dateArray timerStyle:self.timerStyle resetModel:YES];
     self.lastScrollDirection = scrollDirection;
 }
 
-- (void)createCycleViewOfContentViewType:(HYCycleViewContentViewType)contentViewType contentViewClass:(nullable Class)contentViewClass contentViewNibName:(NSString *)contentViewNibName ContentViewModels:(NSArray *)ContentViewModels timerStyle:(HYCycleViewTimerStyle)timerStlye resetModel:(BOOL)resetModel
-{
+- (void)createCycleViewOfContentViewType:(HYCycleViewContentViewType)contentViewType contentViewClass:(nullable Class)contentViewClass contentViewNibName:(NSString *)contentViewNibName ContentViewModels:(NSArray *)ContentViewModels timerStyle:(HYCycleViewTimerStyle)timerStlye resetModel:(BOOL)resetModel {
     self.dateArray = ContentViewModels;
     
     if (!resetModel) {
@@ -500,7 +468,6 @@ static int const ContentViewCount = 3;
                 [self setFrameOfContentViewIndex:i];
                 [self resetContentViewTagIndex:i]; // 改变方向从第一张开始
             }
-            
         }
         [self setScrollViewContentSize];
     }
@@ -536,9 +503,7 @@ static int const ContentViewCount = 3;
     }
 }
 
-
-- (void)resetContentViewTagIndex:(NSInteger)index
-{
+- (void)resetContentViewTagIndex:(NSInteger)index{
     UIView *contentView = self.scrollView.subviews[index];
     switch (self.scrollDirection) {
         case HYCycleViewScrollLeft :
@@ -554,4 +519,8 @@ static int const ContentViewCount = 3;
     }
 }
 
+- (void)setModel:(id)model {}
+- (NSString *)SetupContentModelName {
+    return  nil;
+}
 @end

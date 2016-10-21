@@ -7,7 +7,8 @@
 //
 
 #import "HYCycleView.h"
-#import <objc/runtime.h>
+//#import <objc/runtime.h>
+#import <objc/message.h>
 #import "UIImageView+WebCache.h"
 
 typedef enum {

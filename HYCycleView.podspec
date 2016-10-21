@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/hydreamit/HYCycleView"
   s.license      = "MIT"
   s.authors      = { “hy” => “hydreamit@163.com” }
-  s.source       = { :git => "https://github.com/hydreamit/HYCycleView.git", :tag => s.version.to_s }
+  s.source       = { :git => "https://github.com/hydreamit/HYCycleView.git", :tag => “0.0.1” }
   s.frameworks   = 'Foundation', 'UIKit'
   s.platform     = :ios, '6.0'
   s.source_files = 'HYCycleView/*.{h,m}'

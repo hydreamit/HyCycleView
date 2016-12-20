@@ -2,8 +2,8 @@
 //  HYCycleView.m
 //  ScrollView
 //
-//  Created by jsb06 on 16/5/3.
-//  Copyright © 2016年 jsb06. All rights reserved.
+//  Created by Hy on 16/5/3.
+//  Copyright © 2016年 Hy. All rights reserved.
 //
 
 #import "HYCycleView.h"
@@ -120,7 +120,7 @@ static int const ContentViewCount = 3;
         }
     }
     
-    CGFloat pageW = 80;
+    CGFloat pageW = 15 * self.dateArray.count;
     CGFloat pageH = 20;
     CGFloat pageX = (self.scrollView.frame.size.width - pageW) / 2;
     CGFloat pageY = self.scrollView.frame.size.height - pageH;

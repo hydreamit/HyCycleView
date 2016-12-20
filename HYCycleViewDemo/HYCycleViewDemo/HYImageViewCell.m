@@ -2,8 +2,8 @@
 //  HYImageViewCell.m
 //  HYCycleViewDemo
 //
-//  Created by jsb06 on 16/5/17.
-//  Copyright © 2016年 jsb06. All rights reserved.
+//  Created by Hy on 16/5/17.
+//  Copyright © 2016年 Hy. All rights reserved.
 //
 
 #import "HYImageViewCell.h"
@@ -20,10 +20,9 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         _cycleView = [HYCycleView CycleViewWithFrame:self.bounds NetImageUrlArray:nil placeholderImage:@"two" timerStyle:HYCycleViewTimerStart];
         _cycleView.scrollDirection = HYCycleViewScrollBottom;
-//        _cycleView.pageControl.currentPageIndicatorTintColor = [UIColor yellowColor];
-//        _cycleView.pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
-//        _cycleView.imageViewContentMode = UIViewContentModeScaleAspectFill;
-        
+        _cycleView.pageControl.currentPageIndicatorTintColor = [UIColor yellowColor];
+        _cycleView.pageControl.pageIndicatorTintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.35];
+        _cycleView.imageViewContentMode = UIViewContentModeScaleAspectFill;
         _cycleView.delegate = self;
         [self.contentView addSubview:_cycleView];
     }

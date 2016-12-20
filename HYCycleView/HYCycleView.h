@@ -2,8 +2,8 @@
 //  HYCycleView.h
 //  ScrollView
 //
-//  Created by jsb06 on 16/5/3.
-//  Copyright © 2016年 jsb06. All rights reserved.
+//  Created by Hy on 16/5/3.
+//  Copyright © 2016年 Hy. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -31,6 +31,8 @@ typedef enum {             // 滚动方向
 
 
 @interface HYCycleView : UIView
+
+
 /**
  *  公有属性
  */
@@ -40,6 +42,7 @@ typedef enum {             // 滚动方向
 @property (nonatomic, assign) HYCycleViewScrollDirection scrollDirection; // 滚动方向
 @property (nonatomic, weak) id<HYCycleViewDelegate> delegate;
 
+
 /**
  *  默认ImageView
  *
@@ -47,8 +50,9 @@ typedef enum {             // 滚动方向
 @property (nonatomic, strong) NSArray *NetImageUrlArray;
 @property (nonatomic, strong) NSArray *localImageNameArray;
 @property (nonatomic, assign) UIViewContentMode imageViewContentMode; // 设置图片内容模式
-+ (instancetype)CycleViewWithFrame:(CGRect)frame localImageNameArray:(NSArray *)localImageNameArray  timerStyle:(HYCycleViewTimerStyle)timerStlye; // 本地图片图片
++ (instancetype)CycleViewWithFrame:(CGRect)frame localImageNameArray:(NSArray *)localImageNameArray  timerStyle:(HYCycleViewTimerStyle)timerStlye; // 本地图片
 + (instancetype)CycleViewWithFrame:(CGRect)frame NetImageUrlArray:(NSArray *)NetImageUrlArray placeholderImage:(NSString *)placeholderImage timerStyle:(HYCycleViewTimerStyle)timerStlye; // 网络图片
+
 
 /**
  *  自定义ContentView
@@ -57,6 +61,7 @@ typedef enum {             // 滚动方向
 @property (nonatomic, strong) NSArray *models;
 + (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; // 纯代码
 + (instancetype)CycleViewWithFrame:(CGRect)frame contentViewNibName:(NSString *)nibName models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; //Xib中加载
+
 
 /**************************** 自定义控件数据的赋值 **************************/
 
@@ -77,4 +82,5 @@ typedef enum {             // 滚动方向
  *  @return contentView模型属性名
  */
 - (NSString *)SetupContentModelName;
+
 @end

@@ -21,12 +21,6 @@
 		F3F2E4BC1CEAC09800C94F68 /* HYImageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F3F2E4BB1CEAC09800C94F68 /* HYImageViewCell.m */; };
 		F3F2E4BF1CEAC1DE00C94F68 /* HYContentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F3F2E4BE1CEAC1DE00C94F68 /* HYContentViewModel.m */; };
 		F3F2E4C31CEAC36D00C94F68 /* HYCycleView.m in Sources */ = {isa = PBXBuildFile; fileRef = F3F2E4C21CEAC36D00C94F68 /* HYCycleView.m */; };
-		F3F2E4CB1CEAC70700C94F68 /* five.png in Resources */ = {isa = PBXBuildFile; fileRef = F3F2E4C51CEAC70700C94F68 /* five.png */; };
-		F3F2E4CC1CEAC70700C94F68 /* four.png in Resources */ = {isa = PBXBuildFile; fileRef = F3F2E4C61CEAC70700C94F68 /* four.png */; };
-		F3F2E4CD1CEAC70700C94F68 /* one.png in Resources */ = {isa = PBXBuildFile; fileRef = F3F2E4C71CEAC70700C94F68 /* one.png */; };
-		F3F2E4CE1CEAC70700C94F68 /* six.png in Resources */ = {isa = PBXBuildFile; fileRef = F3F2E4C81CEAC70700C94F68 /* six.png */; };
-		F3F2E4CF1CEAC70700C94F68 /* three.png in Resources */ = {isa = PBXBuildFile; fileRef = F3F2E4C91CEAC70700C94F68 /* three.png */; };
-		F3F2E4D01CEAC70700C94F68 /* two.png in Resources */ = {isa = PBXBuildFile; fileRef = F3F2E4CA1CEAC70700C94F68 /* two.png */; };
 		F3F2E4F21CEAC99D00C94F68 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F3F2E4D21CEAC99D00C94F68 /* LICENSE */; };
 		F3F2E4F31CEAC99D00C94F68 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F3F2E4D31CEAC99D00C94F68 /* README.md */; };
 		F3F2E4F41CEAC99D00C94F68 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = F3F2E4D61CEAC99D00C94F68 /* NSData+ImageContentType.m */; };
@@ -90,12 +84,6 @@
 		F3F2E4BE1CEAC1DE00C94F68 /* HYContentViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYContentViewModel.m; sourceTree = "<group>"; };
 		F3F2E4C11CEAC36D00C94F68 /* HYCycleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYCycleView.h; sourceTree = "<group>"; };
 		F3F2E4C21CEAC36D00C94F68 /* HYCycleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYCycleView.m; sourceTree = "<group>"; };
-		F3F2E4C51CEAC70700C94F68 /* five.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = five.png; sourceTree = "<group>"; };
-		F3F2E4C61CEAC70700C94F68 /* four.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = four.png; sourceTree = "<group>"; };
-		F3F2E4C71CEAC70700C94F68 /* one.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = one.png; sourceTree = "<group>"; };
-		F3F2E4C81CEAC70700C94F68 /* six.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = six.png; sourceTree = "<group>"; };
-		F3F2E4C91CEAC70700C94F68 /* three.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = three.png; sourceTree = "<group>"; };
-		F3F2E4CA1CEAC70700C94F68 /* two.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = two.png; sourceTree = "<group>"; };
 		F3F2E4D21CEAC99D00C94F68 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		F3F2E4D31CEAC99D00C94F68 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F3F2E4D51CEAC99D00C94F68 /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
@@ -204,7 +192,6 @@
 		F3F2E47F1CEABCC500C94F68 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F3F2E4C41CEAC70700C94F68 /* source */,
 				F3F2E4801CEABCC500C94F68 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -235,19 +222,6 @@
 				F3F2E4C21CEAC36D00C94F68 /* HYCycleView.m */,
 			);
 			path = HYCycleView;
-			sourceTree = "<group>";
-		};
-		F3F2E4C41CEAC70700C94F68 /* source */ = {
-			isa = PBXGroup;
-			children = (
-				F3F2E4C51CEAC70700C94F68 /* five.png */,
-				F3F2E4C61CEAC70700C94F68 /* four.png */,
-				F3F2E4C71CEAC70700C94F68 /* one.png */,
-				F3F2E4C81CEAC70700C94F68 /* six.png */,
-				F3F2E4C91CEAC70700C94F68 /* three.png */,
-				F3F2E4CA1CEAC70700C94F68 /* two.png */,
-			);
-			path = source;
 			sourceTree = "<group>";
 		};
 		F3F2E4D11CEAC99D00C94F68 /* SDWebImage */ = {
@@ -403,16 +377,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3F2E48F1CEABCC500C94F68 /* LaunchScreen.storyboard in Resources */,
-				F3F2E4CB1CEAC70700C94F68 /* five.png in Resources */,
 				F3F2E4B61CEAC01D00C94F68 /* HYContentView.xib in Resources */,
 				F3F2E48C1CEABCC500C94F68 /* Assets.xcassets in Resources */,
 				F3F2E48A1CEABCC500C94F68 /* Main.storyboard in Resources */,
 				F3F2E4F21CEAC99D00C94F68 /* LICENSE in Resources */,
-				F3F2E4CD1CEAC70700C94F68 /* one.png in Resources */,
-				F3F2E4CE1CEAC70700C94F68 /* six.png in Resources */,
-				F3F2E4CC1CEAC70700C94F68 /* four.png in Resources */,
-				F3F2E4D01CEAC70700C94F68 /* two.png in Resources */,
-				F3F2E4CF1CEAC70700C94F68 /* three.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

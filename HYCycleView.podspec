@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
-  s.name         = "HYCycleView"
+  s.name         = "HyCycleView"
   s.version      = “0.0.1”
   s.summary      = “cycleView”
-  s.homepage     = "https://github.com/hydreamit/HYCycleView"
+  s.homepage     = "https://github.com/hydreamit/HyCycleView"
   s.license      = "MIT"
   s.authors      = { “hy” => “hydreamit@163.com” }
   s.source       = { :git => "https://github.com/hydreamit/HyCycleView.git", :tag => “0.0.1” }

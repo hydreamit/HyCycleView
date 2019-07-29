@@ -1,86 +1,140 @@
 //
-//  HYCycleView.h
-//  ScrollView
+//  HyCycleView.h
+//  HyCycleView
+//  https://github.com/hydreamit/HyCycleView
 //
 //  Created by Hy on 16/5/3.
 //  Copyright © 2016年 Hy. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "UIView+HyFrame.h"
+
 
 typedef enum {
-    HYCycleViewTimerStart, // 自动轮播模式
-    HYCycleViewTimerStop
-} HYCycleViewTimerStyle;
-
-typedef enum {             // 滚动方向
-    HYCycleViewScrollLeft,
-    HYCycleViewScrollRight,
-    HYCycleViewScrollTop,
-    HYCycleViewScrollBottom,
-} HYCycleViewScrollDirection;
+    HyCycleViewScrollStatic, // need hand scroll
+    HyCycleViewScrollAuto   // auto scroll
+} HyCycleViewScrollStyle;
 
 
+typedef enum {
+    HyCycleViewScrollLoadStyleWillAppear, // view/controller view  will appear load
+    HyCycleViewScrollLoadStyleDidAppear  //  view/controller view  did appear load
+} HyCycleViewScrollLoadStyle;
 
-@class HYCycleView;
-@protocol HYCycleViewDelegate <NSObject>
-@optional
-- (void)cycleView:(HYCycleView *)cycleView didSelectAtIndex:(NSInteger)index;
+
+typedef enum {
+    HyCycleViewScrollLeft,      // scroll to left
+    HyCycleViewScrollRight,    // scroll to right
+    HyCycleViewScrollTop,     // scroll to top
+    HyCycleViewScrollBottom  // scroll to bottom
+} HyCycleViewScrollDirection;
+
+
+@class HyCycleView;
+@interface HyCycleViewConfigure : NSObject
+
+// currentPage (当前页面)
+@property (nonatomic,assign,readonly) NSInteger currentPage;
+
+// cycle loop default yes (是否为无限循环轮播 默认为YES)
+- (HyCycleViewConfigure *(^)(BOOL))isCycleLoop;
+// total Pages (总页数)
+- (HyCycleViewConfigure *(^)(NSInteger))totalPage;
+// start page (开始页)
+- (HyCycleViewConfigure *(^)(NSInteger))startPage;
+// timeInterval default 2.0 s (自动轮播时间间隔 默认2秒)
+- (HyCycleViewConfigure *(^)(NSTimeInterval))timeInterval;
+
+// auto or static scroll style (轮播方式：自动/手动, 默认是自动)
+- (HyCycleViewConfigure *(^)(HyCycleViewScrollStyle))scrollStyle;
+// cycle view load style (轮播View/Controller加载方式: 滑动出现立即加载/滑动到整个页面再加载)
+- (HyCycleViewConfigure *(^)(HyCycleViewScrollLoadStyle))loadStyle;
+// scroll direction (轮播方向:左、右、上、下)
+- (HyCycleViewConfigure *(^)(HyCycleViewScrollDirection))scrollDirection;
+
+
+// cycle views or controllers (轮播传入的是实例对象：view 或者 controller)
+- (HyCycleViewConfigure *(^)(NSArray *))cycleInstances;
+// cycle views or controllers of class (轮播传入的是Class：view class 或者 controller class)
+- (HyCycleViewConfigure *(^)(NSArray<Class> *))cycleClasses;
+- (HyCycleViewConfigure *(^)(Class (^)(HyCycleView *, NSInteger)))cycleClass;
+
+
+// click cycleView action (点击某个轮播view的回调)
+- (HyCycleViewConfigure *(^)(void(^)(HyCycleView *, NSInteger)))clickAction;
+
+// one cycle will appear callback (当轮播view/controllerView出现的回调)
+- (HyCycleViewConfigure *(^)(void(^)(HyCycleView *,  // HyCycleView
+                                     id,            // cycleView
+                                     NSInteger,    // currentIndex
+                                     BOOL))       // is first load
+                                     )viewWillAppear;
+
+// totalPage and currentPage change (总页/当前页发生改变的回调)
+- (HyCycleViewConfigure *(^)(void(^)(HyCycleView *, // HyCycleView
+                                     NSInteger,    // totalPage
+                                     NSInteger))  // currentPage
+                                     )currentPageChange;
+
+// totalPage and roundingPage change (总页/当前页(四舍五入)发生改变的回调)
+- (HyCycleViewConfigure *(^)(void(^)(HyCycleView *, // HyCycleView
+                                     NSInteger,    // totalPage
+                                     NSInteger))  // roundingPage
+                                     )roundingPageChange;
+
+// scroll progress (滑动进度的回调)
+- (HyCycleViewConfigure *(^)(void(^)(HyCycleView *, // HyCycleView
+                                     NSInteger,    // fromPage
+                                     NSInteger,   // toPage
+                                     CGFloat))   // progress
+                                    )scrollProgress;
 @end
 
 
 
-@interface HYCycleView : UIView
+
+
+@interface HyCycleView : UIView
+
+/**
+ create cycleView
+
+ @param frame frame
+ @param configureBlock config the params
+ @return HyCycleView
+ */
++ (instancetype)cycleViewWithFrame:(CGRect)frame
+                    configureBlock:(void (^)(HyCycleViewConfigure *configure))configureBlock;
+
+@property (nonatomic, strong, readonly) HyCycleViewConfigure *configure;
+
 
 
 /**
- *  公有属性
+ scroll to next page
+
+ @param animated animated
  */
-@property (weak, nonatomic) UIScrollView *scrollView;
-@property (weak, nonatomic) UIPageControl *pageControl;
-@property (nonatomic, assign) NSTimeInterval timeInterval; // 轮播模式间隔时间，默认2秒
-@property (nonatomic, assign) HYCycleViewScrollDirection scrollDirection; // 滚动方向
-@property (nonatomic, weak) id<HYCycleViewDelegate> delegate;
+- (void)scrollToNextPageWithAnimated:(BOOL)animated;
 
 
 /**
- *  默认ImageView
- *
+ scroll to last page
+ 
+ @param animated animated
  */
-@property (nonatomic, strong) NSArray *NetImageUrlArray;
-@property (nonatomic, strong) NSArray *localImageNameArray;
-@property (nonatomic, assign) UIViewContentMode imageViewContentMode; // 设置图片内容模式
-+ (instancetype)CycleViewWithFrame:(CGRect)frame localImageNameArray:(NSArray *)localImageNameArray  timerStyle:(HYCycleViewTimerStyle)timerStlye; // 本地图片
-+ (instancetype)CycleViewWithFrame:(CGRect)frame NetImageUrlArray:(NSArray *)NetImageUrlArray placeholderImage:(NSString *)placeholderImage timerStyle:(HYCycleViewTimerStyle)timerStlye; // 网络图片
+- (void)scrollToLastPageWithAnimated:(BOOL)animated;
 
 
 /**
- *  自定义ContentView
- *
+ scroll to the page
+
+ @param page page
+ @param animated animated
  */
-@property (nonatomic, strong) NSArray *models;
-+ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewClass:(Class)contentViewClass models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; // 纯代码
-+ (instancetype)CycleViewWithFrame:(CGRect)frame contentViewNibName:(NSString *)nibName models:(NSArray *)models timerStyle:(HYCycleViewTimerStyle)timerStlye; //Xib中加载
+- (void)scrollToPage:(NSInteger)page animated:(BOOL)animated;
 
-
-/**************************** 自定义控件数据的赋值 **************************/
-
-/************** 1. 最简单方试 ***************/
-
-/**
- *  在自定义控件中直接实现这个方法，可先在自定义的.m文件里#import "HYCycleView.h", 提示写出这个方法， 最后可把#import "HYCycleView.h"删去, 让contentView更加独立性。
- *
- *  @param model contentView对应的数据模型；
- */
-- (void)setModel:(id)model;
-
-
-/************** 2.习惯方式:创建模型属性（默认名：model）(可直接打出set方法)，实现set方法 ***************/
-
-// 根据你自己情况，取的模型属性名不叫model, 可在contentView的.m文件里实现这个方法， 返回自己设定的方法名。
-/**
- *  @return contentView模型属性名
- */
-- (NSString *)SetupContentModelName;
 
 @end
+

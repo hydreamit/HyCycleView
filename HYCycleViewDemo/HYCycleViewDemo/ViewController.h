@@ -1,8 +1,9 @@
 //
 //  ViewController.h
-//  HYCycleViewDemo
+//  HyCycleView
+//  https://github.com/hydreamit/HyCycleView
 //
-//  Created by Hy on 16/5/17.
+//  Created by Hy on 2016/5/9.
 //  Copyright © 2016年 Hy. All rights reserved.
 //
 
@@ -10,6 +11,7 @@
 
 @interface ViewController : UIViewController
 
+@property (nonatomic,strong) NSArray<NSString *> *titles;
 
 @end
 

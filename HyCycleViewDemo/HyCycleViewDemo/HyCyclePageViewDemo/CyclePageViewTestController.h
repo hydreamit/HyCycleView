@@ -1,9 +1,10 @@
 //
 //  CyclePageViewTestController.h
-//  HyCycleViewDemo
+//  HyCycleView
+//  https://github.com/hydreamit/HyCycleView
 //
-//  Created by huangyi on 2019/7/28.
-//  Copyright © 2019 huangyi. All rights reserved.
+//  Created by Hy on 2016/5/21.
+//  Copyright © 2016年 Hy. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

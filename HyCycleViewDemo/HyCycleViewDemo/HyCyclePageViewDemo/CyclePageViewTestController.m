@@ -1,9 +1,10 @@
 //
 //  CyclePageViewTestController.m
-//  HyCycleViewDemo
+//  HyCycleView
+//  https://github.com/hydreamit/HyCycleView
 //
-//  Created by huangyi on 2019/7/28.
-//  Copyright © 2019 huangyi. All rights reserved.
+//  Created by Hy on 2016/5/21.
+//  Copyright © 2016年 Hy. All rights reserved.
 //
 
 #import "CyclePageViewTestController.h"
@@ -23,7 +24,7 @@
     self.view.height -= [[UIApplication sharedApplication] delegate].window.safeAreaInsets.top + 44 + 100;
     
     UILabel *testLabel = [[UILabel alloc] init];
-    testLabel.text = @"testLabel";
+    testLabel.text = @"testController";
     [testLabel sizeToFit];
     testLabel.centerXValue(self.view.width / 2).centerYValue(self.view.height / 2);
     [self.view addSubview:testLabel];

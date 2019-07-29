@@ -1,2 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo-frameworks.sh
+${BUILT_PRODUCTS_DIR}/FDFullscreenPopGesture/FDFullscreenPopGesture.framework
 ${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework

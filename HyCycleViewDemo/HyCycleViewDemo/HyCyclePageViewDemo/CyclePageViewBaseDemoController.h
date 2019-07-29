@@ -13,6 +13,8 @@
 
 @interface CyclePageViewBaseDemoController : UIViewController
 
+@property (nonatomic,assign) HyCyclePageViewGestureStyle gestureStyle;
+
 - (UIView *)hoverView;
 
 - (UIView *)headerView;
@@ -20,7 +22,6 @@
 - (NSArray *)pageInstance;
 
 - (void(^)(HyCyclePageViewConfigure *configure))configPageView;
-
 
 @end
 

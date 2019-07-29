@@ -9,5 +9,6 @@ use_frameworks!
 target 'HyCycleViewDemo' do
 
 pod 'MJRefresh'
+pod 'FDFullscreenPopGesture'
 
 end

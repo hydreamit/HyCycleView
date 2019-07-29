@@ -12,18 +12,23 @@
 
 
 typedef enum {
-    HyCyclePageViewHeaderViewUpAnimationNone,
-    HyCyclePageViewHeaderViewUpAnimationCover
+    HyCyclePageViewGestureStyleOnly,      // only gesture(一个手势,不需解决手势冲突)
+    HyCyclePageViewGestureStyleMultiple  // multiple gestures(多个手势,需解决手势冲突)
+} HyCyclePageViewGestureStyle;
+
+typedef enum {
+    HyCyclePageViewHeaderViewUpAnimationNone,  // UpAnimationNone
+    HyCyclePageViewHeaderViewUpAnimationCover // UpAnimationCover
 } HyCyclePageViewHeaderViewUpAnimation;
 
 typedef enum {
-    HyCyclePageViewHeaderViewDownAnimationNone,
-    HyCyclePageViewHeaderViewDownAnimationScale
+    HyCyclePageViewHeaderViewDownAnimationNone,  // DownAnimationNone
+    HyCyclePageViewHeaderViewDownAnimationScale // AnimationScale
 } HyCyclePageViewHeaderViewDownAnimation;
 
 typedef enum {
-    HyCyclePageViewHeaderRefreshStyleTop,
-    HyCyclePageViewHeaderRefreshStyleCenter
+    HyCyclePageViewHeaderRefreshStyleTop,    // top refresh
+    HyCyclePageViewHeaderRefreshStyleCenter // center refresh
 } HyCyclePageViewHeaderRefreshStyle;
 
 
@@ -32,6 +37,10 @@ typedef enum {
 
 // currentPage
 @property (nonatomic,assign,readonly) NSInteger currentPage;
+
+// gesture Style(需要悬停嵌套scrollView时的 手势处理方式)
+- (HyCyclePageViewConfigure *(^)(HyCyclePageViewGestureStyle))gestureStyle;
+
 // header refresh style
 - (HyCyclePageViewConfigure *(^)(HyCyclePageViewHeaderRefreshStyle))headerRefreshStyle;
 
@@ -95,7 +104,7 @@ typedef enum {
 
 // vertical scroll  (上下滑动的回调)
 - (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
-                                         UIScrollView *,   // currentPage scrollView
+                                         CGFloat ,         // contentOffset y
                                          NSInteger))      // currentPage
                                          )verticalScroll;
 

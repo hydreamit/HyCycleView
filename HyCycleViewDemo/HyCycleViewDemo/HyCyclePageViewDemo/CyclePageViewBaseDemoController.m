@@ -113,6 +113,7 @@
                                                   configureBlock:^(HyCyclePageViewConfigure * _Nonnull configure) {
                                                       
                                                       configure
+                                                      .gestureStyle(weakSelf.gestureStyle)
                                                       .cyclePageInstances(weakSelf.pageInstance)
                                                       .headerView(weakSelf.headerView)
                                                       .hoverView(weakSelf.hoverView)

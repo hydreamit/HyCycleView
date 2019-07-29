@@ -15,6 +15,7 @@
 @property (nonatomic,assign) CGFloat lastAlpha;
 @end
 
+
 @implementation CyclePageViewHoverOffsetDemoController
 @dynamic scrollView;
 
@@ -50,16 +51,16 @@
         .headerViewUpAnimation(HyCyclePageViewHeaderViewUpAnimationCover)
         .headerViewDownAnimation(HyCyclePageViewHeaderViewDownAnimationScale)
         .verticalScroll(^(HyCyclePageView * cyclePageView,
-                          UIScrollView *scrollView,
+                          CGFloat offsetY,
                           NSInteger currentPage) {
-            
-            CGFloat offsetY = scrollView.contentOffset.y;
-            if (offsetY >= -naviHeight - hoverViewH) {
+                        
+            CGFloat margin = headerViewH - (naviHeight + hoverViewH);
+            if (offsetY >= margin) {
                 [weakSelf.navigationController.navigationBar setAlpha:1.0f];
-            }else if (offsetY < - (headerViewH + hoverViewH)) {
+            }else if (offsetY < 0) {
                 [weakSelf.navigationController.navigationBar setAlpha:.0f];
             }else {
-                [weakSelf.navigationController.navigationBar setAlpha:(1 + (offsetY + (naviHeight + hoverViewH)) / (headerViewH - naviHeight ))];
+                [weakSelf.navigationController.navigationBar setAlpha:(offsetY / margin)];
             }
             weakSelf.lastAlpha = weakSelf.navigationController.navigationBar.alpha;
         });

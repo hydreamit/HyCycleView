@@ -8,6 +8,7 @@
 //
 
 #import "HyCyclePageViewDemoController.h"
+#import "CyclePageViewStyleDemoController.h"
 
 
 @implementation HyCyclePageViewDemoController
@@ -15,13 +16,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.titles = @[@"CyclePageViewBaseDemo",
-                    @"CyclePageViewAnimationDemo",
-                    @"CyclePageViewLoadStyleDemo",
-                    @"CyclePageViewNotCycleLoopDemo",
-                    @"CyclePageViewHoverOffsetDemo",
-                    @"CyclePageViewNoHeaderViewDemo",
-                    @"CyclePageViewCustomViewDemo"];
+    self.titles = @[@"GestureStyleOnly(一个手势,不需解决手势冲突)",
+                    @"GestureStyleMultiple(多个手势,需解决手势冲突)"];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    CyclePageViewStyleDemoController *viewController = [[CyclePageViewStyleDemoController alloc] init];
+    viewController.navigationItem.title = self.titles[indexPath.row];
+    viewController.gestureStyle = indexPath.row == 0 ? HyCyclePageViewGestureStyleOnly : HyCyclePageViewGestureStyleMultiple;
+    [self.navigationController pushViewController:viewController
+                                         animated:YES];
 }
 
 @end

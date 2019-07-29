@@ -9,6 +9,24 @@
 
 #import "HyCycleView.h"
 
+
+@interface HyGestureScrollView : UIScrollView <UIGestureRecognizerDelegate>
+@end
+@implementation HyGestureScrollView
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if ([otherGestureRecognizer.view isKindOfClass:NSClassFromString(@"UILayoutContainerView")]) {
+        if (otherGestureRecognizer.state == UIGestureRecognizerStateBegan &&
+            self.contentOffset.x == 0) {
+            return YES;
+        }
+    }
+    return NO;
+}
+@end
+
+
+
 @interface HyCycleViewConfigure ()
 @property (nonatomic, assign) BOOL hy_isCycleLoop;
 @property (nonatomic, assign) NSInteger hy_totalPage;
@@ -50,7 +68,7 @@
 @property (nonatomic, assign) CGFloat lastScrollProgress;
 @property (nonatomic, assign) NSInteger lastFromIndex;
 @property (nonatomic, assign) NSInteger lastToIndex;
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) HyGestureScrollView *scrollView;
 @property (nonatomic, assign) NSInteger totalCycleCount;
 
 @property (nonatomic, assign) NSInteger roundingCyclePage;
@@ -1223,9 +1241,9 @@ static int const CycleContentViewCount = 3;
 }
 
 #pragma mark — getters and setters
-- (UIScrollView *)scrollView {
+- (HyGestureScrollView *)scrollView {
     if (!_scrollView){
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        _scrollView = [[HyGestureScrollView alloc] initWithFrame:self.bounds];
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = NO;
         _scrollView.pagingEnabled = YES;

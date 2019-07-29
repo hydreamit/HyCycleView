@@ -3,12 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		1AEA90624DDB0AA22A165462 /* Pods_HyCycleViewDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D57DCD1953C0CD8956492AA /* Pods_HyCycleViewDemo.framework */; };
 		5107AE0722EDB96400D05857 /* CyclePageViewTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5107AE0622EDB96400D05857 /* CyclePageViewTestController.m */; };
+		517580C822EED9B800D5AC85 /* CyclePageViewStyleDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517580C722EED9B800D5AC85 /* CyclePageViewStyleDemoController.m */; };
 		517D85D222DC6408001F1059 /* HyCyclePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85D122DC6408001F1059 /* HyCyclePageView.m */; };
 		517D85D522DC8927001F1059 /* UIView+HyFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85D422DC8927001F1059 /* UIView+HyFrame.m */; };
 		517D85DA22E2BA57001F1059 /* HyCycleViewDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85D922E2BA57001F1059 /* HyCycleViewDemoController.m */; };
@@ -59,6 +60,8 @@
 /* Begin PBXFileReference section */
 		5107AE0522EDB96400D05857 /* CyclePageViewTestController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewTestController.h; sourceTree = "<group>"; };
 		5107AE0622EDB96400D05857 /* CyclePageViewTestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewTestController.m; sourceTree = "<group>"; };
+		517580C622EED9B800D5AC85 /* CyclePageViewStyleDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewStyleDemoController.h; sourceTree = "<group>"; };
+		517580C722EED9B800D5AC85 /* CyclePageViewStyleDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewStyleDemoController.m; sourceTree = "<group>"; };
 		517D85D022DC6408001F1059 /* HyCyclePageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HyCyclePageView.h; sourceTree = "<group>"; };
 		517D85D122DC6408001F1059 /* HyCyclePageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HyCyclePageView.m; sourceTree = "<group>"; };
 		517D85D322DC8927001F1059 /* UIView+HyFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+HyFrame.h"; sourceTree = "<group>"; };
@@ -165,6 +168,8 @@
 			children = (
 				517D85DB22E2BA6B001F1059 /* HyCyclePageViewDemoController.h */,
 				517D85DC22E2BA6B001F1059 /* HyCyclePageViewDemoController.m */,
+				517580C622EED9B800D5AC85 /* CyclePageViewStyleDemoController.h */,
+				517580C722EED9B800D5AC85 /* CyclePageViewStyleDemoController.m */,
 				517D85ED22E2FCEA001F1059 /* CyclePageViewBaseDemoController.h */,
 				517D85EE22E2FCEA001F1059 /* CyclePageViewBaseDemoController.m */,
 				517D85F022E2FCFD001F1059 /* CyclePageViewAnimationDemoController.h */,
@@ -475,6 +480,7 @@
 				517D85E622E2C0B2001F1059 /* CycleCustomViewDemoController.m in Sources */,
 				517D85D222DC6408001F1059 /* HyCyclePageView.m in Sources */,
 				517D85DD22E2BA6B001F1059 /* HyCyclePageViewDemoController.m in Sources */,
+				517580C822EED9B800D5AC85 /* CyclePageViewStyleDemoController.m in Sources */,
 				517D85F222E2FCFD001F1059 /* CyclePageViewAnimationDemoController.m in Sources */,
 				517D860122E46D3A001F1059 /* CyclePageViewCustomViewDemoController.m in Sources */,
 				5190BAE222D4A09E00534770 /* HyCustomView.m in Sources */,

@@ -305,7 +305,6 @@
 				5190BA9E22D4998100534770 /* Frameworks */,
 				5190BA9F22D4998100534770 /* Resources */,
 				3EF81980CDF4DC69DDBAA3A5 /* [CP] Embed Pods Frameworks */,
-				B321A3DECCD0870D87FAF416 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -428,17 +427,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		445056C2134D39B4C88BFAE6 /* [CP] Check Pods Manifest.lock */ = {
@@ -457,21 +455,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B321A3DECCD0870D87FAF416 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

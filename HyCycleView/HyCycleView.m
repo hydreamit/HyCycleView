@@ -45,7 +45,7 @@
 
 
 @interface HyCycleView () <UIScrollViewDelegate>
-@property (nonatomic, weak)   NSTimer *timer;
+@property (nonatomic, strong) dispatch_source_t timer;
 @property (nonatomic,assign)  BOOL isSetPage;
 @property (nonatomic, assign) CGFloat lastScrollProgress;
 @property (nonatomic, assign) NSInteger lastFromIndex;
@@ -1051,18 +1051,28 @@ static int const CycleContentViewCount = 3;
 - (void)startTimer {
     [self stopTimer];
     
+    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    
+    dispatch_source_set_timer(self.timer,
+                              dispatch_time(DISPATCH_TIME_NOW, self.configure.hy_timeInterval * NSEC_PER_SEC),
+                              self.configure.hy_timeInterval * NSEC_PER_SEC,
+                              0 * NSEC_PER_SEC);
+    
     __weak typeof(self) weakSelf = self;
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:self.configure.hy_timeInterval
-                                                 repeats:YES
-                                                   block:^(NSTimer *timer) {
-        [weakSelf next];
-    }];
-   [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+    dispatch_source_set_event_handler(self.timer,
+                                      ^{
+                                          @autoreleasepool{
+                                              [weakSelf next];
+                                          }
+                                      });
+    dispatch_resume(self.timer);
 }
 
 - (void)stopTimer {
-    [self.timer invalidate];
-    self.timer = nil;
+    if (self.timer) {
+        dispatch_source_cancel(self.timer);
+        self.timer = NULL;
+    }
 }
 
 #pragma mark - <UIScrollViewDelegate>

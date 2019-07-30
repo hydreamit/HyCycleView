@@ -29,7 +29,6 @@
 }
 
 - (void)setDict:(NSDictionary *)dict {
-    
     _dict = dict;
 
     self.titleL.text = dict[@"title"];

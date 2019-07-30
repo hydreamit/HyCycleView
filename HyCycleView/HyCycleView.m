@@ -26,7 +26,6 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 @end
 
 
-
 @interface HyCycleViewConfigure ()
 @property (nonatomic, assign) BOOL hy_isCycleLoop;
 @property (nonatomic, assign) NSInteger hy_totalPage;

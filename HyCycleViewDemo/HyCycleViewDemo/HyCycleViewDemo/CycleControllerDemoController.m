@@ -8,8 +8,6 @@
 //
 
 #import "CycleControllerDemoController.h"
-#import "CycleCustomViewDemoController.h"
-#import "CycleImageViewDemoController.h"
 #import "HySegmentView.h"
 #import "HyCycleView.h"
 
@@ -27,13 +25,9 @@
     [super viewDidLoad];
     
     __weak typeof(self) weakSelf = self;
-    
     self.view.backgroundColor = UIColor.whiteColor;
     [self.view addSubview:self.scrollView];
     
-    
-    UIView *line = [UIView new];
-    line.backgroundColor = UIColor.orangeColor;
     
     NSArray *titleArray = @[@"体育", @"资讯快报", @"社区", @"个人中心"];
     

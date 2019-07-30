@@ -40,7 +40,6 @@
         naviHeight = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.top + 44;
     }
     
-    CGFloat hoverViewH = 40;
     CGFloat headerViewH = 250;
     
     __weak typeof(self) weakSelf = self;
@@ -54,7 +53,7 @@
                           CGFloat offsetY,
                           NSInteger currentPage) {
                         
-            CGFloat margin = headerViewH - (naviHeight + hoverViewH);
+            CGFloat margin = headerViewH - naviHeight;
             if (offsetY >= margin) {
                 [weakSelf.navigationController.navigationBar setAlpha:1.0f];
             }else if (offsetY < 0) {

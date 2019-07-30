@@ -212,6 +212,7 @@
     HyCycleView *cycleView =
     [HyCycleView cycleViewWithFrame:CGRectMake(0, 40, testView.width, 50)
                      configureBlock:^(HyCycleViewConfigure *configure) {
+                         
                          configure
                          .totalPage(9)
                          .cycleClasses(@[UIView.class])
@@ -229,7 +230,8 @@
     __weak typeof(cycleView) weakCycleView = cycleView;
     
     HySegmentView *segmentView =
-    [HySegmentView segmentViewWithFrame:CGRectMake(0, 0, testView.width, 40) configureBlock:^(HySegmentViewConfigure * _Nonnull configure) {
+    [HySegmentView segmentViewWithFrame:CGRectMake(0, 0, testView.width, 40)
+                         configureBlock:^(HySegmentViewConfigure * _Nonnull configure) {
         
         configure
         .numberOfItems(9)
@@ -267,7 +269,6 @@
                         [view addSubview:label];
                         
                     } else {
-                        
                         view = label;
                     }
                 }
@@ -353,8 +354,7 @@
         .animationViews(block);
     }];
     
-        __weak typeof(segmentView) weakSegmentView = segmentView;
-
+    __weak typeof(segmentView) weakSegmentView = segmentView;
     cycleView.configure.scrollProgress(^(HyCycleView *cycleView,
                                           NSInteger fromPage,
                                           NSInteger toPage,

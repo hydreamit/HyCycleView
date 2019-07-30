@@ -10,6 +10,8 @@
 		1AEA90624DDB0AA22A165462 /* Pods_HyCycleViewDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D57DCD1953C0CD8956492AA /* Pods_HyCycleViewDemo.framework */; };
 		5107AE0722EDB96400D05857 /* CyclePageViewTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5107AE0622EDB96400D05857 /* CyclePageViewTestController.m */; };
 		517580C822EED9B800D5AC85 /* CyclePageViewStyleDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517580C722EED9B800D5AC85 /* CyclePageViewStyleDemoController.m */; };
+		517580CB22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517580CA22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m */; };
+		517580CE22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517580CD22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.m */; };
 		517D85D222DC6408001F1059 /* HyCyclePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85D122DC6408001F1059 /* HyCyclePageView.m */; };
 		517D85D522DC8927001F1059 /* UIView+HyFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85D422DC8927001F1059 /* UIView+HyFrame.m */; };
 		517D85DA22E2BA57001F1059 /* HyCycleViewDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85D922E2BA57001F1059 /* HyCycleViewDemoController.m */; };
@@ -62,6 +64,10 @@
 		5107AE0622EDB96400D05857 /* CyclePageViewTestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewTestController.m; sourceTree = "<group>"; };
 		517580C622EED9B800D5AC85 /* CyclePageViewStyleDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewStyleDemoController.h; sourceTree = "<group>"; };
 		517580C722EED9B800D5AC85 /* CyclePageViewStyleDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewStyleDemoController.m; sourceTree = "<group>"; };
+		517580C922EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewTopRefreshDemoController.h; sourceTree = "<group>"; };
+		517580CA22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewTopRefreshDemoController.m; sourceTree = "<group>"; };
+		517580CC22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewCenterRefreshDemoController.h; sourceTree = "<group>"; };
+		517580CD22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewCenterRefreshDemoController.m; sourceTree = "<group>"; };
 		517D85D022DC6408001F1059 /* HyCyclePageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HyCyclePageView.h; sourceTree = "<group>"; };
 		517D85D122DC6408001F1059 /* HyCyclePageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HyCyclePageView.m; sourceTree = "<group>"; };
 		517D85D322DC8927001F1059 /* UIView+HyFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+HyFrame.h"; sourceTree = "<group>"; };
@@ -184,6 +190,10 @@
 				517D85FD22E46D23001F1059 /* CyclePageViewNoHeaderViewDemoController.m */,
 				517D85FF22E46D3A001F1059 /* CyclePageViewCustomViewDemoController.h */,
 				517D860022E46D3A001F1059 /* CyclePageViewCustomViewDemoController.m */,
+				517580C922EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.h */,
+				517580CA22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m */,
+				517580CC22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.h */,
+				517580CD22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.m */,
 				5107AE0522EDB96400D05857 /* CyclePageViewTestController.h */,
 				5107AE0622EDB96400D05857 /* CyclePageViewTestController.m */,
 			);
@@ -469,9 +479,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				517580CE22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.m in Sources */,
 				517D85FE22E46D23001F1059 /* CyclePageViewNoHeaderViewDemoController.m in Sources */,
 				5190BADD22D499F400534770 /* HyCycleView.m in Sources */,
 				517D85F522E46CCD001F1059 /* CyclePageViewLoadStyleDemoController.m in Sources */,
+				517580CB22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m in Sources */,
 				517D85F822E46CE3001F1059 /* CyclePageViewNotCycleLoopDemoController.m in Sources */,
 				517D85EF22E2FCEA001F1059 /* CyclePageViewBaseDemoController.m in Sources */,
 				517D860822E71D31001F1059 /* HySegmentViewDemoController.m in Sources */,

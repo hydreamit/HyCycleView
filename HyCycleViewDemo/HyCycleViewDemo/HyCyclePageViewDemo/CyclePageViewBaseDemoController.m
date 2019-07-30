@@ -8,9 +8,9 @@
 //
 
 #import "CyclePageViewBaseDemoController.h"
+#import <MJRefresh/MJRefresh.h>
 #import "HySegmentView.h"
 #import "HyCycleView.h"
-#import <MJRefresh/MJRefresh.h>
 
 
 @interface CyclePageViewBaseDemoController () <UITableViewDataSource, UITableViewDelegate>
@@ -74,7 +74,6 @@
     tableView.sectionFooterHeight = 0.01;
     tableView.showsHorizontalScrollIndicator = NO;
     tableView.showsVerticalScrollIndicator = NO;
-        
     return tableView;
 }
 

@@ -451,7 +451,6 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     };
 }
 
-
 - (HySegmentViewConfigure *(^)(NSArray<UIView *> *(^)(NSArray<UIView *> *,
                                                       UICollectionViewCell *,
                                                       UICollectionViewCell *,

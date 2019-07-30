@@ -9,9 +9,6 @@
 
 #import "CyclePageViewNoHeaderViewDemoController.h"
 
-@interface CyclePageViewNoHeaderViewDemoController ()
-
-@end
 
 @implementation CyclePageViewNoHeaderViewDemoController
 
@@ -21,6 +18,5 @@
         configure.headerView(nil);
     };
 }
-
 
 @end

@@ -108,6 +108,18 @@ typedef enum {
                                          NSInteger))      // currentPage
                                          )verticalScroll;
 
+// header refresh
+- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
+                                         UIScrollView *,   // scrollView
+                                         NSInteger))      // currentPage
+                                         )headerRefresh;
+
+// footer refresh
+- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
+                                         UIScrollView *,   // scrollView
+                                         NSInteger))      // currentPage
+                                         )footerRefresh;
+
 @end
 
 
@@ -150,7 +162,6 @@ typedef enum {
  @param animated animated
  */
 - (void)scrollToPage:(NSInteger)page animated:(BOOL)animated;
-
 
 @end
 

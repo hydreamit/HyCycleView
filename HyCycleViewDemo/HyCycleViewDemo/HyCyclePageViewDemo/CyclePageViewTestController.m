@@ -10,9 +10,6 @@
 #import "CyclePageViewTestController.h"
 #import "UIView+HyFrame.h"
 
-@interface CyclePageViewTestController ()
-
-@end
 
 @implementation CyclePageViewTestController
 

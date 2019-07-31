@@ -1,4 +1,4 @@
-# HYCycleView
+# HyCycleView HyCyclePageView HySegmentView
 
  HyCycleView(可定制轮播:支持view/controller, 左右上下四个方向);  <br>  
 

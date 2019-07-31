@@ -355,5 +355,5 @@ pageControl.currentPageIndicatorTintColor = UIColor.orangeColor;
 ![控制器轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_Four.gif)
 
 ### HySegmentView
-* Demo图片 
+* Demo图片<br> 
 ![控制器轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HySegmentView.gif)

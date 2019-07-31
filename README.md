@@ -1,10 +1,9 @@
-# HyCycleView HyCyclePageView HySegmentView
-
- HyCycleView(可定制轮播:支持view/controller, 左右上下四个方向);  <br>  
-
- HyCyclePageView(可定制PageView:支持无限循环、view/controller、scrollView嵌套悬停(两种解决方案)); <br>  
-
- HySegmentView(可定制SegmentView:支持自定义每一个item及动画view);
+# HyCycleView -
+HyCycleView(可定制轮播:支持view/controller, 左右上下四个方向);
+# HyCyclePageView  
+ HyCyclePageView(可定制PageView:支持无限循环、view/controller、scrollView嵌套悬停(两种解决方案)); 
+# HySegmentView
+ HySegmentView(可定制SegmentView:支持自定义每一个item及动画view)
 
 
 ## 如何导入

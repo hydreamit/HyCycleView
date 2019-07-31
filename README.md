@@ -346,11 +346,11 @@ pageControl.currentPageIndicatorTintColor = UIColor.orangeColor;
 #### Demo图片 
 
 * 无头部<br>
-![控制器轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_Three.gif)
+![图片轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_One.gif)
 * 有头部scrollView嵌套<br>
 ![自定义轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_Two.gif)
 * 有头部scrollView嵌套 动画<br>
-![图片轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_One.gif)
+![控制器轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_Three.gif)
 * 有头部scrollView嵌套 动画 自定义悬停View<br>
 ![控制器轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_Four.gif)
 

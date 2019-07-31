@@ -53,13 +53,12 @@ typedef enum {
 // scroll direction (轮播方向:左、右、上、下)
 - (HyCycleViewConfigure *(^)(HyCycleViewScrollDirection))scrollDirection;
 
-
-// cycle views or controllers (轮播传入的是实例对象：view 或者 controller)
-- (HyCycleViewConfigure *(^)(NSArray *))cycleInstances;
 // cycle views or controllers of class (轮播传入的是Class：view class 或者 controller class)
 - (HyCycleViewConfigure *(^)(NSArray<Class> *))cycleClasses;
 - (HyCycleViewConfigure *(^)(Class (^)(HyCycleView *, NSInteger)))cycleClass;
-
+// cycle views or controllers (轮播传入的是实例对象：view 或者 controller)
+- (HyCycleViewConfigure *(^)(NSArray *))cycleInstances;
+- (HyCycleViewConfigure *(^)(id (^)(HyCycleView *, NSInteger)))cycleInstance;
 
 // click cycleView action (点击某个轮播view的回调)
 - (HyCycleViewConfigure *(^)(void(^)(HyCycleView *, NSInteger)))clickAction;

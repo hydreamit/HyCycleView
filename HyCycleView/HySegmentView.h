@@ -26,7 +26,7 @@ typedef enum {
 - (HySegmentViewConfigure *(^)(CGFloat))itemMargin;
 // start index default 0 (开始选中的标签数)
 - (HySegmentViewConfigure *(^)(NSInteger))startIndex;
-// number Of items （标签总数)
+// number of items （标签总数)
 - (HySegmentViewConfigure *(^)(NSInteger))numberOfItems;
 
 

@@ -38,11 +38,12 @@ typedef enum {
 // currentPage
 @property (nonatomic,assign,readonly) NSInteger currentPage;
 
+
 // gesture Style(需要悬停嵌套scrollView时的 手势处理方式)
 - (HyCyclePageViewConfigure *(^)(HyCyclePageViewGestureStyle))gestureStyle;
-
 // header refresh style
 - (HyCyclePageViewConfigure *(^)(HyCyclePageViewHeaderRefreshStyle))headerRefreshStyle;
+
 
 // header view (头部视图)
 - (HyCyclePageViewConfigure *(^)(UIView *))headerView;
@@ -53,12 +54,14 @@ typedef enum {
 // header view down Animation(头部视图下拉动画)
 - (HyCyclePageViewConfigure *(^)(HyCyclePageViewHeaderViewDownAnimation))headerViewDownAnimation;
 
+
 // hover view (悬停视图)
 - (HyCyclePageViewConfigure *(^)(UIView *))hoverView;
 // hover view (悬停视图高度)
 - (HyCyclePageViewConfigure *(^)(CGFloat))hoverViewHeight;
 //hover offset default 0 (悬停位置偏移量 默认为0)
 - (HyCyclePageViewConfigure *(^)(CGFloat))hoverOffset;
+
 
 // cycle page loop default yes (是否为无限循环 默认为YES)
 - (HyCyclePageViewConfigure *(^)(BOOL))isCycleLoop;
@@ -67,12 +70,13 @@ typedef enum {
 // total Pages (总页数)
 - (HyCyclePageViewConfigure *(^)(NSInteger))totalPage;
 
+
 // cycle page view load style (view/Controller加载方式: 滑动出现立即加载/滑动到整个页面再加载)
 - (HyCyclePageViewConfigure *(^)(HyCycleViewScrollLoadStyle))loadStyle;
 // cycle views/controllers of class (传入的是class)
 - (HyCyclePageViewConfigure *(^)(Class (^)(HyCyclePageView *, NSInteger)))cyclePageClass;
 // cycle page views/controllers (传入的是实例对象)
-- (HyCyclePageViewConfigure *(^)(NSArray *))cyclePageInstances;
+- (HyCyclePageViewConfigure *(^)(id (^)(HyCyclePageView *, NSInteger)))cyclePageInstance;
 
 
 // one page view will appear callback (view 即将出现的回调)

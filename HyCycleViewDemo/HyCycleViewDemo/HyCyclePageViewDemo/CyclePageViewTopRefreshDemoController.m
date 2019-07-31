@@ -23,7 +23,7 @@
             __block typeof(scrollView) weakScrollView = scrollView;
             scrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                                         (int64_t)(1 * NSEC_PER_SEC)),
+                                                         (int64_t)(.5 * NSEC_PER_SEC)),
                                            dispatch_get_main_queue(), ^{
                                                [weakScrollView.mj_header endRefreshing];
                                            });
@@ -32,7 +32,6 @@
             if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
                 scrollView.mj_header.ignoredScrollViewContentInsetTop = 290;
             }
-            
         })
         .footerRefresh(^(HyCyclePageView *pageView, UIScrollView *scrollView, NSInteger index){
             
@@ -40,7 +39,7 @@
             scrollView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
                 
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                             (int64_t)(1 * NSEC_PER_SEC)),
+                                             (int64_t)(.5 * NSEC_PER_SEC)),
                                dispatch_get_main_queue(), ^{
                                    [weakScrollView.mj_footer endRefreshing];
                                });

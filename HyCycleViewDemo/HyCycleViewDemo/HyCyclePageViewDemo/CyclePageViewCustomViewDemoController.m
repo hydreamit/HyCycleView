@@ -9,6 +9,7 @@
 
 #import "CyclePageViewCustomViewDemoController.h"
 #import "CyclePageViewTestController.h"
+#import <objc/message.h>
 
 
 @interface CyclePageViewCustomViewDemoController ()<UICollectionViewDataSource, UICollectionViewDelegate>
@@ -34,6 +35,52 @@
     
     [self.navigationController.navigationBar setAlpha:1.f];
 }
+
+- (void (^)(HyCyclePageViewConfigure * _Nonnull))configPageView {
+    return ^(HyCyclePageViewConfigure * _Nonnull configure) {
+        
+        __weak typeof(self) weakSelf = self;
+        
+        CGFloat naviHeight = 64;
+        if ([[UIApplication sharedApplication].keyWindow respondsToSelector:NSSelectorFromString(@"safeAreaInsets")]) {
+            naviHeight = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.top + 44;
+        }
+        
+        CGFloat headerViewH = 250;
+        
+        configure
+        .hoverOffset(naviHeight)
+        .loadStyle(HyCycleViewScrollLoadStyleDidAppear)
+        .headerViewUpAnimation(HyCyclePageViewHeaderViewUpAnimationCover)
+        .headerViewDownAnimation(HyCyclePageViewHeaderViewDownAnimationScale)
+        .cyclePageInstance(^id(HyCyclePageView *pageView, NSInteger currentPage){
+            
+            if (currentPage == 1) {
+                return [weakSelf createCollectionView];
+            } else if (currentPage == 2) {
+                return [[CyclePageViewTestController alloc] init];
+            } else {
+                return
+                ((id (*)(id, SEL, NSInteger))objc_msgSend)(weakSelf, NSSelectorFromString(@"creatTableViewWithPageNumber:"), currentPage);
+            }
+        })
+        .verticalScroll(^(HyCyclePageView *cyclePageView,
+                          CGFloat offsetY,
+                          NSInteger currentPage){
+            
+            CGFloat margin = headerViewH - naviHeight;
+            if (offsetY >= margin) {
+                [weakSelf.navigationController.navigationBar setAlpha:1.0f];
+            }else if (offsetY < 0) {
+                [weakSelf.navigationController.navigationBar setAlpha:.0f];
+            }else {
+                [weakSelf.navigationController.navigationBar setAlpha:(offsetY / margin)];
+            }
+            weakSelf.lastAlpha = weakSelf.navigationController.navigationBar.alpha;
+        });
+    };
+}
+
 //
 //- (UIView *)headerView {
 //
@@ -79,9 +126,7 @@
     return newHoverView;
 }
 
-- (NSArray *)pageInstance {
-    
-    NSMutableArray *superPageViews = [super pageInstance].mutableCopy;
+- (UICollectionView *)createCollectionView {
     
     CGFloat itemWH = (self.view.width - 6 * 10) / 5;
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -91,7 +136,7 @@
     layout.itemSize = CGSizeMake(itemWH, itemWH);
     
     UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero
-                                         collectionViewLayout:layout];
+                                                          collectionViewLayout:layout];
     [collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:NSStringFromClass(UICollectionViewCell.class)];
     collectionView.showsHorizontalScrollIndicator = NO;
     collectionView.showsVerticalScrollIndicator = NO;
@@ -104,45 +149,7 @@
     if (@available(iOS 11.0, *)) {
         collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
-    
-    [superPageViews replaceObjectAtIndex:1 withObject:collectionView];
-    [superPageViews replaceObjectAtIndex:2 withObject:[[CyclePageViewTestController alloc] init]];
-    
-    return superPageViews;
-}
-
-- (void (^)(HyCyclePageViewConfigure * _Nonnull))configPageView {
-    return ^(HyCyclePageViewConfigure * _Nonnull configure) {
-        
-        __weak typeof(self) weakSelf = self;
-        
-        CGFloat naviHeight = 64;
-        if ([[UIApplication sharedApplication].keyWindow respondsToSelector:NSSelectorFromString(@"safeAreaInsets")]) {
-           naviHeight = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.top + 44;
-        }
-        
-        CGFloat headerViewH = 250;
-        
-        configure
-        .hoverOffset(naviHeight)
-        .loadStyle(HyCycleViewScrollLoadStyleDidAppear)
-        .headerViewUpAnimation(HyCyclePageViewHeaderViewUpAnimationCover)
-        .headerViewDownAnimation(HyCyclePageViewHeaderViewDownAnimationScale)
-        .verticalScroll(^(HyCyclePageView *cyclePageView,
-                           CGFloat offsetY,
-                           NSInteger currentPage){
-            
-            CGFloat margin = headerViewH - naviHeight;
-            if (offsetY >= margin) {
-                [weakSelf.navigationController.navigationBar setAlpha:1.0f];
-            }else if (offsetY < 0) {
-                [weakSelf.navigationController.navigationBar setAlpha:.0f];
-            }else {
-                [weakSelf.navigationController.navigationBar setAlpha:(offsetY / margin)];
-            }
-            weakSelf.lastAlpha = weakSelf.navigationController.navigationBar.alpha;
-        });
-    };
+    return collectionView;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView

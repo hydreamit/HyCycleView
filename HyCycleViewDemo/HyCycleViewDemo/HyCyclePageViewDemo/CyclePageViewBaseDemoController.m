@@ -14,11 +14,10 @@
 
 
 @interface CyclePageViewBaseDemoController () <UITableViewDataSource, UITableViewDelegate>
-@property (nonatomic,strong) NSMutableArray<UITableView *> *tableviews;
-@property (nonatomic,strong) HyCyclePageView *cyclePageView;
 @property (nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,strong) HyCycleView *cycleView;
 @property (nonatomic,strong) HySegmentView *segmentView;
+@property (nonatomic,strong) HyCyclePageView *cyclePageView;
 @property (nonatomic,strong) NSArray<NSString *> *titleArray;
 @property (nonatomic,strong) NSArray<UIColor *> *colorArray;
 @end
@@ -32,11 +31,7 @@
     self.view.backgroundColor = UIColor.groupTableViewBackgroundColor;
     
     self.titleArray = @[@"NBA", @"国际足球", @"中国篮球", @"跑步",@"欧洲杯", @"欧冠" ,@"英超", @"西甲", @"意甲"];
-    
-    self.tableviews = @[].mutableCopy;
-    for (NSInteger i = 0; i < self.titleArray.count; i++) {
-        [self.tableviews addObject:[self creatTableView]];
-    }
+  
     [self.view addSubview:self.scrollView];
 }
 
@@ -54,26 +49,23 @@
     return self.cycleView;
 }
 
-- (NSArray *)pageInstance {
-    return self.tableviews;
-}
-
 - (void(^)(HyCyclePageViewConfigure *configure))configPageView {
     return nil;
 }
 
-- (UITableView *)creatTableView {
+- (UITableView *)creatTableViewWithPageNumber:(NSInteger)pageNumber {
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    tableView.delegate = self;
-    tableView.dataSource = self;
     [tableView registerClass:UITableViewCell.class
       forCellReuseIdentifier:@"UITableViewCell"];
+    tableView.tag = pageNumber;
     tableView.rowHeight = 50;
     tableView.sectionHeaderHeight = 0.01;
     tableView.sectionFooterHeight = 0.01;
     tableView.showsHorizontalScrollIndicator = NO;
     tableView.showsVerticalScrollIndicator = NO;
+    tableView.delegate = self;
+    tableView.dataSource = self;
     return tableView;
 }
 
@@ -90,7 +82,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
     cell.contentView.backgroundColor = UIColor.grayColor;
-    NSString *string = self.titleArray[[self.tableviews indexOfObject:tableView]];
+    NSString *string = self.titleArray[tableView.tag];
     cell.textLabel.text = [NSString stringWithFormat:@"%@_%tu", string, indexPath.row];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -112,8 +104,11 @@
                                                   configureBlock:^(HyCyclePageViewConfigure * _Nonnull configure) {
                                                       
                                                       configure
+                                                      .totalPage(9)
                                                       .gestureStyle(weakSelf.gestureStyle)
-                                                      .cyclePageInstances(weakSelf.pageInstance)
+                                                      .cyclePageInstance(^id(HyCyclePageView *pageView, NSInteger currentIndex){
+                                                          return [weakSelf creatTableViewWithPageNumber:currentIndex];
+                                                      })
                                                       .headerView(weakSelf.headerView)
                                                       .hoverView(weakSelf.hoverView)
                                                       .horizontalScroll(^(HyCyclePageView *cyclePageView,

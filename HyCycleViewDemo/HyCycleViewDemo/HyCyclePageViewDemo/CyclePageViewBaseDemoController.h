@@ -18,8 +18,6 @@
 
 - (UIView *)headerView;
 
-- (NSArray *)pageInstance;
-
 - (void(^)(HyCyclePageViewConfigure *configure))configPageView;
 
 @end

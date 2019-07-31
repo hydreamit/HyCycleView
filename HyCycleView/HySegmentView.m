@@ -396,6 +396,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     }
     return _animationViews;
 }
+
 @end
 
 @implementation HySegmentViewConfigure

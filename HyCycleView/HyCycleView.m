@@ -35,6 +35,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 @property (nonatomic, strong) NSArray *hy_cycleInstances;
 @property (nonatomic, strong) NSArray<Class> *hy_cycleClasses;
 @property (nonatomic, strong) Class(^hy_cycleClass)(HyCycleView *, NSInteger);
+@property (nonatomic, strong) id (^hy_cycleInstance)(HyCycleView *, NSInteger);
 
 @property (nonatomic, assign) HyCycleViewScrollStyle hy_scrollStyle;
 @property (nonatomic, assign) HyCycleViewScrollLoadStyle hy_loadStyle;
@@ -111,8 +112,7 @@ static int const CycleContentViewCount = 3;
             cycleView.totalCycleCount = cycleView.configure.hy_totalPage;
         }
         
-    } else if (cycleView.configure.hy_cycleClass) {
-        
+    } else if (cycleView.configure.hy_cycleClass || cycleView.configure.hy_cycleInstance) {
         cycleView.totalCycleCount = cycleView.configure.hy_totalPage;
     }
     
@@ -452,7 +452,6 @@ static int const CycleContentViewCount = 3;
         } else {
             self.scrollView.scrollEnabled = YES;
             if (self.configure.hy_scrollStyle == HyCycleViewScrollAuto) {
-                [self stopTimer];
                 [self startTimer];
             }
         }
@@ -469,7 +468,6 @@ static int const CycleContentViewCount = 3;
     [self handleStartCyclePage];
     [self stopTimer];
 }
-
 
 - (void)updateStartPage {
     
@@ -522,7 +520,6 @@ static int const CycleContentViewCount = 3;
         } else {
             self.scrollView.scrollEnabled = YES;
             if (self.configure.hy_scrollStyle == HyCycleViewScrollAuto) {
-                [self stopTimer];
                 [self startTimer];
             }
         }
@@ -870,6 +867,8 @@ static int const CycleContentViewCount = 3;
             
             if (self.configure.hy_cycleInstances.count) {
                 willAddView = self.configure.hy_cycleInstances[dataIndex];
+            } else if (self.configure.hy_cycleInstance){
+                willAddView = self.configure.hy_cycleInstance(self, dataIndex);
             } else {
                 willAddView = [self createViewWithIndex:dataIndex];
             }
@@ -880,6 +879,8 @@ static int const CycleContentViewCount = 3;
             if (isResetContentOffset) {
                 if (self.configure.hy_cycleInstances.count) {
                     willAddView = self.configure.hy_cycleInstances[dataIndex];
+                } else if (self.configure.hy_cycleInstance){
+                    willAddView = self.configure.hy_cycleInstance(self, dataIndex);
                 } else {
                     willAddView = [self createViewWithIndex:dataIndex];
                 }
@@ -896,6 +897,16 @@ static int const CycleContentViewCount = 3;
         [willAddView isKindOfClass:UIViewController.class]) {
         
         [self addingCycleView:willAddView index:dataIndex];
+                
+        if ([willAddView isKindOfClass:UIViewController.class]) {
+            UIViewController *vc = (UIViewController *)willAddView;
+            vc.view.containTo(contentView);
+            [contentView addSubview:vc.view];
+        } else {
+            
+            ((UIView *)willAddView).containTo(contentView);
+            [contentView addSubview:willAddView];
+        }
         
         if (self.configure.hy_loadStyle == HyCycleViewScrollLoadStyleWillAppear) {
             if (!isResetContentOffset) {
@@ -913,16 +924,6 @@ static int const CycleContentViewCount = 3;
                     self.configure.hy_viewWillAppear(self, willAddView, dataIndex, isfistrLoad);
                 }
             }
-        }
-        
-        if ([willAddView isKindOfClass:UIViewController.class]) {
-            UIViewController *vc = (UIViewController *)willAddView;
-            vc.view.containTo(contentView);
-            [contentView addSubview:vc.view];
-        } else {
-            
-            ((UIView *)willAddView).containTo(contentView);
-            [contentView addSubview:willAddView];
         }
     }
 }
@@ -1395,6 +1396,13 @@ static int const CycleContentViewCount = 3;
 - (HyCycleViewConfigure *(^)(NSArray *))cycleInstances {
     return ^HyCycleViewConfigure *(NSArray *array) {
         self.hy_cycleInstances = array;
+        return self;
+    };
+}
+
+- (HyCycleViewConfigure *(^)(id (^)(HyCycleView *, NSInteger)))cycleInstance {
+    return ^HyCycleViewConfigure *(id (^block)(HyCycleView *, NSInteger)){
+        self.hy_cycleInstance = [block copy];
         return self;
     };
 }

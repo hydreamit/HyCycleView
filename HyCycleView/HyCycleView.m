@@ -554,11 +554,17 @@ static int const CycleContentViewCount = 3;
     [self handleScrollViewContentSize];
     [self handleScrollViewAndContentView];
     
+    NSInteger currentPage = self.currentCyclePage;
+    if (self.configure.hy_scrollDirection == HyCycleViewScrollRight ||
+        self.configure.hy_scrollDirection == HyCycleViewScrollBottom) {
+        currentPage = self.totalCycleCount - 1 - currentPage;
+    }
+    
     !self.configure.hy_currentPageChange ?:
-    self.configure.hy_currentPageChange(self, self.totalCycleCount, self.currentCyclePage);
+    self.configure.hy_currentPageChange(self, self.totalCycleCount, currentPage);
     
     !self.configure.hy_roundingPageChange ?:
-    self.configure.hy_roundingPageChange(self, self.totalCycleCount, self.currentCyclePage);
+    self.configure.hy_roundingPageChange(self, self.totalCycleCount, currentPage);
 }
 
 - (void)handleScrollViewAndContentView {
@@ -587,7 +593,7 @@ static int const CycleContentViewCount = 3;
                 }
             }break;
             default:
-                break;
+            break;
         }
         
         NSInteger loadOnIndex = 0;

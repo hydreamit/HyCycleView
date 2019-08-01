@@ -10,31 +10,31 @@
 #import <UIKit/UIKit.h>
 
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
     HySegmentViewItemPositionLeft,
     HySegmentViewItemPositionCenter,
     HySegmentViewItemPositionRight
-} HySegmentViewItemPosition;
-
+};
 
 @class HySegmentView;
 @interface HySegmentViewConfigure : NSObject
 
+/// current index
 @property (nonatomic,assign,readonly) NSInteger currentIndex;
 
-// item margin default average (标签间距 默认是平均分配)
+/// item margin default average (标签间距 默认是平均分配)
 - (HySegmentViewConfigure *(^)(CGFloat))itemMargin;
-// start index default 0 (开始选中的标签数)
+/// start index default 0 (开始选中的标签数)
 - (HySegmentViewConfigure *(^)(NSInteger))startIndex;
-// number of items （标签总数)
+/// number of items （标签总数)
 - (HySegmentViewConfigure *(^)(NSInteger))numberOfItems;
 
-
+/// click item at index callback
 - (HySegmentViewConfigure *(^)(void (^)(NSInteger, // click index
                                         BOOL))     // is repeat click
                                         )clickItemAtIndex;
 
-
+/// view for item at index
 - (HySegmentViewConfigure *(^)(UIView *(^)(UIView *,                      // current view
                                            NSInteger,                    // index
                                            CGFloat,                     // progress
@@ -42,7 +42,7 @@ typedef enum {
                                            NSArray<UIView *> *))      // animationViews
                                            )viewForItemAtIndex;
 
-
+/// animationViews
 - (HySegmentViewConfigure *(^)(NSArray<UIView *> *(^)(NSArray<UIView *> *,     // current animationViews
                                                       UICollectionViewCell *, // from cell
                                                       UICollectionViewCell *,// to cell

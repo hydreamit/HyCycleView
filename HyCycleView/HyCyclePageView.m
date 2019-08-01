@@ -490,8 +490,8 @@
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context {
    
-    CGPoint newContentOffset =  [change[@"new"] CGPointValue];
-    CGPoint oldContentOffset =  [change[@"old"] CGPointValue];
+    CGPoint newContentOffset =  [change[NSKeyValueChangeNewKey] CGPointValue];
+    CGPoint oldContentOffset =  [change[NSKeyValueChangeOldKey] CGPointValue];
     NSInteger currentPage =  [((NSNumber *)(__bridge typeof(NSNumber *))context) integerValue];
 
     if (newContentOffset.y == oldContentOffset.y) {return;}

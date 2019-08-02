@@ -13,8 +13,17 @@
 
 @interface HyGestureTableView : UITableView <UIGestureRecognizerDelegate>
 @property (nonatomic,strong) NSArray<UIView *> *hy_otherGestureViews;
+@property (nonatomic,assign) BOOL isGestureHeader;
 @end
 @implementation HyGestureTableView
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    CGFloat pointY = [gestureRecognizer locationInView:gestureRecognizer.view].y;
+    CGFloat cellY = [self rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].origin.y;
+    self.isGestureHeader = (pointY <= cellY && self.contentOffset.y < self.tableHeaderView.height);
+    return YES;
+}
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return
     self.hy_otherGestureViews.count &&
@@ -139,8 +148,6 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
-    self.headerView.backgroundColor = UIColor.redColor;
     
     if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
         
@@ -590,47 +597,51 @@
             }
             
         } else {
-            
+
             if (currentPage == self.cycleView.configure.currentPage) {
-                
+
                 if (self.cellScrollViewCanScroll) {
                     !self.configure.hy_verticalScroll ?:
                     self.configure.hy_verticalScroll(self, newContentOffset.y + self.gestureTableView.contentOffset.y, self.cycleView.configure.currentPage);
                 }
-                
+
                 BOOL isCenterRefresh =
                 self.configure.hy_headerViewDownAnimation != HyCyclePageViewHeaderViewDownAnimationScale &&
                 self.configure.hy_headerRefreshStyle == HyCyclePageViewHeaderRefreshStyleCenter &&
                 self.configure.hy_headerRefresh;
-                
+
                 if (isCenterRefresh) {
-                    
+
                     if (object.contentOffset.y == 0 &&
                         self.gestureTableView.contentOffset.y == 0) {
-                        
+
                         self.cellScrollViewCanScroll =
                         self.tableViewCanScroll = YES;
                     }
                     
+                    if (object.contentOffset.y < 0 && self.gestureTableView.contentOffset.y == - self.gestureTableView.tableHeaderView.height) {
+                        self.cellScrollViewCanScroll = YES;
+                    }
+
                     if (!self.cellScrollViewCanScroll) {
-                        
-                        object.contentOffset = CGPointZero;
-                        
+
+                        object.contentOffset = CGPointMake(0, -object.contentInset.top);
+
                     } else if (object.contentOffset.y < 0 &&
                                self.gestureTableView.contentOffset.y == self.headerView.height - self.configure.hy_hoverOffset) {
-                        
-                        object.contentOffset = CGPointZero;
+
+                        object.contentOffset = CGPointMake(0, -object.contentInset.top);
                         self.cellScrollViewCanScroll = NO;
                         self.tableViewCanScroll = YES;
-                        
+
                     } else if (object.contentOffset.y > 0 &&
                                self.gestureTableView.contentOffset.y < self.headerView.height - self.configure.hy_hoverOffset && self.gestureTableView.contentOffset.y >= 0) {
-                        
-                        object.contentOffset = CGPointZero;
+
+                        object.contentOffset = CGPointMake(0, -object.contentInset.top);
                         self.cellScrollViewCanScroll = NO;
                         self.tableViewCanScroll = YES;
                     }
-                    
+
                 } else {
                     if (self.configure.hy_headerView.height) {
                         if (!self.cellScrollViewCanScroll) {
@@ -674,25 +685,36 @@
     return self.configure.hy_hoverView.height;
 }
 
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView
+                     withVelocity:(CGPoint)velocity
+              targetContentOffset:(inout CGPoint *)targetContentOffset {
+    self.gestureTableView.isGestureHeader = NO;
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     CGFloat headerViewH = self.headerView.height;
     if (headerViewH) {
-                
+
         if (self.tableViewCanScroll) {
             !self.configure.hy_verticalScroll ?:
             self.configure.hy_verticalScroll(self, scrollView.contentOffset.y, self.cycleView.configure.currentPage);
         }
         
         CGFloat contentOffsetY = scrollView.contentOffset.y;
-        
+
         BOOL isCenterRefresh =
         self.configure.hy_headerViewDownAnimation != HyCyclePageViewHeaderViewDownAnimationScale &&
         self.configure.hy_headerRefreshStyle == HyCyclePageViewHeaderRefreshStyleCenter &&
         self.configure.hy_headerRefresh;
-        
+
         if (isCenterRefresh) {
             
+            if (self.gestureTableView.isGestureHeader) {
+                self.tableViewCanScroll =
+                self.cellScrollViewCanScroll = YES;
+            }
+
             UIScrollView *pageScrollView = [self.pageScrollViewsDict objectForKey:@(self.cycleView.configure.currentPage)];
             if ([pageScrollView isKindOfClass:UIScrollView.class]) {
                 if (pageScrollView.contentOffset.y == 0 && scrollView.contentOffset.y == 0) {
@@ -701,27 +723,31 @@
                 }
             }
             
+            if (contentOffsetY > 0 && self.gestureTableView.isGestureHeader) {
+                self.tableViewCanScroll = YES;
+            }
+
             if (!self.tableViewCanScroll) {
-                
+
                 scrollView.contentOffset = CGPointMake(0, self.contentOffset);
-                
+
             } else if (contentOffsetY >= headerViewH - self.configure.hy_hoverOffset) {
-                
+
                 self.contentOffset = headerViewH - self.configure.hy_hoverOffset;
                 scrollView.contentOffset = CGPointMake(0, self.contentOffset);
                 self.tableViewCanScroll = NO;
                 self.cellScrollViewCanScroll = YES;
-                
+
             } else if (contentOffsetY < 0) {
-                
+
                 self.contentOffset = 0;
                 scrollView.contentOffset = CGPointMake(0, self.contentOffset);
                 self.tableViewCanScroll = NO;
                 self.cellScrollViewCanScroll = YES;
             }
-            
+
         } else {
-            
+
             CGFloat contentOffset = headerViewH - self.configure.hy_hoverOffset;
             if (!self.tableViewCanScroll) {
                 scrollView.contentOffset = CGPointMake(0, contentOffset);
@@ -735,7 +761,7 @@
         if (self.configure.hy_headerViewDownAnimation == HyCyclePageViewHeaderViewDownAnimationScale &&
             contentOffsetY <= 0 &&
             !isCenterRefresh) {
-            
+
             self.headerView.clipsToBounds = NO;
             self.configure.hy_headerView
             .topValue(contentOffsetY)
@@ -743,10 +769,10 @@
             .widthValue(self.headerView.width - contentOffsetY)
             .leftValue(contentOffsetY / 2);
         }
-        
+
         if (self.configure.hy_headerViewUpAnimation == HyCyclePageViewHeaderViewUpAnimationCover &&
             contentOffsetY >= 0 && contentOffsetY <= headerViewH - self.configure.hy_hoverOffset) {
-            
+
             self.headerView.clipsToBounds = YES;
             CGFloat topView = contentOffsetY * 2 / 3;
             self.configure.hy_headerView.topValue(topView);

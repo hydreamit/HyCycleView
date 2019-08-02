@@ -11,6 +11,7 @@
 #import "HyCycleView.h"
 
 
+/// gesture style(内部手势处理方式)
 typedef NS_ENUM(NSUInteger, HyCyclePageViewGestureStyle) {
     /// only gesture(一个手势,不需解决手势冲突)
     HyCyclePageViewGestureStyleOnly,

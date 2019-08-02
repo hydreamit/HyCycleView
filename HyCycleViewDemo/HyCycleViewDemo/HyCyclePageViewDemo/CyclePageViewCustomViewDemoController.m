@@ -81,26 +81,6 @@
     };
 }
 
-//
-//- (UIView *)headerView {
-//
-//    UIView *view = [super headerView];
-//
-//    UIView *newHeaderView = [[UIView alloc] init];
-//    newHeaderView.backgroundColor = UIColor.whiteColor;
-//    newHeaderView.widthIsEqualTo(view).heightValue(view.height + 50);
-//
-//    [newHeaderView addSubview:view];
-//    view.originValue(0,0);
-//
-//    UIView *customView = [[UIView alloc] init];
-//    customView.backgroundColor = UIColor.greenColor;
-//    customView.rectValue(0, view.bottom, view.width, 50);
-//    [newHeaderView addSubview:customView];
-//
-//    return newHeaderView;
-//}
-
 - (UIView *)hoverView {
     
     UIView *view = [super hoverView];

@@ -10,7 +10,6 @@
 #import "ViewController.h"
 #import "HyCyclePageView.h"
 
-
 @interface CyclePageViewStyleDemoController : ViewController
 
 @property (nonatomic,assign) HyCyclePageViewGestureStyle gestureStyle;

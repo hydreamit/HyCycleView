@@ -24,7 +24,8 @@
                     @"CyclePageViewNoHeaderViewDemo",
                     @"CyclePageViewCustomViewDemo",
                     @"CyclePageViewTopRefreshDemo",
-                    @"CyclePageViewCenterRefreshDemo",];
+                    @"CyclePageViewCenterRefreshDemo",
+                    @"CyclePageViewSpecialDemo"];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

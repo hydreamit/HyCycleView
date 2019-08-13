@@ -9,6 +9,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HyCyclePageView.h"
+#import "HySegmentView.h"
 
 @interface CyclePageViewBaseDemoController : UIViewController
 
@@ -19,6 +20,8 @@
 - (UIView *)headerView;
 
 - (void(^)(HyCyclePageViewConfigure *configure))configPageView;
+
+- (void(^)(HySegmentViewConfigure *configure))configSegmentView;
 
 @end
 

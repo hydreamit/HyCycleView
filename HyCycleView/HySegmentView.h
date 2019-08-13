@@ -19,9 +19,18 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 @class HySegmentView;
 @interface HySegmentViewConfigure : NSObject
 
-/// current index
-@property (nonatomic,assign,readonly) NSInteger currentIndex;
+/// get current index
+- (NSInteger)getCurrentIndex;
+/// get inset
+- (UIEdgeInsets)getInset;
+/// get item margin
+- (CGFloat)getItemMargin;
 
+
+/// inset
+- (HySegmentViewConfigure *(^)(UIEdgeInsets))inset;
+/// insetAndMarginRatio
+- (HySegmentViewConfigure *(^)(CGFloat))insetAndMarginRatio;
 /// item margin default average (标签间距 默认是平均分配)
 - (HySegmentViewConfigure *(^)(CGFloat))itemMargin;
 /// start index default 0 (开始选中的标签数)
@@ -29,8 +38,9 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 /// number of items （标签总数)
 - (HySegmentViewConfigure *(^)(NSInteger))numberOfItems;
 
-/// click item at index callback
-- (HySegmentViewConfigure *(^)(void (^)(NSInteger, // click index
+
+/// click item at index callback 
+- (HySegmentViewConfigure *(^)(BOOL (^)(NSInteger, // click index
                                         BOOL))     // is repeat click
                                         )clickItemAtIndex;
 

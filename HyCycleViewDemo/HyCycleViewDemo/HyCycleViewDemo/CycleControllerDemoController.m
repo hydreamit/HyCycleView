@@ -74,11 +74,12 @@
                                  
                                  return array;
                              })
-                             .clickItemAtIndex(^(NSInteger currentIndex, BOOL isRepeat){
+                             .clickItemAtIndex(^BOOL(NSInteger currentIndex, BOOL isRepeat){
                                  
                                  if (!isRepeat) {
                                      [weakSelf.cycleView scrollToPage:currentIndex animated:YES];
                                  }
+                                 return NO;
                              });
     }];
     

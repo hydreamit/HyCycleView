@@ -89,6 +89,7 @@
 
 @property (nonatomic,weak) HyCyclePageView *cyclePageView;
 + (instancetype)defaultConfigure;
+- (void)deallocBlock;
 @end
 
 
@@ -983,6 +984,7 @@
                                                                      BOOL *stop) {
         [obj removeObserver:self forKeyPath:@"contentOffset"];
     }];
+    [self.configure deallocBlock];
 }
 
 @end
@@ -996,105 +998,105 @@
 }
 
 - (HyCyclePageViewConfigure *(^)(HyCyclePageViewGestureStyle))gestureStyle {
-    return ^HyCyclePageViewConfigure *(HyCyclePageViewGestureStyle style){
+    return ^(HyCyclePageViewGestureStyle style){
         self.hy_gestureStyle = style;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(HyCyclePageViewHeaderRefreshStyle))headerRefreshStyle {
-    return ^HyCyclePageViewConfigure *(HyCyclePageViewHeaderRefreshStyle style) {
+    return ^(HyCyclePageViewHeaderRefreshStyle style) {
         self.hy_headerRefreshStyle = style;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(BOOL))isCycleLoop {
-    return ^HyCyclePageViewConfigure *(BOOL cycleLoop) {
+    return ^(BOOL cycleLoop) {
         self.hy_isCycleLoop = cycleLoop;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(HyCycleViewScrollLoadStyle))loadStyle {
-    return ^HyCyclePageViewConfigure *(HyCycleViewScrollLoadStyle style) {
+    return ^(HyCycleViewScrollLoadStyle style) {
         self.hy_loadStyle = style;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(HyCyclePageViewHeaderViewUpAnimation))headerViewUpAnimation {
-    return ^HyCyclePageViewConfigure *(HyCyclePageViewHeaderViewUpAnimation animation) {
+    return ^(HyCyclePageViewHeaderViewUpAnimation animation) {
         self.hy_headerViewUpAnimation = animation;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(HyCyclePageViewHeaderViewDownAnimation))headerViewDownAnimation {
-    return ^HyCyclePageViewConfigure *(HyCyclePageViewHeaderViewDownAnimation animation) {
+    return ^(HyCyclePageViewHeaderViewDownAnimation animation) {
         self.hy_headerViewDownAnimation = animation;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(UIView *))headerView {
-    return ^HyCyclePageViewConfigure *(UIView *view){
+    return ^(UIView *view){
         self.hy_headerView = view;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(CGFloat ))headerViewHeight {
-    return ^HyCyclePageViewConfigure *(CGFloat height){
+    return ^(CGFloat height){
         self.hy_headerViewHeight = height;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(UIView *))hoverView {
-    return ^HyCyclePageViewConfigure *(UIView *view){
+    return ^(UIView *view){
         self.hy_hoverView = view;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(CGFloat))hoverOffset {
-    return ^HyCyclePageViewConfigure *(CGFloat offset){
+    return ^(CGFloat offset){
         self.hy_hoverOffset = offset;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(CGFloat))hoverViewHeight {
-    return ^HyCyclePageViewConfigure *(CGFloat height){
+    return ^(CGFloat height){
         self.hy_hoverViewHeight = height;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(NSInteger))startPage {
-    return ^HyCyclePageViewConfigure *(NSInteger page){
+    return ^(NSInteger page){
         self.hy_startPage = page;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(NSInteger))totalPage {
-    return ^HyCyclePageViewConfigure *(NSInteger page){
+    return ^(NSInteger page){
         self.hy_totalPage = page;
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(Class (^)(HyCyclePageView *, NSInteger)))cyclePageClass {
-    return ^HyCyclePageViewConfigure *(Class (^block)(HyCyclePageView *, NSInteger)){
+    return ^(Class (^block)(HyCyclePageView *, NSInteger)){
         self.hy_cyclePageClass = [block copy];
         return self;
     };
 }
 
 - (HyCyclePageViewConfigure *(^)(id (^)(HyCyclePageView *, NSInteger)))cyclePageInstance {
-    return ^HyCyclePageViewConfigure *(id (^block)(HyCyclePageView *, NSInteger)){
+    return ^(id (^block)(HyCyclePageView *, NSInteger)){
         self.hy_cyclePageInstance = [block copy];
         return self;
     };
@@ -1105,10 +1107,11 @@
                                          NSInteger,
                                          BOOL))
                                         )viewWillAppear {
-    return ^HyCyclePageViewConfigure *(void (^block)(HyCyclePageView *,
-                                                     id,
-                                                     NSInteger,
-                                                     BOOL)) {
+    
+    return ^(void (^block)(HyCyclePageView *,
+                           id,
+                           NSInteger,
+                           BOOL)) {
         self.hy_viewWillAppear = [block copy];
         return self;
     };
@@ -1118,9 +1121,10 @@
                                          NSInteger,
                                          NSInteger))
                                          )currentPageChange {
-    return ^HyCyclePageViewConfigure *(void (^block)(HyCyclePageView *,
-                                                     NSInteger,
-                                                     NSInteger)) {
+    
+    return ^(void (^block)(HyCyclePageView *,
+                           NSInteger,
+                           NSInteger)) {
         self.hy_currentPageChange = [block copy];
         return self;
     };
@@ -1130,9 +1134,10 @@
                                          NSInteger,
                                          NSInteger))
                                          )roundingPageChange {
-    return ^HyCyclePageViewConfigure *(void (^block)(HyCyclePageView *,
-                                                     NSInteger,
-                                                     NSInteger)) {
+    
+    return ^(void (^block)(HyCyclePageView *,
+                           NSInteger,
+                           NSInteger)) {
         self.hy_roundingPageChange = [block copy];
         return self;
     };
@@ -1143,10 +1148,11 @@
                                          NSInteger,
                                          CGFloat))
                                          )horizontalScroll {
-    return ^HyCyclePageViewConfigure *(void (^block)(HyCyclePageView *,
-                                                     NSInteger,
-                                                     NSInteger,
-                                                     CGFloat)) {
+    
+    return ^(void (^block)(HyCyclePageView *,
+                           NSInteger,
+                           NSInteger,
+                           CGFloat)) {
         self.hy_horizontalScroll = [block copy];
         return self;
     };
@@ -1156,9 +1162,10 @@
                                          CGFloat,
                                          NSInteger))
                                          ) verticalScroll {
-    return ^HyCyclePageViewConfigure *(void (^block)(HyCyclePageView *,
-                                                     CGFloat,
-                                                     NSInteger)) {
+    
+    return ^(void (^block)(HyCyclePageView *,
+                           CGFloat,
+                           NSInteger)) {
         self.hy_verticalScroll = [block copy];
         return self;
     };
@@ -1168,9 +1175,9 @@
                                          UIScrollView *,
                                          NSInteger)))headerRefresh {
     
-    return ^HyCyclePageViewConfigure *(void(^block)(HyCyclePageView *,
-                                                    UIScrollView *,
-                                                    NSInteger)) {
+    return ^(void(^block)(HyCyclePageView *,
+                          UIScrollView *,
+                          NSInteger)) {
         self.hy_headerRefresh = [block copy];
         return self;
     };
@@ -1180,9 +1187,9 @@
                                          UIScrollView *,
                                          NSInteger)))footerRefresh {
     
-    return ^HyCyclePageViewConfigure *(void(^block)(HyCyclePageView *,
-                                                    UIScrollView *,
-                                                    NSInteger)){
+    return ^(void(^block)(HyCyclePageView *,
+                          UIScrollView *,
+                          NSInteger)) {
         self.hy_footerRefresh = [block copy];
         return self;
     };
@@ -1246,6 +1253,18 @@
 
 - (NSInteger)currentPage {
     return self.cyclePageView.cycleView.configure.currentPage;
+}
+
+- (void)deallocBlock {
+    self.hy_cyclePageClass = nil;
+    self.hy_cyclePageInstance = nil;
+    self.hy_viewWillAppear = nil;
+    self.hy_currentPageChange = nil;
+    self.hy_roundingPageChange = nil;
+    self.hy_horizontalScroll = nil;
+    self.hy_verticalScroll = nil;
+    self.hy_headerRefresh = nil;
+    self.hy_footerRefresh = nil;
 }
 
 @end

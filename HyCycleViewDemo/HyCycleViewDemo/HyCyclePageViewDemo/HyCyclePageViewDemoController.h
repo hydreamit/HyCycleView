@@ -9,7 +9,6 @@
 
 #import "ViewController.h"
 
-
 @interface HyCyclePageViewDemoController : ViewController
 
 @end

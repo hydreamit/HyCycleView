@@ -14,11 +14,13 @@
 
 @property (nonatomic,assign) NSInteger currentIndex;
 
+@property (nonatomic,assign) CGFloat hy_insetAndMarginRatio;
+@property (nonatomic,assign) UIEdgeInsets hy_inset;
 @property (nonatomic,assign) CGFloat hy_itemMargin;
 @property (nonatomic,assign) NSInteger hy_items;
 @property (nonatomic,assign) NSInteger hy_startIndex;
 
-@property (nonatomic,copy) void(^hy_clickItemAtIndex)(NSInteger, BOOL);
+@property (nonatomic,copy) BOOL(^hy_clickItemAtIndex)(NSInteger, BOOL);
 
 @property (nonatomic,copy) UIView *(^hy_viewForItemAtIndex)(UIView *,
                                                             NSInteger,
@@ -32,8 +34,9 @@
                                                                   NSInteger,
                                                                   NSInteger,
                                                                   CGFloat);
-+ (instancetype)defaultConfigure;
 @property (nonatomic,weak) HySegmentView *segmentView;
++ (instancetype)defaultConfigure;
+- (void)deallocBlock;
 @end
 
 
@@ -74,17 +77,41 @@
         for (NSInteger i = 0; i < self.configure.hy_items; i++) {
             UIView *view = self.configure.hy_viewForItemAtIndex(nil, i, 0, HySegmentViewItemPositionCenter, nil);
             if (view) {
-                totalWith += view.size.width;
+                totalWith += view.width;
                 [self.itemViews addObject:view];
             }
         }
         
         if (self.configure.hy_itemMargin == 0) {
-            CGFloat overWith = self.width - totalWith;
-            if (overWith >= 0) {
-                self.configure.hy_itemMargin = overWith / (self.configure.hy_items + 1);
+            
+            if (UIEdgeInsetsEqualToEdgeInsets(self.configure.hy_inset, UIEdgeInsetsZero)) {
+              
+                CGFloat overWith = self.width - totalWith;
+                if (overWith >= 0) {
+                    
+                    self.configure.hy_itemMargin = overWith / (self.configure.hy_items - 1 + self.configure.hy_insetAndMarginRatio * 2);
+                } else {
+                    self.configure.hy_itemMargin = 30;
+                }
+                
+                self.configure.hy_inset = UIEdgeInsetsMake(0, self.configure.hy_itemMargin * self.configure.hy_insetAndMarginRatio, 0, self.configure.hy_itemMargin * self.configure.hy_insetAndMarginRatio);
+                
             } else {
-                self.configure.hy_itemMargin = 30;
+                
+                CGFloat insetLR = self.configure.hy_inset.left + self.configure.hy_inset.right;
+                CGFloat overWith = self.width - totalWith - insetLR;
+                if (overWith >= 0) {
+                    self.configure.hy_itemMargin = overWith / (self.configure.hy_items - 1);
+                } else {
+                    self.configure.hy_itemMargin = 30;
+                }
+            }
+            
+        } else  {
+            
+            if (UIEdgeInsetsEqualToEdgeInsets(self.configure.hy_inset, UIEdgeInsetsZero)) {
+                
+                self.configure.hy_inset = UIEdgeInsetsMake(0, self.configure.hy_itemMargin * self.configure.hy_insetAndMarginRatio, 0, self.configure.hy_itemMargin * self.configure.hy_insetAndMarginRatio);
             }
         }
     }
@@ -222,7 +249,6 @@
                     [cell.contentView addSubview:currentItemView];
                 }
             }
-            
             currentItemView.centerYValue(cell.contentView.height / 2);
         }
     }
@@ -307,25 +333,24 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    !self.configure.hy_clickItemAtIndex ?:
-    self.configure.hy_clickItemAtIndex(indexPath.row,
-                                       indexPath.row == self.currentSelectedIndex);
+    NSInteger fromIndex = self.currentSelectedIndex;
     
-    self.currentSelectedIndex = indexPath.row;
+    BOOL needHandle =
+    !self.configure.hy_clickItemAtIndex ? YES :
+    self.configure.hy_clickItemAtIndex(indexPath.row, indexPath.row == self.currentSelectedIndex);
     
-//    if (indexPath.row != self.currentSelectedIndex) {
-//        NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForItem:self.currentSelectedIndex inSection:0];
-//        self.currentSelectedIndex = indexPath.row;
-//        [collectionView reloadItemsAtIndexPaths:@[selectedIndexPath, indexPath]];
-//        [self scrollToCenterWithIndex:indexPath.row];
-//    }
+    if (needHandle) {
+        [self handleAnimationViewWithFromIndex:fromIndex
+                                       toIndex:indexPath.row
+                                      progress:1];
+    }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout*)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    return CGSizeMake(self.itemViews[indexPath.row].width, collectionView.height);
+    return CGSizeMake(self.itemViews[indexPath.row].width, collectionView.height - self.configure.hy_inset.top - self.configure.hy_inset.bottom);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
@@ -343,7 +368,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
                         layout:(UICollectionViewLayout*)collectionViewLayout
         insetForSectionAtIndex:(NSInteger)section {
     
-    return UIEdgeInsetsMake(0, self.configure.hy_itemMargin, 0, self.configure.hy_itemMargin);
+    return self.configure.hy_inset;
 }
 
 #pragma mark — getters and setters
@@ -379,7 +404,6 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     if (!_layout){
         _layout = [[UICollectionViewFlowLayout alloc] init];
         _layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        _layout.minimumInteritemSpacing = 0;
     }
     return _layout;
 }
@@ -397,56 +421,76 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return _animationViews;
 }
 
+- (void)dealloc {
+    [self.configure deallocBlock];
+}
+
 @end
 
 @implementation HySegmentViewConfigure
 
 + (instancetype)defaultConfigure {
     HySegmentViewConfigure *configure = [[self alloc] init];
+    configure.insetAndMarginRatio(1.0);
     return configure;
 }
 
+- (HySegmentViewConfigure *(^)(UIEdgeInsets))inset {
+    return ^(UIEdgeInsets value){
+        self.hy_inset = value;
+        return self;
+    };
+}
+
+- (HySegmentViewConfigure *(^)(CGFloat))insetAndMarginRatio {
+    return ^(CGFloat value){
+        self.hy_insetAndMarginRatio = value;
+        return self;
+    };
+}
+
 - (HySegmentViewConfigure *(^)(NSInteger))startIndex {
-    return ^HySegmentViewConfigure *(NSInteger index){
+    return ^(NSInteger index){
         self.hy_startIndex = index;
         return self;
     };
 }
+
 - (HySegmentViewConfigure *(^)(NSInteger))numberOfItems {
-    return ^HySegmentViewConfigure *(NSInteger items){
+    return ^(NSInteger items){
         self.hy_items = items;
         return self;
     };
 }
 
 - (HySegmentViewConfigure *(^)(CGFloat))itemMargin {
-    return ^HySegmentViewConfigure *(CGFloat margin){
+    return ^(CGFloat margin){
         self.hy_itemMargin = margin;
         return self;
     };
 }
 
-- (HySegmentViewConfigure *(^)(void (^)(NSInteger,
+- (HySegmentViewConfigure *(^)(BOOL (^)(NSInteger,
                                         BOOL)))clickItemAtIndex {
     
-    return ^HySegmentViewConfigure *(void (^block)(NSInteger,
-                                                   BOOL)){
+    return ^(BOOL (^block)(NSInteger,
+                           BOOL)){
         self.hy_clickItemAtIndex = [block copy];
         return self;
     };
 }
-
 
 - (HySegmentViewConfigure *(^)(UIView *(^)(UIView *,
                                            NSInteger,
                                            CGFloat,
                                            HySegmentViewItemPosition,
                                            NSArray<UIView *> *)))viewForItemAtIndex {
-    return ^HySegmentViewConfigure *(UIView *(^block)(UIView *,
-                                                      NSInteger,
-                                                      CGFloat,
-                                                      HySegmentViewItemPosition,
-                                                      NSArray<UIView *> *)){
+    
+    return ^(UIView *(^block)(UIView *,
+                              NSInteger,
+                              CGFloat,
+                              HySegmentViewItemPosition,
+                              NSArray<UIView *> *)){
         self.hy_viewForItemAtIndex = [block copy];
         return self;
     };
@@ -459,19 +503,33 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
                                                       NSInteger,
                                                       CGFloat)))animationViews {
     
-    return ^HySegmentViewConfigure *(NSArray<UIView *> *(^block)(NSArray<UIView *> *,
-                                                                 UICollectionViewCell *,
-                                                                 UICollectionViewCell *,
-                                                                 NSInteger,
-                                                                 NSInteger,
-                                                                 CGFloat)){
+    return ^(NSArray<UIView *> *(^block)(NSArray<UIView *> *,
+                                         UICollectionViewCell *,
+                                         UICollectionViewCell *,
+                                         NSInteger,
+                                         NSInteger,
+                                         CGFloat)){
         self.hy_animationViews = [block copy];
         return self;
     };
 }
 
-- (NSInteger)currentIndex {
-    return self.segmentView.currentSelectedIndex;
+- (NSInteger)getCurrentIndex {
+   return self.segmentView.currentSelectedIndex;
+}
+
+- (UIEdgeInsets)getInset {
+    return self.hy_inset;
+}
+
+- (CGFloat)getItemMargin {
+    return self.hy_itemMargin;
+}
+
+- (void)deallocBlock {
+    self.hy_animationViews = nil;
+    self.hy_clickItemAtIndex = nil;
+    self.hy_viewForItemAtIndex = nil;
 }
 
 @end

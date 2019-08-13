@@ -9,8 +9,6 @@
 
 #import "CyclePageViewBaseDemoController.h"
 #import <MJRefresh/MJRefresh.h>
-#import "HySegmentView.h"
-#import "HyCycleView.h"
 
 
 @interface CyclePageViewBaseDemoController () <UITableViewDataSource, UITableViewDelegate>
@@ -33,6 +31,7 @@
     self.titleArray = @[@"NBA", @"国际足球", @"中国篮球", @"跑步",@"欧洲杯", @"欧冠" ,@"英超", @"西甲", @"意甲"];
   
     [self.view addSubview:self.scrollView];
+    
 }
 
 - (void)viewDidLayoutSubviews {
@@ -50,6 +49,10 @@
 }
 
 - (void(^)(HyCyclePageViewConfigure *configure))configPageView {
+    return nil;
+}
+
+- (void(^)(HySegmentViewConfigure *configure))configSegmentView {
     return nil;
 }
 
@@ -104,7 +107,7 @@
                                                   configureBlock:^(HyCyclePageViewConfigure * _Nonnull configure) {
                                                       
                                                       configure
-                                                      .totalPage(9)
+                                                      .totalPage(weakSelf.titleArray.count)
                                                       .gestureStyle(weakSelf.gestureStyle)
                                                       .cyclePageInstance(^id(HyCyclePageView *pageView, NSInteger currentIndex){
                                                           return [weakSelf creatTableViewWithPageNumber:currentIndex];
@@ -135,14 +138,14 @@
                              configureBlock:^(HySegmentViewConfigure * _Nonnull configure) {
             
             configure
-            .numberOfItems(self.titleArray.count)
+            .numberOfItems(weakSelf.titleArray.count)
             .itemMargin(25)
             .viewForItemAtIndex(^UIView *(UIView *currentView,
                                           NSInteger currentIndex,
                                           CGFloat progress,
                                           HySegmentViewItemPosition position,
                                           NSArray<UIView *> *animationViews){
-                
+
                 UILabel *label = (UILabel *)currentView;
                 if (!label) {
                     label = [UILabel new];
@@ -187,12 +190,19 @@
                  
                  return array;
              })
-            .clickItemAtIndex(^(NSInteger currentIndex, BOOL isRepeat){
+            .clickItemAtIndex(^BOOL(NSInteger currentIndex, BOOL isRepeat){
                 
                 if (!isRepeat) {
                     [weakSelf.cyclePageView scrollToPage:currentIndex animated:YES];
                 }
+                return NO;
+                
+//                if (!isRepeat) {
+//                    [weakSelf.cyclePageView scrollToPage:currentIndex animated:NO];
+//                }
+//                return YES;
             });
+            !weakSelf.configSegmentView ?: weakSelf.configSegmentView(configure);
         }];
     }
     return _segmentView;

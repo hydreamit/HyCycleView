@@ -93,7 +93,7 @@ typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderRefreshStyle) {
                                          id,                // cycleView
                                          NSInteger,        // currentIndex
                                          BOOL))           // is first load
-                                        )viewWillAppear;
+                                         )viewWillAppear;
 
 /// totalPage and currentPage change (总页/当前页发生改变的回调)
 - (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCycleView
@@ -105,7 +105,7 @@ typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderRefreshStyle) {
 - (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCycleView
                                          NSInteger,        // totalPage
                                          NSInteger))      // roundingPage
-                                        )roundingPageChange;
+                                         )roundingPageChange;
 
 
 /// horizontal scroll progress (水平滑动进度的回调)
@@ -113,13 +113,17 @@ typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderRefreshStyle) {
                                          NSInteger,        // fromPage
                                          NSInteger,       // toPage
                                          CGFloat))       // progress
-                                        )horizontalScroll;
+                                         )horizontalScroll;
 
 /// vertical scroll  (上下滑动的回调)
 - (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
                                          CGFloat ,         // contentOffset y
                                          NSInteger))      // currentPage
                                          )verticalScroll;
+
+- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
+                                         BOOL))            // state begin or end
+                                         )horizontalScrollState;
 
 /// header refresh
 - (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
@@ -176,6 +180,42 @@ typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderRefreshStyle) {
  @param animated animated
  */
 - (void)scrollToPage:(NSInteger)page animated:(BOOL)animated;
+
+
+/**
+ reload initialize configure block
+ */
+- (void)reloadConfigureBlock;
+
+
+/**
+ changed configure with reload
+ */
+- (void)reloadConfigureChange;
+
+
+/**
+ reload headerView or hoverView
+ */
+- (void)reloadHeaderViewAndHoverView;
+
+
+/**
+ updateContentInsetTop
+ 
+ @param top inset top
+ */
+- (void)updateContentInsetTop:(CGFloat)top;
+
+
+/**
+ updateContentOffSetY
+ 
+ @param contentOffsetY contentOffset y
+ @param flag animation
+ */
+- (void)updateContentOffSetY:(CGFloat)contentOffsetY
+                   animation:(BOOL)flag;
 
 @end
 

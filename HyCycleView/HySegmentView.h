@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 
 /// inset
 - (HySegmentViewConfigure *(^)(UIEdgeInsets))inset;
-/// insetAndMarginRatio
+/// insetAndMarginRatio (左右变局和中间间隔的比例)
 - (HySegmentViewConfigure *(^)(CGFloat))insetAndMarginRatio;
 /// item margin default average (标签间距 默认是平均分配)
 - (HySegmentViewConfigure *(^)(CGFloat))itemMargin;
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 - (HySegmentViewConfigure *(^)(NSInteger))numberOfItems;
 
 
-/// click item at index callback 
+/// click item at index callback
 - (HySegmentViewConfigure *(^)(BOOL (^)(NSInteger, // click index
                                         BOOL))     // is repeat click
                                         )clickItemAtIndex;
@@ -68,7 +68,7 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 
 /**
  create HySegmentView
-
+ 
  @param frame frame
  @param configureBlock config the params
  @return HySegmentView
@@ -77,10 +77,14 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
                       configureBlock:(void (^)(HySegmentViewConfigure *configure))configureBlock;
 
 
+/// configure
+@property (nonatomic,strong,readonly) HySegmentViewConfigure *configure;
+
+
 
 /**
  click item at index
-
+ 
  @param index clicking index
  */
 - (void)clickItemAtIndex:(NSInteger)index;
@@ -89,7 +93,7 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 
 /**
  click item with progress
-
+ 
  @param fromIndex fromIndex
  @param toIndex toIndex
  @param progress progress
@@ -97,6 +101,19 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 - (void)clickItemFromIndex:(NSInteger)fromIndex
                    toIndex:(NSInteger)toIndex
                   progress:(CGFloat)progress;
+
+
+/**
+ reload initialize configure block
+ */
+- (void)reloadConfigureBlock;
+
+
+/**
+ changed configure with reload
+ */
+- (void)reloadConfigureChange;
+
 
 @end
 

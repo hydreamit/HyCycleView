@@ -95,7 +95,13 @@ typedef NS_ENUM(NSUInteger, HyCycleViewScrollDirection) {
                                      NSInteger,    // fromPage
                                      NSInteger,   // toPage
                                      CGFloat))   // progress
-                                    )scrollProgress;
+                                     )scrollProgress;
+
+/// scroll state (滑动状态)
+- (HyCycleViewConfigure *(^)(void(^)(HyCycleView *, // HyCycleView
+                                     BOOL))        // state begin or end
+                                     )scrollState;
+
 @end
 
 
@@ -106,7 +112,7 @@ typedef NS_ENUM(NSUInteger, HyCycleViewScrollDirection) {
 
 /**
  create cycleView
-
+ 
  @param frame frame
  @param configureBlock config the params
  @return HyCycleView
@@ -122,7 +128,7 @@ typedef NS_ENUM(NSUInteger, HyCycleViewScrollDirection) {
 
 /**
  scroll to next page
-
+ 
  @param animated animated
  */
 - (void)scrollToNextPageWithAnimated:(BOOL)animated;
@@ -138,11 +144,23 @@ typedef NS_ENUM(NSUInteger, HyCycleViewScrollDirection) {
 
 /**
  scroll to the page
-
+ 
  @param page page
  @param animated animated
  */
 - (void)scrollToPage:(NSInteger)page animated:(BOOL)animated;
+
+
+/**
+ reload initialize configure block
+ */
+- (void)reloadConfigureBlock;
+
+
+/**
+ changed configure with reload
+ */
+- (void)reloadConfigureChange;
 
 
 @end

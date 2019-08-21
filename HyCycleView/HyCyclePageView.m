@@ -35,12 +35,11 @@
 
 @interface HyCyclePageViewConfigure ()
 
-@property (nonatomic,assign) HyCyclePageViewGestureStyle hy_gestureStyle;
+@property (nonatomic, assign) NSInteger hy_totalPage;
+@property (nonatomic, assign) NSInteger hy_startPage;
 
-@property (nonatomic,assign) HyCyclePageViewHeaderRefreshStyle  hy_headerRefreshStyle;
 @property (nonatomic,assign) BOOL hy_isCycleLoop;
 @property (nonatomic,assign) CGFloat hy_hoverOffset;
-@property (nonatomic, assign) HyCycleViewScrollLoadStyle hy_loadStyle;
 
 @property (nonatomic,strong) UIView *hy_headerView;
 @property (nonatomic,assign) CGFloat hy_headerViewHeight;
@@ -48,11 +47,11 @@
 @property (nonatomic,strong) UIView *hy_hoverView;
 @property (nonatomic,assign) CGFloat hy_hoverViewHeight;
 
+@property (nonatomic,assign) HyCycleViewScrollLoadStyle hy_loadStyle;
+@property (nonatomic,assign) HyCyclePageViewGestureStyle hy_gestureStyle;
+@property (nonatomic,assign) HyCyclePageViewHeaderRefreshStyle  hy_headerRefreshStyle;
 @property (nonatomic,assign) HyCyclePageViewHeaderViewUpAnimation hy_headerViewUpAnimation;
 @property (nonatomic,assign) HyCyclePageViewHeaderViewDownAnimation hy_headerViewDownAnimation;
-
-@property (nonatomic, assign) NSInteger hy_totalPage;
-@property (nonatomic, assign) NSInteger hy_startPage;
 
 @property (nonatomic,copy) Class(^hy_cyclePageClass)(HyCyclePageView *, NSInteger);
 @property (nonatomic,copy) id (^hy_cyclePageInstance)(HyCyclePageView *, NSInteger);
@@ -63,8 +62,8 @@
                                                      BOOL);
 
 @property (nonatomic, copy) void(^hy_currentPageChange)(HyCyclePageView *,
-                                                      NSInteger,
-                                                      NSInteger);
+                                                        NSInteger,
+                                                        NSInteger);
 
 @property (nonatomic, copy) void(^hy_roundingPageChange)(HyCyclePageView *,
                                                          NSInteger,
@@ -79,6 +78,8 @@
                                                      CGFloat ,
                                                      NSInteger);
 
+@property (nonatomic,copy) void (^hy_horizontalScrollState)(HyCyclePageView *,BOOL);
+
 @property (nonatomic,copy) void (^hy_headerRefresh)(HyCyclePageView *,
                                                     UIScrollView * ,
                                                     NSInteger);
@@ -89,9 +90,13 @@
 
 @property (nonatomic,weak) HyCyclePageView *cyclePageView;
 + (instancetype)defaultConfigure;
+- (void)clearConfigure;
 - (void)deallocBlock;
 @end
 
+
+#define Hy_HeaderViewTag 66
+#define Hy_HoverViewTag 88
 
 @interface HyCyclePageView ()<UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -109,6 +114,10 @@
 @property (nonatomic,assign) BOOL cellScrollViewCanScroll;
 @property (nonatomic,assign) BOOL tableViewCanScroll;
 @property (nonatomic,assign) CGFloat contentOffset;
+
+@property (nonatomic,copy) void(^configureBlock)(HyCyclePageViewConfigure *configure);
+@property (nonatomic,strong) dispatch_semaphore_t semaphore;
+@property (nonatomic,assign) CGFloat insetTop;
 @end
 
 
@@ -120,6 +129,7 @@
     HyCyclePageView *pageView = [[self alloc] initWithFrame:frame];
     !configureBlock ?: configureBlock(pageView.configure);
     pageView.configure.cyclePageView = pageView;
+    pageView.configureBlock = [configureBlock copy];
     pageView.gestureStyle = pageView.configure.hy_gestureStyle;
     
     if (pageView.gestureStyle == HyCyclePageViewGestureStyleOnly) {
@@ -147,6 +157,107 @@
     [self.cycleView scrollToPage:page animated:animated];
 }
 
+- (void)reloadConfigureBlock {
+    
+    if (self.configureBlock) {
+        dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+        
+        [self.configure clearConfigure];
+        self.configureBlock(self.configure);
+        [self reloadHeaderViewAndHoverView];
+        [self clearData];
+        [self.cycleView reloadConfigureBlock];
+        
+        dispatch_semaphore_signal(self.semaphore);
+    }
+}
+
+- (void)reloadConfigureChange {
+    
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    
+    [self reloadHeaderViewAndHoverView];
+    
+    [self clearData];
+    [self.cycleView reloadConfigureBlock];
+    
+    dispatch_semaphore_signal(self.semaphore);
+}
+
+- (void)reloadHeaderViewAndHoverView {
+    
+    UIView *hy_headerView = [self.headerView viewWithTag:Hy_HeaderViewTag];
+    if (hy_headerView != self.configure.hy_headerView) {
+        [self updateHeaderViewWithNewView:self.configure.hy_headerView
+                                  oldView:hy_headerView];
+    } else {
+        if (self.configure.hy_headerViewHeight >= 0 &&
+            self.configure.hy_headerViewHeight != hy_headerView.height) {
+            [self updateHeaderViewHeight];
+        }
+    }
+    
+    if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
+        UIView *hy_hoverView = [self.headerView viewWithTag:Hy_HoverViewTag];
+        if (hy_hoverView != self.configure.hy_hoverView) {
+            [self updateHoverViewWithNewView:self.configure.hy_hoverView
+                                     oldView:hy_hoverView];
+        } else {
+            if (self.configure.hy_hoverViewHeight >= 0 &&
+                self.configure.hy_hoverViewHeight != hy_hoverView.height) {
+                [self updateHoverViewHeight];
+            }
+        }
+    } else {
+        
+        if (self.configure.hy_hoverViewHeight >= 0 &&
+            self.configure.hy_hoverViewHeight != self.configure.hy_hoverView.height) {
+            self.configure.hy_hoverView.heightValue(self.configure.hy_hoverViewHeight);
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
+                                     (int64_t)(.1 * NSEC_PER_SEC)),
+                       dispatch_get_main_queue(), ^{
+                           [self.gestureTableView reloadData];
+                       });
+    }
+}
+
+- (void)updateContentInsetTop:(CGFloat)top {
+    self.insetTop = top;
+    
+    if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
+        [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj,
+                                                                         NSUInteger idx,
+                                                                         BOOL *stop) {
+            if ([obj isKindOfClass:UIScrollView.class]) {
+                obj.contentInset = UIEdgeInsetsMake(self.headerView.height + self.insetTop, 0, 0, 0);
+            }
+        }];
+    } else {
+        self.gestureTableView.contentInset = UIEdgeInsetsMake(self.insetTop, 0, 0, 0);
+    }
+}
+
+- (void)updateContentOffSetY:(CGFloat)contentOffsetY
+                   animation:(BOOL)flag {
+    
+    if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
+        UIScrollView *scrollView = [self.pageScrollViewsDict objectForKey:@(self.cycleView.configure.currentPage)];
+        if ([scrollView isKindOfClass:UIScrollView.class]) {
+            [scrollView setContentOffset:CGPointMake(0, -self.headerView.height+ contentOffsetY) animated:flag];
+        }
+    } else {
+        if (contentOffsetY <= self.headerView.height) {
+            [self.gestureTableView setContentOffset:CGPointMake(0, contentOffsetY) animated:flag];
+        } else {
+            UIScrollView *scrollView = [self.pageScrollViewsDict objectForKey:@(self.cycleView.configure.currentPage)];
+            if ([scrollView isKindOfClass:UIScrollView.class]) {
+                [scrollView setContentOffset:CGPointMake(0, contentOffsetY) animated:flag];
+            }
+        }
+    }
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     
@@ -166,7 +277,6 @@
         }
         
         self.cycleView.containTo(self.contentScrollView);
-        
         [self updateCyclePageScrollViewContentInset];
         
     } else {
@@ -186,21 +296,21 @@
                                                                      NSUInteger idx,
                                                                      BOOL *stop) {
         if ([obj isKindOfClass:UIScrollView.class]) {
-            obj.contentInset = UIEdgeInsetsMake(self.headerView.height, 0, 0, 0);
-            obj.contentOffset = CGPointMake(0, - self.headerView.height);
+            obj.contentInset = UIEdgeInsetsMake(self.headerView.height + self.insetTop, 0, 0, 0);
+            obj.contentOffset = [self getCurrentContentOffset];
         }
     }];
 }
 
 - (void)updateHeaderViewWithNewView:(UIView *)newView
                             oldView:(UIView *)oldView {
-
+    
     if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
-        
         [oldView removeFromSuperview];
         
         if (newView) {
             [self.headerView addSubview:newView];
+            newView.tag = Hy_HeaderViewTag;
             newView.rectValue(0, 0, self.headerView.width, newView.height);
             if (self.configure.hy_hoverView) {
                 self.configure.hy_hoverView.topValue(newView.height);
@@ -264,67 +374,27 @@
         
         if (newView) {
             [self.headerView addSubview:newView];
+            newView.tag = Hy_HoverViewTag;
             newView.rectValue(0, self.configure.hy_headerView.bottom, self.headerView.width, newView.height);
             self.headerView.heightValue(newView.height + self.configure.hy_headerView.height);
         } else {
             self.headerView.heightValue(self.configure.hy_headerView.height);
         }
         [self updateCyclePageScrollViewContentInset];
-        
-    } else {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                     (int64_t)(.1 * NSEC_PER_SEC)),
-                       dispatch_get_main_queue(), ^{
-                           [self.gestureTableView reloadData];
-                       });
     }
 }
 
-- (void)updateHoverHeight {
-   
+- (void)updateHoverViewHeight {
+    
     if (self.configure.hy_hoverView) {
+        
         self.configure.hy_hoverView.heightValue(self.configure.hy_hoverViewHeight);
         
         if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
             self.headerView.heightValue(self.configure.hy_headerView.height + self.configure.hy_hoverView.height);
             [self updateCyclePageScrollViewContentInset];
-        } else {
-            [self.gestureTableView reloadData];
         }
     }
-}
-
-- (void)updateTotalPage {
-    
-    [self clearData];
-    if (self.configure.hy_cyclePageInstance &&
-        self.configure.hy_cyclePageClass) {
-        self.cycleView.configure.totalPage(self.configure.hy_totalPage);
-    }
-}
-
-- (void)updateStartPage {
-    self.cycleView.configure.startPage(self.configure.hy_startPage);
-}
-
-- (void)updateCyclePageClass {
-    
-    [self clearData];
-    if (self.configure.hy_cyclePageClass) {
-        self.cycleView.configure.totalPage(self.configure.hy_totalPage);
-    }
-}
-
-- (void)updateCyclePageInstance {
-    
-    [self clearData];
-    if (self.configure.hy_cyclePageInstance) {
-        self.cycleView.configure.totalPage(self.configure.hy_totalPage);
-    }
-}
-
-- (void)updateHoverOffset {
-
 }
 
 - (void)handleViewWithContainScrollView:(UIScrollView *)containScrollView
@@ -351,7 +421,7 @@
         if ([[NSFileManager defaultManager] fileExistsAtPath:nibPath]) {
             instance = [[[NSBundle mainBundle] loadNibNamed:classString owner:nil options:nil] lastObject];
         } else {
-           instance = [[clas alloc] init];
+            instance = [[clas alloc] init];
         }
         
     } else if (self.configure.hy_cyclePageInstance) {
@@ -376,7 +446,7 @@
             [containScrollView addSubview:customView];
             
             if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
-                containScrollView.contentInset = UIEdgeInsetsMake(self.headerView.height, 0, 0, 0);
+                containScrollView.contentInset = UIEdgeInsetsMake(self.headerView.height + self.insetTop, 0, 0, 0);
                 containScrollView.contentOffset = [self getCurrentContentOffset];
                 [self.panGesturesDict setObject:containScrollView.gestureRecognizers forKey:@(currentPage)];
             }
@@ -389,8 +459,8 @@
             containScrollView.scrollEnabled = NO;
             NSMutableArray *list = [NSMutableArray arrayWithArray:containScrollView.gestureRecognizers];
             [list enumerateObjectsUsingBlock:^(UIGestureRecognizer *obj,
-                                                NSUInteger idx,
-                                                BOOL * stop) {
+                                               NSUInteger idx,
+                                               BOOL * stop) {
                 [containScrollView removeGestureRecognizer:obj];
             }];
             
@@ -404,7 +474,7 @@
             [containScrollView addSubview:scrollView];
             
             if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
-                scrollView.contentInset = UIEdgeInsetsMake(self.headerView.height, 0, 0, 0);
+                scrollView.contentInset = UIEdgeInsetsMake(self.headerView.height + self.insetTop, 0, 0, 0);
                 scrollView.contentOffset = [self getCurrentContentOffset];
                 [self.panGesturesDict setObject:scrollView.gestureRecognizers forKey:@(currentPage)];
             }
@@ -421,7 +491,7 @@
             [containScrollView addSubview:customView];
             
             if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
-                containScrollView.contentInset = UIEdgeInsetsMake(self.headerView.height, 0, 0, 0);
+                containScrollView.contentInset = UIEdgeInsetsMake(self.headerView.height + self.insetTop, 0, 0, 0);
                 containScrollView.contentOffset = [self getCurrentContentOffset];
                 [self.panGesturesDict setObject:containScrollView.gestureRecognizers forKey:@(currentPage)];
             }
@@ -447,26 +517,19 @@
 
 - (CGPoint)getCurrentContentOffset {
     
-    __block CGFloat contentOffsetY = - self.headerView.height;
-    [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj, NSUInteger idx, BOOL *stop) {
-        if (obj.contentOffset.y > contentOffsetY) {
-            contentOffsetY = obj.contentOffset.y;
-        }
-    }];
-    
+    CGFloat contentOffsetY = - (self.headerView.top + self.headerView.height);
     CGFloat hoverContentOffsetY = -(self.configure.hy_hoverView.height + self.configure.hy_hoverOffset);
-    
     return CGPointMake(0, contentOffsetY >= hoverContentOffsetY ? hoverContentOffsetY : contentOffsetY);
 }
 
 - (void)clearData {
-    
     [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj,
-                                                           NSUInteger idx,
-                                                           BOOL *stop) {
+                                                                     NSUInteger idx,
+                                                                     BOOL *stop) {
         [obj removeObserver:self forKeyPath:@"contentOffset"];
     }];
     [self.pageScrollViewsDict removeAllObjects];
+    [self.pageInstancesDict removeAllObjects];
     [self.panGesturesDict removeAllObjects];
 }
 
@@ -497,11 +560,11 @@
                       ofObject:(UIScrollView *)object
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context {
-   
-    CGPoint newContentOffset =  [change[NSKeyValueChangeNewKey] CGPointValue];
-    CGPoint oldContentOffset =  [change[NSKeyValueChangeOldKey] CGPointValue];
+    
+    CGPoint newContentOffset = [change[NSKeyValueChangeNewKey] CGPointValue];
+    CGPoint oldContentOffset = [change[NSKeyValueChangeOldKey] CGPointValue];
     NSInteger currentPage =  [((NSNumber *)(__bridge typeof(NSNumber *))context) integerValue];
-
+    
     if (newContentOffset.y == oldContentOffset.y) {return;}
     
     if (self.configure.hy_headerView.height) {
@@ -574,6 +637,7 @@
                 if (currentPage == self.cycleView.configure.currentPage) {
                     
                     if (newContentOffset.y <= - hoverOffset) {
+                        
                         if (newContentOffset.y >= - self.headerView.height) {
                             [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                                 if (object != obj) {
@@ -583,7 +647,7 @@
                                 }
                             }];
                         }
-                        
+                    
                     } else {
                         
                         [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -598,24 +662,24 @@
             }
             
         } else {
-
+            
             if (currentPage == self.cycleView.configure.currentPage) {
-
+                
                 if (self.cellScrollViewCanScroll) {
                     !self.configure.hy_verticalScroll ?:
                     self.configure.hy_verticalScroll(self, newContentOffset.y + self.gestureTableView.contentOffset.y, self.cycleView.configure.currentPage);
                 }
-
+                
                 BOOL isCenterRefresh =
                 self.configure.hy_headerViewDownAnimation != HyCyclePageViewHeaderViewDownAnimationScale &&
                 self.configure.hy_headerRefreshStyle == HyCyclePageViewHeaderRefreshStyleCenter &&
                 self.configure.hy_headerRefresh;
-
+                
                 if (isCenterRefresh) {
-
+                    
                     if (object.contentOffset.y == 0 &&
                         self.gestureTableView.contentOffset.y == 0) {
-
+                        
                         self.cellScrollViewCanScroll =
                         self.tableViewCanScroll = YES;
                     }
@@ -623,26 +687,26 @@
                     if (object.contentOffset.y < 0 && self.gestureTableView.contentOffset.y == - self.gestureTableView.tableHeaderView.height) {
                         self.cellScrollViewCanScroll = YES;
                     }
-
+                    
                     if (!self.cellScrollViewCanScroll) {
-
+                        
                         object.contentOffset = CGPointMake(0, -object.contentInset.top);
-
+                        
                     } else if (object.contentOffset.y < 0 &&
                                self.gestureTableView.contentOffset.y == self.headerView.height - self.configure.hy_hoverOffset) {
-
+                        
                         object.contentOffset = CGPointMake(0, -object.contentInset.top);
                         self.cellScrollViewCanScroll = NO;
                         self.tableViewCanScroll = YES;
-
+                        
                     } else if (object.contentOffset.y > 0 &&
                                self.gestureTableView.contentOffset.y < self.headerView.height - self.configure.hy_hoverOffset && self.gestureTableView.contentOffset.y >= 0) {
-
+                        
                         object.contentOffset = CGPointMake(0, -object.contentInset.top);
                         self.cellScrollViewCanScroll = NO;
                         self.tableViewCanScroll = YES;
                     }
-
+                    
                 } else {
                     if (self.configure.hy_headerView.height) {
                         if (!self.cellScrollViewCanScroll) {
@@ -696,26 +760,26 @@
     
     CGFloat headerViewH = self.headerView.height;
     if (headerViewH) {
-
+        
         if (self.tableViewCanScroll) {
             !self.configure.hy_verticalScroll ?:
             self.configure.hy_verticalScroll(self, scrollView.contentOffset.y, self.cycleView.configure.currentPage);
         }
         
         CGFloat contentOffsetY = scrollView.contentOffset.y;
-
+        
         BOOL isCenterRefresh =
         self.configure.hy_headerViewDownAnimation != HyCyclePageViewHeaderViewDownAnimationScale &&
         self.configure.hy_headerRefreshStyle == HyCyclePageViewHeaderRefreshStyleCenter &&
         self.configure.hy_headerRefresh;
-
+        
         if (isCenterRefresh) {
             
             if (self.gestureTableView.isGestureHeader) {
                 self.tableViewCanScroll =
                 self.cellScrollViewCanScroll = YES;
             }
-
+            
             UIScrollView *pageScrollView = [self.pageScrollViewsDict objectForKey:@(self.cycleView.configure.currentPage)];
             if ([pageScrollView isKindOfClass:UIScrollView.class]) {
                 if (pageScrollView.contentOffset.y == 0 && scrollView.contentOffset.y == 0) {
@@ -727,28 +791,28 @@
             if (contentOffsetY > 0 && self.gestureTableView.isGestureHeader) {
                 self.tableViewCanScroll = YES;
             }
-
+            
             if (!self.tableViewCanScroll) {
-
+                
                 scrollView.contentOffset = CGPointMake(0, self.contentOffset);
-
+                
             } else if (contentOffsetY >= headerViewH - self.configure.hy_hoverOffset) {
-
+                
                 self.contentOffset = headerViewH - self.configure.hy_hoverOffset;
                 scrollView.contentOffset = CGPointMake(0, self.contentOffset);
                 self.tableViewCanScroll = NO;
                 self.cellScrollViewCanScroll = YES;
-
+                
             } else if (contentOffsetY < 0) {
-
+                
                 self.contentOffset = 0;
                 scrollView.contentOffset = CGPointMake(0, self.contentOffset);
                 self.tableViewCanScroll = NO;
                 self.cellScrollViewCanScroll = YES;
             }
-
+            
         } else {
-
+            
             CGFloat contentOffset = headerViewH - self.configure.hy_hoverOffset;
             if (!self.tableViewCanScroll) {
                 scrollView.contentOffset = CGPointMake(0, contentOffset);
@@ -758,11 +822,11 @@
                 self.cellScrollViewCanScroll = YES;
             }
         }
-
+        
         if (self.configure.hy_headerViewDownAnimation == HyCyclePageViewHeaderViewDownAnimationScale &&
             contentOffsetY <= 0 &&
             !isCenterRefresh) {
-
+            
             self.headerView.clipsToBounds = NO;
             self.configure.hy_headerView
             .topValue(contentOffsetY)
@@ -770,10 +834,10 @@
             .widthValue(self.headerView.width - contentOffsetY)
             .leftValue(contentOffsetY / 2);
         }
-
+        
         if (self.configure.hy_headerViewUpAnimation == HyCyclePageViewHeaderViewUpAnimationCover &&
             contentOffsetY >= 0 && contentOffsetY <= headerViewH - self.configure.hy_hoverOffset) {
-
+            
             self.headerView.clipsToBounds = YES;
             CGFloat topView = contentOffsetY * 2 / 3;
             self.configure.hy_headerView.topValue(topView);
@@ -783,13 +847,12 @@
 
 - (void)setTableViewCanScroll:(BOOL)tableViewCanScroll {
     if (_tableViewCanScroll == tableViewCanScroll) { return;}
-    
     _tableViewCanScroll = tableViewCanScroll;
     
     if (tableViewCanScroll) {
         [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj,
-                                                                NSUInteger idx,
-                                                                BOOL * _Nonnull stop) {
+                                                                         NSUInteger idx,
+                                                                         BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:UIScrollView.class] && obj.contentOffset.y > 0) {
                 [obj setContentOffset:CGPointZero];
             }
@@ -872,7 +935,7 @@
         __weak typeof(self) weakSelf = self;
         _cycleView = [HyCycleView cycleViewWithFrame:rect
                                       configureBlock:^(HyCycleViewConfigure *configure) {
-           
+                                          
                                           configure
                                           .scrollStyle(HyCycleViewScrollStatic)
                                           .loadStyle(weakSelf.configure.hy_loadStyle)
@@ -929,11 +992,15 @@
                                                   [weakSelf handleViewWithContainScrollView:view
                                                                                 currentPage:page];
                                               }
-                                             
+                                              
                                               !weakSelf.configure.hy_viewWillAppear ?:
                                               weakSelf.configure.hy_viewWillAppear(weakSelf, [weakSelf.pageInstancesDict objectForKey:@(page)], page, isFirstLoad);
+                                          }).scrollState(^(HyCycleView *cycleView,
+                                                           BOOL isBeging){
+                                              !weakSelf.configure.hy_horizontalScrollState ?:
+                                              weakSelf.configure.hy_horizontalScrollState(weakSelf, isBeging);
                                           });
-        }];
+                                      }];
     }
     return _cycleView;
 }
@@ -944,10 +1011,12 @@
         
         if (self.configure.hy_headerView) {
             [_headerView addSubview:self.configure.hy_headerView];
+            self.configure.hy_headerView.tag = Hy_HeaderViewTag;
         }
         if (self.gestureStyle == HyCyclePageViewGestureStyleOnly) {
             if (self.configure.hy_hoverView) {
                 [_headerView addSubview:self.configure.hy_hoverView];
+                self.configure.hy_hoverView.tag = Hy_HoverViewTag;
             }
             _headerView.frame = CGRectMake(0, 0, self.width, self.configure.hy_headerView.height + self.configure.hy_hoverView.height);
         } else {
@@ -978,6 +1047,13 @@
     return _pageInstancesDict;
 }
 
+- (dispatch_semaphore_t)semaphore{
+    if (!_semaphore) {
+        _semaphore = dispatch_semaphore_create(1);
+    }
+    return _semaphore;
+}
+
 - (void)dealloc {
     [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj,
                                                                      NSUInteger idx,
@@ -993,8 +1069,30 @@
 @implementation HyCyclePageViewConfigure
 + (instancetype)defaultConfigure {
     HyCyclePageViewConfigure *configure = [[self alloc] init];
-    configure.isCycleLoop(YES).headerRefreshStyle(0);
+    configure
+    .isCycleLoop(YES)
+    .headerRefreshStyle(0)
+    .headerViewHeight(-1)
+    .hoverViewHeight(-1);
     return configure;
+}
+
+- (void)clearConfigure {
+    [self
+     .gestureStyle(0)
+     .loadStyle(0)
+     .isCycleLoop(YES)
+     .headerRefreshStyle(0)
+     .hoverOffset(0)
+     .headerView(nil)
+     .headerViewHeight(-1)
+     .hoverView(nil)
+     .hoverViewHeight(-1)
+     .headerViewUpAnimation(0)
+     .headerViewDownAnimation(0)
+     .totalPage(0)
+     .startPage(0)
+     deallocBlock];
 }
 
 - (HyCyclePageViewConfigure *(^)(HyCyclePageViewGestureStyle))gestureStyle {
@@ -1042,6 +1140,9 @@
 - (HyCyclePageViewConfigure *(^)(UIView *))headerView {
     return ^(UIView *view){
         self.hy_headerView = view;
+        if (self.hy_headerViewHeight < 0) {
+            self.hy_headerViewHeight = view.height;
+        }
         return self;
     };
 }
@@ -1056,6 +1157,9 @@
 - (HyCyclePageViewConfigure *(^)(UIView *))hoverView {
     return ^(UIView *view){
         self.hy_hoverView = view;
+        if (self.hy_hoverViewHeight < 0) {
+            self.hy_hoverViewHeight = view.height;
+        }
         return self;
     };
 }
@@ -1106,7 +1210,7 @@
                                          id,
                                          NSInteger,
                                          BOOL))
-                                        )viewWillAppear {
+   )viewWillAppear {
     
     return ^(void (^block)(HyCyclePageView *,
                            id,
@@ -1120,7 +1224,7 @@
 - (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *,
                                          NSInteger,
                                          NSInteger))
-                                         )currentPageChange {
+   )currentPageChange {
     
     return ^(void (^block)(HyCyclePageView *,
                            NSInteger,
@@ -1133,7 +1237,7 @@
 - (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *,
                                          NSInteger,
                                          NSInteger))
-                                         )roundingPageChange {
+   )roundingPageChange {
     
     return ^(void (^block)(HyCyclePageView *,
                            NSInteger,
@@ -1147,7 +1251,7 @@
                                          NSInteger,
                                          NSInteger,
                                          CGFloat))
-                                         )horizontalScroll {
+   )horizontalScroll {
     
     return ^(void (^block)(HyCyclePageView *,
                            NSInteger,
@@ -1161,7 +1265,7 @@
 - (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *,
                                          CGFloat,
                                          NSInteger))
-                                         ) verticalScroll {
+   ) verticalScroll {
     
     return ^(void (^block)(HyCyclePageView *,
                            CGFloat,
@@ -1195,60 +1299,15 @@
     };
 }
 
-- (void)setHy_totalPage:(NSInteger)hy_totalPage {
-    _hy_totalPage = hy_totalPage;
+- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *,
+                                         BOOL))
+   )horizontalScrollState {
     
-    [self.cyclePageView updateTotalPage];
-}
-
-- (void)setHy_startPage:(NSInteger)hy_startPage {
-    _hy_startPage = hy_startPage;
-    
-    [self.cyclePageView updateStartPage];
-}
-
-- (void)setHy_headerView:(UIView *)hy_headerView {
-    
-    [self.cyclePageView updateHeaderViewWithNewView:hy_headerView
-                                            oldView:_hy_headerView];
-    _hy_headerView = hy_headerView;
-}
-
-- (void)setHy_hoverView:(UIView *)hy_hoverView {
-    
-    [self.cyclePageView updateHoverViewWithNewView:hy_hoverView
-                                           oldView:_hy_hoverView];
-    _hy_hoverView = hy_hoverView;
-}
-
-- (void)setHy_headerViewHeight:(CGFloat)hy_headerViewHeight {
-    _hy_headerViewHeight = hy_headerViewHeight;
-    
-    [self.cyclePageView updateHeaderViewHeight];
-}
-
-- (void)setHy_hoverViewHeight:(CGFloat)hy_hoverViewHeight {
-    _hy_hoverViewHeight = hy_hoverViewHeight;
-    
-    [self.cyclePageView updateHoverHeight];
-}
-
-- (void)setHy_cyclePageClass:(Class (^)(HyCyclePageView *, NSInteger))hy_cyclePageClass {
-    _hy_cyclePageClass = [hy_cyclePageClass copy];
-    
-    [self.cyclePageView updateCyclePageClass];
-}
-
-- (void)setHy_cyclePageInstance:(id (^)(HyCyclePageView *, NSInteger))hy_cyclePageInstance {
-    _hy_cyclePageInstance = [hy_cyclePageInstance copy];
-    
-    [self.cyclePageView updateCyclePageInstance];
-}
-
-- (void)setHy_hoverOffset:(CGFloat)hy_hoverOffset {
-    _hy_hoverOffset = hy_hoverOffset;
-    
-    [self.cyclePageView updateHoverOffset];
+    return ^(void(^block)(HyCyclePageView *,
+                          BOOL)) {
+        self.hy_horizontalScrollState = [block copy];
+        return self;
+    };
 }
 
 - (NSInteger)currentPage {
@@ -1265,6 +1324,7 @@
     self.hy_verticalScroll = nil;
     self.hy_headerRefresh = nil;
     self.hy_footerRefresh = nil;
+    self.hy_horizontalScrollState = nil;
 }
 
 @end

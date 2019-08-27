@@ -293,10 +293,11 @@ static int const CycleContentViewCount = 3;
     if (self.totalCycleCount <= 1) { return;}
     
     if (page >= 0 && page < self.totalCycleCount) {
-        
+        CGFloat index = [self getScrollViewContentOffsetIndex];
         if (self.scrollView.isDragging ||
             self.scrollView.isTracking ||
-            self.scrollView.isDecelerating) {
+            self.scrollView.isDecelerating ||
+            (index != 0 && index != 1 && index != 3)) {
             return;
         }
         

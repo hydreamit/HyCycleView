@@ -68,9 +68,11 @@
 - (void)clickItemAtIndex:(NSInteger)index {
     
     if (index < self.configure.hy_items && index != self.currentSelectedIndex) {
+        dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
         [self handleAnimationViewWithFromIndex:self.currentSelectedIndex
                                        toIndex:index
                                       progress:1];
+        dispatch_semaphore_signal(self.semaphore);
     }
 }
 
@@ -79,9 +81,11 @@
                   progress:(CGFloat)progress {
     
     if (fromIndex < self.configure.hy_items && toIndex < self.configure.hy_items) {
+        dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
         [self handleAnimationViewWithFromIndex:fromIndex
                                        toIndex:toIndex
                                       progress:progress];
+        dispatch_semaphore_signal(self.semaphore);
     }
 }
 
@@ -297,7 +301,8 @@
 - (void)scrollToCenterWithIndex:(NSInteger)index {
     
     if (self.collectionView.contentSize.width <= self.collectionView.width ||
-        !self.configure.hy_items) {
+        !self.configure.hy_items ||
+        self.collectionView.isDragging) {
         return;
     }
     

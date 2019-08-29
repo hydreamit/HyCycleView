@@ -950,22 +950,29 @@
                                               if (weakSelf.configure.hy_headerView.height &&
                                                   weakSelf.gestureStyle == HyCyclePageViewGestureStyleOnly) {
                                                   
-                                                  NSArray *panGes = [weakSelf.panGesturesDict objectForKey:@(currentPage)];
-                                                  
-                                                  if (panGes) {
-                                                      NSMutableArray *list = [NSMutableArray arrayWithArray:weakSelf.contentScrollView.gestureRecognizers];
-                                                      for (UIGestureRecognizer *gestureRecognizer in list) {
-                                                          [weakSelf.contentScrollView removeGestureRecognizer:gestureRecognizer];
-                                                      }
-                                                      [weakSelf.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                                                  void (^handleGesture)(void) = ^{
+                                                      NSArray *panGes = [weakSelf.panGesturesDict objectForKey:@(currentPage)];
+                                                      
+                                                      if (panGes) {
+                                                          NSMutableArray *list = [NSMutableArray arrayWithArray:weakSelf.contentScrollView.gestureRecognizers];
+                                                          for (UIGestureRecognizer *gestureRecognizer in list) {
+                                                              [weakSelf.contentScrollView removeGestureRecognizer:gestureRecognizer];
+                                                          }
+                                                          [weakSelf.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                                                              for (UIGestureRecognizer *gestureRecognizer in panGes) {
+                                                                  [obj addGestureRecognizer:gestureRecognizer];
+                                                              };
+                                                          }];
                                                           for (UIGestureRecognizer *gestureRecognizer in panGes) {
-                                                              [obj addGestureRecognizer:gestureRecognizer];
+                                                              [weakSelf.contentScrollView addGestureRecognizer:gestureRecognizer];
                                                           };
-                                                      }];
-                                                      for (UIGestureRecognizer *gestureRecognizer in panGes) {
-                                                          [weakSelf.contentScrollView addGestureRecognizer:gestureRecognizer];
-                                                      };
-                                                  }
+                                                      }
+                                                  };
+                                                  
+                                                  NSTimeInterval time = weakSelf.configure.hy_loadStyle == HyCycleViewScrollLoadStyleDidAppear ? 0.05 : 0;
+                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
+                                                                               (int64_t)(time * NSEC_PER_SEC)),
+                                                                 dispatch_get_main_queue(), handleGesture);
                                               }
                                               
                                               !weakSelf.configure.hy_currentPageChange ?:

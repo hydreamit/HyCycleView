@@ -297,7 +297,7 @@ static int const CycleContentViewCount = 3;
         if (self.scrollView.isDragging ||
             self.scrollView.isTracking ||
             self.scrollView.isDecelerating ||
-            (index != 0 && index != 1 && index != 3)) {
+            (index != 0 && index != 1 && index != 2)) {
             return;
         }
         

@@ -317,6 +317,7 @@
                 [currentCell.contentView addSubview:currentItemView];
             }
         }
+        currentCell.contentView.frame = currentCell.bounds;
         currentItemView.centerYValue(currentCell.contentView.height / 2);
         currentItemView.centerXValue(currentCell.contentView.width / 2);
     } else {

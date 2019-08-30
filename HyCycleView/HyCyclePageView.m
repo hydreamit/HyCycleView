@@ -406,12 +406,6 @@
         containScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
     
-    BOOL isHoverType = self.configure.hy_headerView.height;
-    if (!isHoverType) {
-        containScrollView.bounces = NO;
-        containScrollView.scrollEnabled = NO;
-    }
-    
     id instance = nil;
     if (self.configure.hy_cyclePageClass) {
         
@@ -436,6 +430,7 @@
         
         if ([instance isKindOfClass:UIViewController.class]) {
             
+            containScrollView.bounces = YES;
             containScrollView.alwaysBounceVertical = YES;
             
             UIViewController *controller = (UIViewController *)instance;
@@ -483,6 +478,7 @@
             
         } else if ([instance isKindOfClass:UIView.class]) {
             
+            containScrollView.bounces = YES;
             containScrollView.alwaysBounceVertical = YES;
             
             UIView *customView = (UIView *)instance;

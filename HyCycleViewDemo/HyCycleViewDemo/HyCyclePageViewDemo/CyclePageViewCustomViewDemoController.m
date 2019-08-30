@@ -56,9 +56,11 @@
         .cyclePageInstance(^id(HyCyclePageView *pageView, NSInteger currentPage){
             
             if (currentPage == 1) {
-                return [weakSelf createCollectionView];
+                return [weakSelf collectionView];
             } else if (currentPage == 2) {
                 return [[CyclePageViewTestController alloc] init];
+            } else if (currentPage == 3) {
+                return [weakSelf customView];
             } else {
                 return
                 ((id (*)(id, SEL, NSInteger))objc_msgSend)(weakSelf, NSSelectorFromString(@"creatTableViewWithPageNumber:"), currentPage);
@@ -97,7 +99,6 @@
     [newHoverView addSubview:view];
     view.topValue(customTopView.bottom);
     
-    
     UIView *customBottomView = [[UIView alloc] init];
     customBottomView.backgroundColor = UIColor.orangeColor;
     customBottomView.rectValue(0, view.bottom, view.width, 30);
@@ -106,7 +107,22 @@
     return newHoverView;
 }
 
-- (UICollectionView *)createCollectionView {
+- (UIView *)customView {
+    
+    UIView *view = [[UIView alloc] init];
+    view.sizeValue(self.view.width, self.view.height - ([[UIApplication sharedApplication] delegate].window.safeAreaInsets.top + 44 + 100));
+    view.backgroundColor = UIColor.groupTableViewBackgroundColor;
+    
+    UILabel *testLabel = [[UILabel alloc] init];
+    testLabel.text = @"testCustomView";
+    [testLabel sizeToFit];
+    testLabel.centerXValue(view.width / 2).centerYValue(view.height / 2);
+    [view addSubview:testLabel];
+    
+    return view;
+}
+
+- (UICollectionView *)collectionView {
     
     CGFloat itemWH = (self.view.width - 6 * 10) / 5;
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];

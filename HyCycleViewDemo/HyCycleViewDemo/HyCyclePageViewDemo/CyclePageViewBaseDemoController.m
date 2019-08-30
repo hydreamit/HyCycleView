@@ -164,14 +164,14 @@
                  if (!array.count) {
                      UIView *line = [UIView new];
                      line.backgroundColor = UIColor.redColor;
-                     line.layer.cornerRadius = 2.0;
+                     line.layer.cornerRadius = 1.5;
                      line.heightValue(3).bottomValue(40);
                      array = @[line];
                  }
                  
                  CGFloat margin = ABS(toCell.centerX - fromCell.centerX);
                  CGFloat currentProgress = progress <= 0.5 ? progress : (1 - progress);
-                 CGFloat width = 20;
+                 CGFloat width = 15;
                  array.firstObject.widthValue(width + margin * currentProgress * 2);
                  
                  if (fromIndex < toIndex) {

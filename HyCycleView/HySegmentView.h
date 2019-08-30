@@ -27,12 +27,16 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 - (CGFloat)getItemMargin;
 
 
-/// inset
+/// inset (内边距)
 - (HySegmentViewConfigure *(^)(UIEdgeInsets))inset;
 /// insetAndMarginRatio (左右变局和中间间隔的比例)
 - (HySegmentViewConfigure *(^)(CGFloat))insetAndMarginRatio;
 /// item margin default average (标签间距 默认是平均分配)
 - (HySegmentViewConfigure *(^)(CGFloat))itemMargin;
+/// keeping margin and inset default NO (是否保持margin/inset不变(外部自定义itemView变化时))
+- (HySegmentViewConfigure *(^)(BOOL))keepingMarginAndInset;
+
+
 /// start index default 0 (开始选中的标签数)
 - (HySegmentViewConfigure *(^)(NSInteger))startIndex;
 /// number of items （标签总数)

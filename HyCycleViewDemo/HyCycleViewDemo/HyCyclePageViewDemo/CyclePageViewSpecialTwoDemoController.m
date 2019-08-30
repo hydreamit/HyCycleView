@@ -1,5 +1,5 @@
 //
-//  CyclePageViewSpecialDemoController.m
+//  CyclePageViewSpecialTwoDemoController.m
 //  HyCycleView
 //  https://github.com/hydreamit/HyCycleView
 //
@@ -7,15 +7,15 @@
 //  Copyright © 2016年 Hy. All rights reserved.
 //
 
-#import "CyclePageViewSpecialDemoController.h"
+#import "CyclePageViewSpecialTwoDemoController.h"
 
 
-@interface CyclePageViewSpecialDemoController ()
+@interface CyclePageViewSpecialTwoDemoController ()
 @property (nonatomic,strong) HySegmentView *segmentView;
 @end
 
 
-@implementation CyclePageViewSpecialDemoController
+@implementation CyclePageViewSpecialTwoDemoController
 @dynamic segmentView;
 
 - (void)viewDidLoad {

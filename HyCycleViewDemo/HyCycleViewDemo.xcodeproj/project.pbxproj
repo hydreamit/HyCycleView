@@ -12,7 +12,7 @@
 		517580C822EED9B800D5AC85 /* CyclePageViewStyleDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517580C722EED9B800D5AC85 /* CyclePageViewStyleDemoController.m */; };
 		517580CB22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517580CA22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m */; };
 		517580CE22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517580CD22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.m */; };
-		51758334230291DB00D5AC85 /* CyclePageViewSpecialDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51758333230291DB00D5AC85 /* CyclePageViewSpecialDemoController.m */; };
+		51758334230291DB00D5AC85 /* CyclePageViewSpecialTwoDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51758333230291DB00D5AC85 /* CyclePageViewSpecialTwoDemoController.m */; };
 		517D85D222DC6408001F1059 /* HyCyclePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85D122DC6408001F1059 /* HyCyclePageView.m */; };
 		517D85D522DC8927001F1059 /* UIView+HyFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85D422DC8927001F1059 /* UIView+HyFrame.m */; };
 		517D85DA22E2BA57001F1059 /* HyCycleViewDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85D922E2BA57001F1059 /* HyCycleViewDemoController.m */; };
@@ -42,6 +42,7 @@
 		5190BAE122D4A09E00534770 /* HyCustomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5190BADF22D4A09E00534770 /* HyCustomView.xib */; };
 		5190BAE222D4A09E00534770 /* HyCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5190BAE022D4A09E00534770 /* HyCustomView.m */; };
 		51B35B02230BECCD00C7E38B /* CircleRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 51B35B01230BECCC00C7E38B /* CircleRefreshView.m */; };
+		51CF6146231901D800D99A63 /* CyclePageViewSpecialOneDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CF6145231901D800D99A63 /* CyclePageViewSpecialOneDemoController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,8 +71,8 @@
 		517580CA22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewTopRefreshDemoController.m; sourceTree = "<group>"; };
 		517580CC22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewCenterRefreshDemoController.h; sourceTree = "<group>"; };
 		517580CD22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewCenterRefreshDemoController.m; sourceTree = "<group>"; };
-		51758332230291DB00D5AC85 /* CyclePageViewSpecialDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewSpecialDemoController.h; sourceTree = "<group>"; };
-		51758333230291DB00D5AC85 /* CyclePageViewSpecialDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewSpecialDemoController.m; sourceTree = "<group>"; };
+		51758332230291DB00D5AC85 /* CyclePageViewSpecialTwoDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewSpecialTwoDemoController.h; sourceTree = "<group>"; };
+		51758333230291DB00D5AC85 /* CyclePageViewSpecialTwoDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewSpecialTwoDemoController.m; sourceTree = "<group>"; };
 		517D85D022DC6408001F1059 /* HyCyclePageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HyCyclePageView.h; sourceTree = "<group>"; };
 		517D85D122DC6408001F1059 /* HyCyclePageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HyCyclePageView.m; sourceTree = "<group>"; };
 		517D85D322DC8927001F1059 /* UIView+HyFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+HyFrame.h"; sourceTree = "<group>"; };
@@ -129,6 +130,8 @@
 		5190BAE022D4A09E00534770 /* HyCustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HyCustomView.m; sourceTree = "<group>"; };
 		51B35B00230BECCC00C7E38B /* CircleRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleRefreshView.h; sourceTree = "<group>"; };
 		51B35B01230BECCC00C7E38B /* CircleRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleRefreshView.m; sourceTree = "<group>"; };
+		51CF6144231901D800D99A63 /* CyclePageViewSpecialOneDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewSpecialOneDemoController.h; sourceTree = "<group>"; };
+		51CF6145231901D800D99A63 /* CyclePageViewSpecialOneDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewSpecialOneDemoController.m; sourceTree = "<group>"; };
 		8D57DCD1953C0CD8956492AA /* Pods_HyCycleViewDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HyCycleViewDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB13A85488DE7D209EC26C5E /* Pods-HyCycleViewDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HyCycleViewDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo.release.xcconfig"; sourceTree = "<group>"; };
 		C60487CABD1481748B4D86CD /* Pods-HyCycleViewDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HyCycleViewDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -200,8 +203,10 @@
 				517580CA22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m */,
 				517580CC22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.h */,
 				517580CD22EFF2EF00D5AC85 /* CyclePageViewCenterRefreshDemoController.m */,
-				51758332230291DB00D5AC85 /* CyclePageViewSpecialDemoController.h */,
-				51758333230291DB00D5AC85 /* CyclePageViewSpecialDemoController.m */,
+				51CF6144231901D800D99A63 /* CyclePageViewSpecialOneDemoController.h */,
+				51CF6145231901D800D99A63 /* CyclePageViewSpecialOneDemoController.m */,
+				51758332230291DB00D5AC85 /* CyclePageViewSpecialTwoDemoController.h */,
+				51758333230291DB00D5AC85 /* CyclePageViewSpecialTwoDemoController.m */,
 				5107AE0522EDB96400D05857 /* CyclePageViewTestController.h */,
 				5107AE0622EDB96400D05857 /* CyclePageViewTestController.m */,
 				51B35B00230BECCC00C7E38B /* CircleRefreshView.h */,
@@ -494,7 +499,7 @@
 				5190BADD22D499F400534770 /* HyCycleView.m in Sources */,
 				517D85F522E46CCD001F1059 /* CyclePageViewLoadStyleDemoController.m in Sources */,
 				517580CB22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m in Sources */,
-				51758334230291DB00D5AC85 /* CyclePageViewSpecialDemoController.m in Sources */,
+				51758334230291DB00D5AC85 /* CyclePageViewSpecialTwoDemoController.m in Sources */,
 				517D85F822E46CE3001F1059 /* CyclePageViewNotCycleLoopDemoController.m in Sources */,
 				517D85EF22E2FCEA001F1059 /* CyclePageViewBaseDemoController.m in Sources */,
 				517D860822E71D31001F1059 /* HySegmentViewDemoController.m in Sources */,
@@ -511,6 +516,7 @@
 				517D860422E550D0001F1059 /* HySegmentView.m in Sources */,
 				517D85D522DC8927001F1059 /* UIView+HyFrame.m in Sources */,
 				517D85E322E2C0A1001F1059 /* CycleImageViewDemoController.m in Sources */,
+				51CF6146231901D800D99A63 /* CyclePageViewSpecialOneDemoController.m in Sources */,
 				517D85FB22E46CF7001F1059 /* CyclePageViewHoverOffsetDemoController.m in Sources */,
 				51B35B02230BECCD00C7E38B /* CircleRefreshView.m in Sources */,
 				517D85E922E2C0C1001F1059 /* CycleControllerDemoController.m in Sources */,

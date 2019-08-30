@@ -1,5 +1,5 @@
 //
-//  CyclePageViewSpecialDemoController.h
+//  CyclePageViewSpecialTwoDemoController.h
 //  HyCycleView
 //  https://github.com/hydreamit/HyCycleView
 //
@@ -9,7 +9,7 @@
 
 #import "CyclePageViewBaseDemoController.h"
 
-@interface CyclePageViewSpecialDemoController : CyclePageViewBaseDemoController
+@interface CyclePageViewSpecialTwoDemoController : CyclePageViewBaseDemoController
 
 @end
 

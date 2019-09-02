@@ -44,6 +44,7 @@ typedef NS_ENUM(NSUInteger, HyCycleViewScrollDirection) {
 
 /// currentPage (当前页面)
 @property (nonatomic,assign,readonly) NSInteger currentPage;
+@property (nonatomic,weak,readonly) HyCycleView *cycleView;
 
 /// cycle loop default yes (是否为无限循环轮播 默认为YES)
 - (HyCycleViewConfigure *(^)(BOOL))isCycleLoop;

@@ -69,6 +69,7 @@
     tableView.showsVerticalScrollIndicator = NO;
     tableView.delegate = self;
     tableView.dataSource = self;
+    tableView.backgroundColor = UIColor.grayColor;
     return tableView;
 }
 

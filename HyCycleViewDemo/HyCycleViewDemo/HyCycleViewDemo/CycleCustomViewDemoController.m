@@ -10,6 +10,7 @@
 #import "CycleCustomViewDemoController.h"
 #import "HyCustomView.h"
 #import "HyCycleView.h"
+#import "HySegmentView.h"
 
 
 @interface CycleCustomViewDemoController ()
@@ -55,8 +56,8 @@
          },
       ];
     
-    UIPageControl *pageControl = [[UIPageControl alloc] init];
-    pageControl.currentPageIndicatorTintColor = UIColor.orangeColor;
+    HySegmentView *segment = [self segment];
+    segment.backgroundColor = UIColor.clearColor;
     
     [self.scrollView addSubview:
      [HyCycleView cycleViewWithFrame:CGRectMake(30, 10, self.scrollView.width - 60, 180)
@@ -76,16 +77,12 @@
                                                 NSInteger totalPage,
                                                 NSInteger currentPage){
                               
-                              if (!pageControl.superview) {
-                                  CGFloat pageW = 15 * totalPage;
-                                  CGFloat pageH = 20;
-                                  CGFloat pageX = cycleView.frame.size.width - pageW - 5;
-                                  CGFloat pageY = cycleView.frame.size.height - pageH;
-                                  pageControl.frame = CGRectMake(pageX, pageY, pageW, pageH);
-                                  [cycleView addSubview:pageControl];
-                                  pageControl.numberOfPages = totalPage;
+                              if (!segment.superview) {
+                                  segment.leftValue(cycleView.width - segment.width);
+                                  segment.bottomValue(cycleView.height - 5);
+                                  [cycleView addSubview:segment];
                               }
-                              pageControl.currentPage = currentPage;
+                              [segment clickItemAtIndex:currentPage];
                           });
                       }]];
 }
@@ -108,15 +105,17 @@
       
       @{ @"image" : @"one"},
       ];
+
     
-    UIPageControl *pageControl = [[UIPageControl alloc] init];
-    pageControl.currentPageIndicatorTintColor = UIColor.orangeColor;
+    HySegmentView *segment = [self segment];
+    segment.backgroundColor = UIColor.clearColor;
     
     [self.scrollView addSubview:
      [HyCycleView cycleViewWithFrame:CGRectMake(30, self.scrollView.subviews.lastObject.bottom + 10, self.scrollView.width - 60, 180)
                       configureBlock:^(HyCycleViewConfigure *configure) {
+                          
                           configure
-                        .scrollDirection(1)
+                          .scrollDirection(1)
                           .totalPage(dataArray.count)
                           .cycleClass(^Class(HyCycleView *cycleView,
                                              NSInteger currentPage){
@@ -138,16 +137,12 @@
                                                 NSInteger totalPage,
                                                 NSInteger currentPage){
                               
-                              if (!pageControl.superview) {
-                                  CGFloat pageW = 15 * totalPage;
-                                  CGFloat pageH = 20;
-                                  CGFloat pageX = cycleView.frame.size.width - pageW - 5;
-                                  CGFloat pageY = cycleView.frame.size.height - pageH;
-                                  pageControl.frame = CGRectMake(pageX, pageY, pageW, pageH);
-                                  [cycleView addSubview:pageControl];
-                                  pageControl.numberOfPages = totalPage;
+                              if (!segment.superview) {
+                                  segment.leftValue(cycleView.width - segment.width);
+                                  segment.bottomValue(cycleView.height - 5);
+                                  [cycleView addSubview:segment];
                               }
-                              pageControl.currentPage = totalPage - 1 - currentPage;
+                              [segment clickItemAtIndex:totalPage - 1 - currentPage];
                           });
                       }]];
 }
@@ -201,5 +196,50 @@
     }
     return _scrollView;
 }
+
+- (HySegmentView *)segment {
+    
+    return
+    [HySegmentView segmentViewWithFrame:CGRectMake(0, 0, 14 * 4 + 18, 7)
+                         configureBlock:^(HySegmentViewConfigure *configure) {
+        
+        configure
+        .keepingMarginAndInset(YES)
+        .itemMargin(7)
+        .numberOfItems(4)
+        .viewForItemAtIndex(^UIView *(UIView *currentView,
+                                      NSInteger pageNumber,
+                                      CGFloat progress,
+                                      HySegmentViewItemPosition positon,
+                                      NSArray<UIView *> *animationViews) {
+            
+            UIView *view = currentView;
+            if (!view) {
+                view = [UIView new];
+                view.layer.masksToBounds = YES;
+                view.backgroundColor = UIColor.whiteColor;
+            }
+            
+            if (progress == 0) {
+                view.alpha = .5;
+                view.layer.cornerRadius = 3.5;
+                view.sizeValue(7, 7);
+            }
+            
+            if (progress == 1) {
+                view.alpha = .9;
+                view.layer.cornerRadius = 3;
+                view.sizeValue(16, 6);
+            }
+            return view;
+            
+        }).clickItemAtIndex(^BOOL(NSInteger page,
+                                  BOOL isRepeat){
+            
+            return NO;
+        });
+    }];
+}
+
 
 @end

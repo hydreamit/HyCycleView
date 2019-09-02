@@ -212,7 +212,7 @@
         self.currentSelectedIndex = toIndex;
     }
     
-    if (self.configure.hy_animationViews && self.configure.hy_items) {
+    if (self.configure.hy_animationViews) {
         
         NSArray<UIView *> *animationViews =
         self.configure.hy_animationViews(self.animationViews,
@@ -237,6 +237,7 @@
         }
     }
     
+    NSTimeInterval delayTime = self.configure.hy_keepingMarginAndInset ? 0.05 : 0.0;
     
     if (self.configure.hy_viewForItemAtIndex && toIndex != fromIndex) {
         
@@ -275,18 +276,24 @@
             [self.layout invalidateLayout];
         }
         
-        [self handleItemViewWithCell:nil
-                               index:fromIndex
-                            itemView:fromItemView];
-        
-        [self handleItemViewWithCell:nil
-                               index:toIndex
-                            itemView:toItemView];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
+                                     (int64_t)(delayTime * NSEC_PER_SEC)),
+                       dispatch_get_main_queue(), ^{
+                           
+                           [self handleItemViewWithCell:nil
+                                                  index:fromIndex
+                                               itemView:fromItemView];
+                           
+                           [self handleItemViewWithCell:nil
+                                                  index:toIndex
+                                               itemView:toItemView];
+                       });
+       
     }
     
     if (progress == 1) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                     (int64_t)(.05 * NSEC_PER_SEC)),
+                                     (int64_t)(delayTime * NSEC_PER_SEC)),
                        dispatch_get_main_queue(), ^{
                            [self scrollToCenterWithIndex:toIndex];
                        });

@@ -48,7 +48,7 @@
     return ^(HySegmentViewConfigure * _Nonnull configure) {
         
         configure
-        .itemMargin(0)
+        .itemMargin(MAXFLOAT)
         .numberOfItems(3)
         .insetAndMarginRatio(.5)
         .animationViews(^NSArray<UIView *> *(NSArray<UIView *> *currentAnimations, UICollectionViewCell *fromCell, UICollectionViewCell *toCell, NSInteger fromIndex, NSInteger toIndex, CGFloat progress){

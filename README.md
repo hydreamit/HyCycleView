@@ -117,7 +117,7 @@ pageControl.currentPageIndicatorTintColor = UIColor.orangeColor;
 ![自定义轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_Two.gif)
 * 有头部scrollView嵌套 动画<br>
 ![控制器轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_Three.gif)
-* 有头部scrollView嵌套 动画 自定义悬停View<br>
+* 有头部scrollView嵌套 动画 自定义View<br>
 ![控制器轮播](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_Four.gif)
 * 淘宝首页<br>
 ![淘宝首页](https://github.com/hydreamit/HyCycleView/blob/master/Pictures/HyCyclePageView_TaoBao.gif)

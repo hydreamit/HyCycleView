@@ -218,18 +218,17 @@
                 view = [UIView new];
                 view.layer.masksToBounds = YES;
                 view.backgroundColor = UIColor.whiteColor;
+                view.layer.cornerRadius = 3.5;
             }
             
             if (progress == 0) {
                 view.alpha = .5;
-                view.layer.cornerRadius = 3.5;
                 view.sizeValue(7, 7);
             }
             
             if (progress == 1) {
-                view.alpha = .9;
-                view.layer.cornerRadius = 3;
-                view.sizeValue(16, 6);
+                view.alpha = .85;
+                view.sizeValue(16, 7);
             }
             return view;
             

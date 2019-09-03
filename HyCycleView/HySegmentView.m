@@ -147,13 +147,12 @@
             }
         }
         
-        if (self.configure.hy_itemMargin == 0) {
+        if (self.configure.hy_itemMargin == MAXFLOAT) {
             
             if (UIEdgeInsetsEqualToEdgeInsets(self.configure.hy_inset, UIEdgeInsetsZero)) {
                 
                 CGFloat overWith = self.width - totalWith;
                 if (overWith >= 0) {
-                    
                     self.configure.hy_itemMargin = overWith / (self.configure.hy_items - 1 + self.configure.hy_insetAndMarginRatio * 2);
                 } else {
                     self.configure.hy_itemMargin = 30;
@@ -539,7 +538,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 
 + (instancetype)defaultConfigure {
     HySegmentViewConfigure *configure = [[self alloc] init];
-    configure.insetAndMarginRatio(1.0);
+    configure.insetAndMarginRatio(1.0).itemMargin(MAXFLOAT);
     return configure;
 }
 

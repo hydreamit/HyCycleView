@@ -79,7 +79,7 @@
             }
             
             weakSelf.animationLine.alpha = progress;
-            weakSelf.animationLine.bottom = 50 - 10 * progress;
+            weakSelf.animationLine.bottom = 50 - 8 * progress;
             [weakSelf.subTitleLabelArray enumerateObjectsUsingBlock:^(UILabel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 obj.alpha = 1 - progress;
             }];
@@ -101,8 +101,7 @@
     return ^(HySegmentViewConfigure * _Nonnull configure) {
         
         configure
-        .keepingMarginAndInset(YES)
-        .itemMargin(0.01)
+        .itemMargin(0)
         .inset(UIEdgeInsetsMake(0, 10, 0, 10))
         .viewForItemAtIndex(^UIView *(UIView *currentView,
                                       NSInteger currentIndex,

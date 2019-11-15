@@ -15,6 +15,8 @@
 - (void)drawTextColor:(UIColor *)color
              progress:(CGFloat)progress;
 
+- (void)drawTextColor:(UIColor *)color
+                 rect:(CGRect)rect;
 @end
 
 

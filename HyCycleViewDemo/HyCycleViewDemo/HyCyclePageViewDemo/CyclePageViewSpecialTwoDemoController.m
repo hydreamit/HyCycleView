@@ -8,6 +8,7 @@
 //
 
 #import "CyclePageViewSpecialTwoDemoController.h"
+#import "HyDrawTextColorLabel.h"
 
 
 @interface CyclePageViewSpecialTwoDemoController ()
@@ -30,6 +31,10 @@
     self.navigationItem.titleView = self.segmentView;;
 }
 
+- (NSArray<NSString *> *)titleArray {
+    return @[@"NBA", @"国际足球", @"中国篮球"];
+}
+
 - (UIView *)hoverView {
     return nil;
 }
@@ -45,12 +50,34 @@
 }
 
 - (void (^)(HySegmentViewConfigure * _Nonnull))configSegmentView {
+    
+    __weak typeof(self) weakSelf = self;
+    
     return ^(HySegmentViewConfigure * _Nonnull configure) {
         
         configure
         .itemMargin(MAXFLOAT)
         .numberOfItems(3)
         .insetAndMarginRatio(.5)
+        .viewForItemAtIndex(^UIView *(UIView *currentView,
+                                      NSInteger currentIndex,
+                                      CGFloat progress,
+                                      HySegmentViewItemPosition position,
+                                      NSArray<UIView *> *animationViews){
+
+                        HyDrawTextColorLabel *label = (HyDrawTextColorLabel *)currentView;
+                       if (!label) {
+                           label = [HyDrawTextColorLabel new];
+                           label.tag = 99;
+                           label.text = weakSelf.titleArray[currentIndex];
+                           label.textAlignment = NSTextAlignmentCenter;
+                           [label sizeToFit];
+                           label.width += 8;
+                           label.textColor = UIColor.darkTextColor;
+                       }
+            
+                    return label;
+        })
         .animationViews(^NSArray<UIView *> *(NSArray<UIView *> *currentAnimations, UICollectionViewCell *fromCell, UICollectionViewCell *toCell, NSInteger fromIndex, NSInteger toIndex, CGFloat progress){
             
             NSArray<UIView *> *array = currentAnimations;
@@ -68,6 +95,30 @@
             array.firstObject
             .widthValue(fromCell.width + widthMargin * progress + configure.getItemMargin)
             .centerXValue(fromCell.centerX + margin * progress);
+            
+            UICollectionView *collectionView = (UICollectionView *)fromCell.superview;
+            if ([collectionView isKindOfClass:UICollectionView.class]) {
+                
+                UIView *animationView = array.firstObject;
+                
+                NSArray<UICollectionViewCell *> *cells = collectionView.visibleCells;
+                [cells enumerateObjectsUsingBlock:^(UICollectionViewCell *cell, NSUInteger idx, BOOL * _Nonnull stop) {
+                    
+                    HyDrawTextColorLabel *label = [cell.contentView viewWithTag:99];
+                    
+                    CGFloat leftMargin = animationView.left - cell.left;
+                    leftMargin = leftMargin >= 0 ? leftMargin : 0;
+                    
+                    CGFloat rightMargin = cell.right - animationView.right;
+                    rightMargin = rightMargin < 0 ? cell.width : (cell.width - rightMargin);
+                    
+                    CGFloat width = rightMargin - leftMargin;
+                    if (width > 0) {
+                       CGRect rect = CGRectMake(leftMargin, 0, width, 26);
+                       [label drawTextColor:UIColor.whiteColor rect:rect];
+                    }
+                }];
+            }
       
             return array;
         });

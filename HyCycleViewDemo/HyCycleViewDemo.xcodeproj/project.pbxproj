@@ -188,8 +188,8 @@
 			isa = PBXGroup;
 			children = (
 				517D85DB22E2BA6B001F1059 /* HyCyclePageViewDemoController.h */,
-				517D85DC22E2BA6B001F1059 /* HyCyclePageViewDemoController.m */,
 				517580C622EED9B800D5AC85 /* CyclePageViewStyleDemoController.h */,
+				517D85DC22E2BA6B001F1059 /* HyCyclePageViewDemoController.m */,
 				517580C722EED9B800D5AC85 /* CyclePageViewStyleDemoController.m */,
 				517D85ED22E2FCEA001F1059 /* CyclePageViewBaseDemoController.h */,
 				517D85EE22E2FCEA001F1059 /* CyclePageViewBaseDemoController.m */,

@@ -140,8 +140,9 @@
                 gradientLayer.locations = @[@0.25,@0.75];
                 gradientLayer.startPoint = CGPointMake(0, .5);
                 gradientLayer.endPoint = CGPointMake(1, .5);
-                [subTitleLabel.layer addSublayer:gradientLayer];
-                gradientLayer.hidden = YES;
+                gradientLayer.zPosition = -1;
+                [subTitleLabel.layer insertSublayer:gradientLayer atIndex:0];
+                gradientLayer.opacity = 0;
 
                 view
                 .heightValue(subTitleLabel.bottom)
@@ -165,20 +166,16 @@
             }
             
             if (progress == 0 || progress == 1) {
-                
                 UILabel *titleLabel =  ((UILabel *)[view viewWithTag:1]);
                 UILabel *subTitleLabel =  ((UILabel *)[view viewWithTag:2]);
-                __block CAGradientLayer *gradientLayer;
+                titleLabel.textColor = progress ? [UIColor colorWithRed:255 / 255.0 green:48 / 255.0 blue:0 / 255.0 alpha:1] : UIColor.darkTextColor;
+                subTitleLabel.textColor = progress ? UIColor.whiteColor : UIColor.grayColor;
                 [subTitleLabel.layer.sublayers enumerateObjectsUsingBlock:^(__kindof CALayer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([obj isKindOfClass:CAGradientLayer.class]) {
-                        gradientLayer = obj;
+                        obj.opacity = progress;
                         *stop = YES;
                     };
                 }];
-                
-                titleLabel.textColor = progress ? [UIColor colorWithRed:255 / 255.0 green:48 / 255.0 blue:0 / 255.0 alpha:1] : UIColor.darkTextColor;
-                subTitleLabel.textColor = progress ? UIColor.whiteColor : UIColor.grayColor;
-                gradientLayer.hidden = !progress;
             }
         
             return view;

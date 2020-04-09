@@ -141,6 +141,7 @@
                 progress = self.currentSelectedIndex == i ? 1 : 0;
             }
             UIView *view = self.configure.hy_viewForItemAtIndex(nil, i, progress, HySegmentViewItemPositionCenter, nil);
+            if (i == 0) { view.width += 0.0001; }
             if (view) {
                 totalWith += view.width;
                 [self.itemViews addObject:view];

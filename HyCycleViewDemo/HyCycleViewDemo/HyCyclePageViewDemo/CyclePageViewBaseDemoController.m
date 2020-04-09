@@ -253,4 +253,8 @@
     return _cycleView;
 }
 
+- (void)dealloc {
+    NSLog(@"%s", __func__);
+}
+
 @end

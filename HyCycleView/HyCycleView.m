@@ -1226,6 +1226,10 @@ static int const CycleContentViewCount = 3;
         self.configure.hy_scrollStyle == HyCycleViewScrollAuto) {
         [self startTimer];
     }
+    if (decelerate == 0) {
+        self.scrollState = NO;
+        [self updateContentOffsetAndContentView];
+    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {

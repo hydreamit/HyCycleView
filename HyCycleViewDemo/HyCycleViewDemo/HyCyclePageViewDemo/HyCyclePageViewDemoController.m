@@ -18,14 +18,14 @@
     [super viewDidLoad];
     
     self.titles = @[@"GestureStyleOnly(一个手势,不需解决手势冲突)",
-                    @"GestureStyleMultiple(多个手势,需解决手势冲突)",
+//                    @"GestureStyleMultiple(多个手势,需解决手势冲突)",
                     @"TaoBaoDemo(淘宝首页)"];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.row == 2) {
+    if (indexPath.row == self.titles.count - 1) {
         CyclePageViewTaoBaoDemoController *viewController = [[CyclePageViewTaoBaoDemoController alloc] init];
         viewController.navigationItem.title = self.titles[indexPath.row];
         [self.navigationController pushViewController:viewController

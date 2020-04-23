@@ -43,7 +43,7 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 - (HySegmentViewConfigure *(^)(NSInteger))numberOfItems;
 
 
-/// click item at index callback
+/// click item at index callback(点击回调 返回YES内部实现点击动画逻辑, NO外部自己通过调用方法clickItemFromIndex:实现)
 - (HySegmentViewConfigure *(^)(BOOL (^)(NSInteger, // click index
                                         BOOL))     // is repeat click
                                         )clickItemAtIndex;

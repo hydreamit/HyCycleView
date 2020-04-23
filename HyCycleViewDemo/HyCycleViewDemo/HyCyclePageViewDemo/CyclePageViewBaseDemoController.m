@@ -199,11 +199,6 @@
                     [weakSelf.cyclePageView scrollToPage:currentIndex animated:YES];
                 }
                 return NO;
-                
-//                if (!isRepeat) {
-//                    [weakSelf.cyclePageView scrollToPage:currentIndex animated:NO];
-//                }
-//                return YES;
             });
             !weakSelf.configSegmentView ?: weakSelf.configSegmentView(configure);
         }];

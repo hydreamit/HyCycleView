@@ -21,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
        
-    self.titles =@[@"HyCycleViewDemo", @"HyCyclePageViewDemo", @"HySegmentViewDemo"];
+    self.titles = @[@"HyCycleViewDemo", @"HyCyclePageViewDemo", @"HySegmentViewDemo"];
     [self.view addSubview:self.tableView];
 }
 
@@ -66,4 +66,5 @@
 - (void)dealloc {
     NSLog(@"%s", __func__);
 }
+
 @end

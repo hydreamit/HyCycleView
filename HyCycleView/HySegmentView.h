@@ -26,44 +26,32 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 /// get item margin
 - (CGFloat)getItemMargin;
 
-
 /// inset (内边距)
-- (HySegmentViewConfigure *(^)(UIEdgeInsets))inset;
-/// insetAndMarginRatio (左右变局和中间间隔的比例)
-- (HySegmentViewConfigure *(^)(CGFloat))insetAndMarginRatio;
-/// item margin default average (标签间距 默认是平均分配, 不够分默认值30)
-- (HySegmentViewConfigure *(^)(CGFloat))itemMargin;
-/// keeping margin and inset default NO (是否保持margin/inset不变(外部自定义itemView变化时))
-- (HySegmentViewConfigure *(^)(BOOL))keepingMarginAndInset;
+@property (nonatomic, copy, readonly) HySegmentViewConfigure *(^inset)(UIEdgeInsets);
 
+/// insetAndMarginRatio (左右变局和中间间隔的比例)
+@property (nonatomic, copy, readonly) HySegmentViewConfigure *(^insetAndMarginRatio)(CGFloat);
+
+///item margin default average (标签间距 默认是平均分配, 不够分默认值30)
+@property (nonatomic, copy, readonly) HySegmentViewConfigure *(^itemMargin)(CGFloat);
+
+/// keeping margin and inset default NO (是否保持margin/inset不变(外部自定义itemView变化时))
+@property (nonatomic, copy, readonly) HySegmentViewConfigure *(^keepingMarginAndInset)(BOOL);
 
 /// start index default 0 (开始选中的标签数)
-- (HySegmentViewConfigure *(^)(NSInteger))startIndex;
-/// number of items （标签总数)
-- (HySegmentViewConfigure *(^)(NSInteger))numberOfItems;
+@property (nonatomic, copy, readonly) HySegmentViewConfigure *(^startIndex)(NSInteger);
 
+///number of items （标签总数)
+@property (nonatomic, copy, readonly) HySegmentViewConfigure *(^numberOfItems)(NSInteger);
 
 /// click item at index callback(点击回调 返回YES内部实现点击动画逻辑, NO外部自己通过调用方法clickItemFromIndex:实现)
-- (HySegmentViewConfigure *(^)(BOOL (^)(NSInteger, // click index
-                                        BOOL))     // is repeat click
-                                        )clickItemAtIndex;
+@property (nonatomic, copy, readonly) HySegmentViewConfigure *(^clickItemAtIndex)(BOOL(^)(NSInteger index, BOOL isRepeat));
 
 /// view for item at index
-- (HySegmentViewConfigure *(^)(UIView *(^)(UIView *,                      // current view
-                                           NSInteger,                    // index
-                                           CGFloat,                     // progress
-                                           HySegmentViewItemPosition,  // position
-                                           NSArray<UIView *> *))      // animationViews
-                                           )viewForItemAtIndex;
+@property (nonatomic, copy, readonly) HySegmentViewConfigure *(^viewForItemAtIndex)(UIView *(^)(UIView *currentView, NSInteger index, CGFloat progress, HySegmentViewItemPosition position, NSArray<UIView *> *animationViews));
 
 /// animationViews
-- (HySegmentViewConfigure *(^)(NSArray<UIView *> *(^)(NSArray<UIView *> *,     // current animationViews
-                                                      UICollectionViewCell *, // from cell
-                                                      UICollectionViewCell *,// to cell
-                                                      NSInteger,            // from index
-                                                      NSInteger,           // to index
-                                                      CGFloat))           // progress
-                                                      )animationViews;
+@property (nonatomic, copy, readonly) HySegmentViewConfigure *(^animationViews)(NSArray<UIView *> *(^)(NSArray<UIView *> *currentAnimationViews, UICollectionViewCell *fromCell, UICollectionViewCell *toCell, NSInteger fromIndex, NSInteger toIndex, CGFloat progress));
 
 @end
 

@@ -49,89 +49,65 @@ typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderRefreshStyle) {
 @property (nonatomic,weak,readonly) HyCyclePageView *cyclePageView;
 
 /// gesture Style(需要悬停嵌套scrollView时的 手势处理方式)
-- (HyCyclePageViewConfigure *(^)(HyCyclePageViewGestureStyle))gestureStyle;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^gestureStyle)(HyCyclePageViewGestureStyle);
 /// header refresh style
-- (HyCyclePageViewConfigure *(^)(HyCyclePageViewHeaderRefreshStyle))headerRefreshStyle;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^headerRefreshStyle)(HyCyclePageViewHeaderRefreshStyle);
+
+
 
 /// header view (头部视图)
-- (HyCyclePageViewConfigure *(^)(UIView *))headerView;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^headerView)(UIView *);
 /// header view height (头部视图高度)
-- (HyCyclePageViewConfigure *(^)(CGFloat ))headerViewHeight;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^headerViewHeight)(CGFloat);
 /// header view up Animation(头部视图上滑动画)
-- (HyCyclePageViewConfigure *(^)(HyCyclePageViewHeaderViewUpAnimation))headerViewUpAnimation;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^headerViewUpAnimation)(HyCyclePageViewHeaderViewUpAnimation);
 /// header view down Animation(头部视图下拉动画)
-- (HyCyclePageViewConfigure *(^)(HyCyclePageViewHeaderViewDownAnimation))headerViewDownAnimation;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^headerViewDownAnimation)(HyCyclePageViewHeaderViewDownAnimation);
+
 
 /// hover view (悬停视图)
-- (HyCyclePageViewConfigure *(^)(UIView *))hoverView;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^hoverView)(UIView *);
 /// hover view (悬停视图高度)
-- (HyCyclePageViewConfigure *(^)(CGFloat))hoverViewHeight;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^hoverViewHeight)(CGFloat);
 /// hover offset default 0 (悬停位置偏移量 默认为0)
-- (HyCyclePageViewConfigure *(^)(CGFloat))hoverOffset;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^hoverOffset)(CGFloat);
 
 /// cycle page loop default yes (是否为无限循环 默认为YES)
-- (HyCyclePageViewConfigure *(^)(BOOL))isCycleLoop;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^isCycleLoop)(BOOL);
 /// start page (开始页)
-- (HyCyclePageViewConfigure *(^)(NSInteger))startPage;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^startPage)(NSInteger);
 /// total Pages (总页数)
-- (HyCyclePageViewConfigure *(^)(NSInteger))totalPage;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^totalPage)(NSInteger);
+
 
 /// cycle page view load style (view/Controller加载方式: 滑动出现立即加载/滑动到整个页面再加载)
-- (HyCyclePageViewConfigure *(^)(HyCycleViewScrollLoadStyle))loadStyle;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^loadStyle)(HyCycleViewScrollLoadStyle);
 /// cycle views/controllers of class (传入的是class)
-- (HyCyclePageViewConfigure *(^)(Class (^)(HyCyclePageView *, NSInteger)))cyclePageClass;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^cyclePageClass)(Class (^)(HyCyclePageView *cyclePageView, NSInteger index));
 /// cycle page views/controllers (传入的是实例对象)
-- (HyCyclePageViewConfigure *(^)(id (^)(HyCyclePageView *, NSInteger)))cyclePageInstance;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^cyclePageInstance)(id (^)(HyCyclePageView *cyclePageView, NSInteger index));
 
 
 /// one page view will appear callback (view 即将出现的回调)
-- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *,  // HyCyclePageView
-                                         id,                // cycleView
-                                         NSInteger,        // currentIndex
-                                         BOOL))           // is first load
-                                         )viewWillAppear;
-
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^viewWillAppear)(id (^)(HyCyclePageView *cyclePageView, id pageView, NSInteger index, BOOL isFirstLoad));
 /// totalPage and currentPage change (总页/当前页发生改变的回调)
-- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCycleView
-                                         NSInteger,        // totalPage
-                                         NSInteger))      // currentPage
-                                         )currentPageChange;
-
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^currentPageChange)(id (^)(HyCyclePageView *cyclePageView, NSInteger indexs, NSInteger index));
 /// totalPage and roundingPage change (总页/当前页(四舍五入)发生改变的回调)
-- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCycleView
-                                         NSInteger,        // totalPage
-                                         NSInteger))      // roundingPage
-                                         )roundingPageChange;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^roundingPageChange)(id (^)(HyCyclePageView *cyclePageView, NSInteger indexs, NSInteger index));
 
 
 /// horizontal scroll progress (水平滑动进度的回调)
-- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
-                                         NSInteger,        // fromPage
-                                         NSInteger,       // toPage
-                                         CGFloat))       // progress
-                                         )horizontalScroll;
-
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^horizontalScroll)(void (^)(HyCyclePageView *cyclePageView, NSInteger fromIndex, NSInteger toIndex, CGFloat progress));
 /// vertical scroll  (上下滑动的回调)
-- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
-                                         CGFloat ,         // contentOffset y
-                                         NSInteger))      // currentPage
-                                         )verticalScroll;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^verticalScroll)(void (^)(HyCyclePageView *cyclePageView, CGFloat offsetY, NSInteger index));
 
-- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
-                                         BOOL))            // state begin or end
-                                         )horizontalScrollState;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^horizontalScrollState)(void (^)(HyCyclePageView *cyclePageView, BOOL isStart));
+
 
 /// header refresh
-- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
-                                         UIScrollView *,   // scrollView
-                                         NSInteger))      // currentPage
-                                         )headerRefresh;
-
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^headerRefresh)(void (^)(HyCyclePageView *cyclePageView, UIScrollView *scrollView, NSInteger index));
 /// footer refresh
-- (HyCyclePageViewConfigure *(^)(void(^)(HyCyclePageView *, // HyCyclePageView
-                                         UIScrollView *,   // scrollView
-                                         NSInteger))      // currentPage
-                                         )footerRefresh;
+@property (nonatomic,copy,readonly) HyCyclePageViewConfigure *(^footerRefresh)(void (^)(HyCyclePageView *cyclePageView, UIScrollView *scrollView, NSInteger index));
 
 @end
 

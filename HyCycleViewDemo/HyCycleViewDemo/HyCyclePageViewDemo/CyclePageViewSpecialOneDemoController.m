@@ -21,7 +21,7 @@
 }
 
 - (void (^)(HySegmentViewConfigure * _Nonnull))configSegmentView {
-    __weak typeof(self) weakSelf = self;
+    __weak typeof(self) _self = self;
     return ^(HySegmentViewConfigure * _Nonnull configure) {
         configure
         .keepingMarginAndInset(YES)
@@ -31,11 +31,11 @@
                                       CGFloat progress,
                                       HySegmentViewItemPosition position,
                                       NSArray<UIView *> *animationViews) {
-            
+            __strong typeof(_self) self = _self;
             UILabel *label = (UILabel *)currentView;
             if (!label) {
                 label = [UILabel new];
-                label.text = weakSelf.titleArray[currentIndex];
+                label.text = self.titleArray[currentIndex];
                 label.textAlignment = NSTextAlignmentCenter;
                 label.textColor = UIColor.darkTextColor;
                 label.font = [UIFont boldSystemFontOfSize:15];

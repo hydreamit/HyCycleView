@@ -12,7 +12,5 @@
 
 @interface CyclePageViewStyleDemoController : ViewController
 
-@property (nonatomic,assign) HyCyclePageViewGestureStyle gestureStyle;
-
 @end
 

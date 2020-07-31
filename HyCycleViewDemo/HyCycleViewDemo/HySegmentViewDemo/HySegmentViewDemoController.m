@@ -13,12 +13,18 @@
 #import "HyCycleView.h"
 
 
-@interface HySegmentViewDemoController ()
+@interface HySegmentViewDemoController ()<HyCycleViewProviderProtocol>
 @property (nonatomic,strong) UIScrollView *scrollView;
 @end
 
 
 @implementation HySegmentViewDemoController
+
+- (void)configCycleView:(HyCycleViewProvider<HyCycleView *> *)provider index:(NSInteger)index {
+    [provider view:^UIView * _Nonnull(HyCycleView * _Nonnull cycleView) {
+        return UIView.new;
+    }];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -99,7 +105,6 @@
                 array.firstObject.leftValue(toCell.centerX - width / 2);
             };
         }
-        
         return array;
     }];
     
@@ -209,23 +214,18 @@
     testView.frame = CGRectMake(0, self.scrollView.subviews.lastObject.bottom + 10, self.scrollView.width, 90);
     testView.tag = self.scrollView.subviews.count;
     
-    HyCycleView *cycleView =
-    [HyCycleView cycleViewWithFrame:CGRectMake(0, 40, testView.width, 50)
-                     configureBlock:^(HyCycleViewConfigure *configure) {
-                         
-                         configure
-                         .totalPage(9)
-                         .cycleClasses(@[UIView.class])
-                         .viewWillAppear(^(HyCycleView *cycleView,
-                                           UIView *view,
-                                           NSInteger currentPage,
-                                           BOOL isfirtLoad){
-                             view.backgroundColor = colorArray[currentPage];
-                         });
-                     }];
+    __weak typeof(self) _self = self;
+    HyCycleView *cycleView = [[HyCycleView alloc] initWithFrame:CGRectMake(0, 40, testView.width, 50)];
+    [[[[[cycleView.configure totalIndexs:^NSInteger(HyCycleView * _Nonnull cycleView) {
+        return 9;
+    }] viewProviderAtIndex:^id<HyCycleViewProviderProtocol> _Nonnull(HyCycleView * _Nonnull cycleView, NSInteger index) {
+        __strong typeof(_self) self = _self;
+        return self;
+    }] viewWillAppearAtIndex:^(HyCycleView * _Nonnull cycleView, UIView  *view, NSInteger index, BOOL isFirstLoad) {
+        view.backgroundColor = colorArray[index];
+    }] isAutoCycle:YES] isCycle:YES];
     
-    
-    __weak typeof(self) weakSelf = self;
+   
     __weak typeof(testView) weakTestView = testView;
     __weak typeof(cycleView) weakCycleView = cycleView;
     
@@ -241,7 +241,7 @@
                                       CGFloat progress,
                                       HySegmentViewItemPosition position,
                                       NSArray<UIView *> *animationViews){
-            
+            __strong typeof(_self) self = _self;
             UIView *view = currentView;
             if (!view) {
                 
@@ -293,8 +293,8 @@
                 
                 if (weakTestView.tag < 4 && weakTestView.tag != 1) {
                     
-                    NSArray *selectedRGB = [weakSelf getRGBComponentsForColor:colorArray[currentIndex]];
-                    NSArray *normalRGB = [weakSelf getRGBComponentsForColor:UIColor.darkGrayColor];
+                    NSArray *selectedRGB = [self getRGBComponentsForColor:colorArray[currentIndex]];
+                    NSArray *normalRGB = [self getRGBComponentsForColor:UIColor.darkGrayColor];
                     
                     NSInteger colorR = [normalRGB.firstObject integerValue] + ([selectedRGB.firstObject integerValue] - [normalRGB.firstObject integerValue]) * progress;
                     
@@ -319,7 +319,7 @@
                         [label drawTextColor:colorArray[currentIndex] progress:0];
                         
                     } else {
-                        if ([weakSelf checkColor:label.textColor otherColor:UIColor.darkGrayColor]) {
+                        if ([self checkColor:label.textColor otherColor:UIColor.darkGrayColor]) {
                             
                             if (position == HySegmentViewItemPositionLeft) {
                                 [label drawTextColor:colorArray[currentIndex] progress:-progress];
@@ -348,7 +348,7 @@
         })
         .clickItemAtIndex(^BOOL(NSInteger currentIndex, BOOL isRepeat){
             if (!isRepeat) {
-                [weakCycleView scrollToPage:currentIndex animated:YES];
+                [weakCycleView scrollToIndex:currentIndex animated:YES];
             }
             return NO;
         })
@@ -356,20 +356,27 @@
     }];
     
     __weak typeof(segmentView) weakSegmentView = segmentView;
-    cycleView.configure.scrollProgress(^(HyCycleView *cycleView,
-                                          NSInteger fromPage,
-                                          NSInteger toPage,
-                                          CGFloat progress) {
-
-        [weakSegmentView clickItemFromIndex:fromPage
-                                    toIndex:toPage
-                                   progress:progress];
-    });
+    [cycleView.configure scrollProgress:^(HyCycleView * _Nonnull cycleView, NSInteger fromIndex, NSInteger toIndex, CGFloat progress) {
+            [weakSegmentView clickItemFromIndex:fromIndex
+                                        toIndex:toIndex
+                                       progress:progress];
+    }];
+//    cycleView.configure.scrollProgress(^(HyCycleView *cycleView,
+//                                          NSInteger fromPage,
+//                                          NSInteger toPage,
+//                                          CGFloat progress) {
+//
+//        [weakSegmentView clickItemFromIndex:fromPage
+//                                    toIndex:toPage
+//                                   progress:progress];
+//    });
     
     [testView addSubview:segmentView];
     [testView addSubview:cycleView];
     
     [self.scrollView addSubview:testView];
+    
+    [cycleView reloadData];
 }
 
 - (UIScrollView *)scrollView {

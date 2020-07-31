@@ -16,24 +16,18 @@
 - (void (^)(HyCyclePageViewConfigure * _Nonnull))configPageView {
     return ^(HyCyclePageViewConfigure * _Nonnull configure){
         
-        configure
-        .headerRefreshStyle(HyCyclePageViewHeaderRefreshStyleCenter)
-        .headerRefresh(^(HyCyclePageView *pageView, UIScrollView *scrollView, NSInteger index){
-            
+        [[[configure headerRefreshPositon:HyCyclePageViewHeaderRefreshPositionCenter] headerRefreshAtIndex:^(HyCyclePageView * _Nonnull cyclePageView, UIScrollView * _Nonnull scrollView, id  _Nonnull view, NSInteger index) {
             __block typeof(scrollView) weakScrollView = scrollView;
             scrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
                 
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
                                              (int64_t)(.5 * NSEC_PER_SEC)),
                                dispatch_get_main_queue(), ^{
-                                   
-                                   [weakScrollView.mj_header endRefreshing];
-                               });
+                    
+                    [weakScrollView.mj_header endRefreshing];
+                });
             }];
-            
-        })
-        .footerRefresh(^(HyCyclePageView *pageView, UIScrollView *scrollView, NSInteger index){
-            
+        }] footerRefreshAtIndex:^(HyCyclePageView * _Nonnull cyclePageView, UIScrollView * _Nonnull scrollView, id  _Nonnull view, NSInteger index) {
             __block typeof(scrollView) weakScrollView = scrollView;
             scrollView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
                 
@@ -44,7 +38,7 @@
                                    [weakScrollView.mj_footer endRefreshing];
                                });
             }];
-        });
+        }];
     };
 }
 

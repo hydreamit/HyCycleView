@@ -11,22 +11,31 @@
 #import "CyclePageViewTaoBaoDemoCell.h"
 
 
-@interface CyclePageViewTaoBaoDemoController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface CyclePageViewTaoBaoDemoController () <UICollectionViewDataSource, UICollectionViewDelegate, HyCyclePageViewProviderProtocol>
 @property (nonatomic,strong) NSMutableArray<UIView *> *lines;
 @property (nonatomic,strong) NSMutableArray<UILabel *> *subTitleLabelArray;
 @property (nonatomic,strong) UIView *animationLine;
 @property (nonatomic,strong) UIView *backgroundView;
 @property (nonatomic,strong) HySegmentView *segmentView;
+@property (nonatomic,strong) HyCyclePageView *cyclePageView;
 @end
 
 
 @implementation CyclePageViewTaoBaoDemoController
-@dynamic segmentView;
+@dynamic segmentView, cyclePageView;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.segmentView.height = 60;
     self.segmentView.backgroundColor = UIColor.clearColor;
+}
+
+- (void)configCyclePageView:(HyCycleViewProvider<HyCyclePageView *> *)provider index:(NSInteger)index {
+    __weak typeof(self) _self = self;
+    [provider view:^UIView * _Nonnull(HyCyclePageView * _Nonnull cycleView) {
+        __strong typeof(_self) self = _self;
+        return [self collectionView];
+    }];
 }
 
 - (NSArray<NSString *> *)titleArray {
@@ -60,44 +69,41 @@
 }
 
 - (void (^)(HyCyclePageViewConfigure * _Nonnull))configPageView {
-    __weak typeof(self) weakSelf = self;
-    return ^(HyCyclePageViewConfigure * _Nonnull configure){
+    __weak typeof(self) _self = self;
+    return ^(HyCyclePageViewConfigure * _Nonnull configure) {
         
-        configure
-        .cyclePageInstance(^id(HyCyclePageView *pageView, NSInteger currentIndex){
-            return weakSelf.collectionView;
-        })
-        .verticalScroll(^(HyCyclePageView * cyclePageView,
-                          CGFloat offsetY,
-                          NSInteger currentPage) {
-            
-            CGFloat progress = (offsetY - weakSelf.headerView.height) / 18;            
+        [[configure viewProviderAtIndex:^id<HyCyclePageViewProviderProtocol> _Nonnull(HyCyclePageView * _Nonnull cycleView, NSInteger index) {
+            __strong typeof(_self) self = _self;
+            return self;
+        }] verticalScrollProgress:^(HyCyclePageView * _Nonnull cyclePageView, UIView * _Nonnull view, NSInteger index, CGFloat offset) {
+            __strong typeof(_self) self = _self;
+            CGFloat progress = (offset - self.headerView.height) / 18;
             if (progress < 0) {progress = 0;}
             if (progress > 1) {progress = 1;}
-            if (weakSelf.animationLine.alpha == 1.0 && progress > 0 && progress < 1) {
+            if (self.animationLine.alpha == 1.0 && progress > 0 && progress < 1) {
                 return ;
             }
             
-            weakSelf.animationLine.alpha = progress;
-            weakSelf.animationLine.bottom = 50 - 8 * progress;
-            [weakSelf.subTitleLabelArray enumerateObjectsUsingBlock:^(UILabel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            self.animationLine.alpha = progress;
+            self.animationLine.bottom = 50 - 8 * progress;
+            [self.subTitleLabelArray enumerateObjectsUsingBlock:^(UILabel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 obj.alpha = 1 - progress;
             }];
-            [weakSelf.lines enumerateObjectsUsingBlock:^(UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self.lines enumerateObjectsUsingBlock:^(UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 obj.height = 30 - 10 * progress;
                 obj.top = 5 - 3 * progress;
             }];
             
-            weakSelf.backgroundView.height = weakSelf.segmentView.height - 18 * progress;
-            weakSelf.backgroundView.backgroundColor =
+            self.backgroundView.height = self.segmentView.height - 18 * progress;
+            self.backgroundView.backgroundColor =
             progress == 1 ? UIColor.whiteColor :
             [UIColor colorWithRed:239 / 255.0 green:239 / 255.0 blue:239 / 255.0 alpha:1];
-        });
+        }];
     };
 }
 
 - (void (^)(HySegmentViewConfigure * _Nonnull))configSegmentView {
-    __weak typeof(self) weakSelf = self;
+    __weak typeof(self) _self = self;
     return ^(HySegmentViewConfigure * _Nonnull configure) {
         
         configure
@@ -109,6 +115,7 @@
                                       HySegmentViewItemPosition position,
                                       NSArray<UIView *> *animationViews) {
 
+            __strong typeof(_self) self = _self;
             UIView *view = currentView;
             if (!view) {
                 view = [[UIView alloc] init];
@@ -116,7 +123,7 @@
                 UILabel *titleLabel = [[UILabel alloc] init];
                 titleLabel.font = [UIFont systemFontOfSize:16];
                 titleLabel.textAlignment = NSTextAlignmentCenter;
-                titleLabel.text = weakSelf.titleArray[currentIndex];
+                titleLabel.text = self.titleArray[currentIndex];
                 titleLabel.tag = 1;
                 [titleLabel sizeToFit];
                 [view addSubview:titleLabel];
@@ -124,14 +131,14 @@
                 UILabel *subTitleLabel = [[UILabel alloc] init];
                 subTitleLabel.textAlignment = NSTextAlignmentCenter;
                 subTitleLabel.font = [UIFont systemFontOfSize:10];
-                subTitleLabel.text = weakSelf.subTitleArray[currentIndex];
+                subTitleLabel.text = self.subTitleArray[currentIndex];
                 subTitleLabel.tag = 2;
                 [subTitleLabel sizeToFit];
                 subTitleLabel.width += 10;
                 subTitleLabel.height += 4;
                 subTitleLabel.topValue(titleLabel.bottom + 2);
                 [view addSubview:subTitleLabel];
-                [weakSelf.subTitleLabelArray addObject:subTitleLabel];
+                [self.subTitleLabelArray addObject:subTitleLabel];
                 
                 CAGradientLayer *gradientLayer =  [CAGradientLayer layer];
                 gradientLayer.frame = subTitleLabel.bounds;
@@ -151,7 +158,7 @@
                 titleLabel.centerXValue(view.width / 2);
                 subTitleLabel.centerXIsEqualTo(titleLabel);
 
-                if (currentIndex != weakSelf.subTitleArray.count - 1) {
+                if (currentIndex != self.subTitleArray.count - 1) {
                     UIView *line = [[UIView alloc] init];
                     line.backgroundColor = [UIColor colorWithRed:200 / 255.0 green:200 / 255.0 blue:200 / 255.0 alpha:1];
                     line.tag = 3;
@@ -161,7 +168,7 @@
                     .heightValue(30)
                     .rightValue(view.width)
                     .topValue(5);
-                    [weakSelf.lines addObject:line];
+                    [self.lines addObject:line];
                 }
             }
             
@@ -182,24 +189,34 @@
             
         }).animationViews(^NSArray<UIView *> *(NSArray<UIView *> *currentAnimations, UICollectionViewCell *fromCell, UICollectionViewCell *toCell, NSInteger fromIndex, NSInteger toIndex, CGFloat progress){
             
+            __strong typeof(_self) self = _self;
+            
             NSArray<UIView *> *array = currentAnimations;
             if (!array.count) {
                 UIView *line = [UIView new];
                 line.backgroundColor = [UIColor colorWithRed:255 / 255.0 green:48 / 255.0 blue:0 / 255.0 alpha:1];
                 line.layer.cornerRadius = 1.5;
                 line.heightValue(3).bottomValue(50).widthValue(40);
-                weakSelf.animationLine = line;
+                self.animationLine = line;
                 
                 UIView *backgroundView = [[UIView alloc] init];
                 backgroundView.backgroundColor = [UIColor colorWithRed:239 / 255.0 green:239 / 255.0 blue:239 / 255.0 alpha:1];
-                backgroundView.frame = CGRectMake(-weakSelf.view.width, 0, weakSelf.view.width * 3, 60);
-                weakSelf.backgroundView = backgroundView;
+                backgroundView.frame = CGRectMake(-self.view.width, 0, self.view.width * 3, 60);
+                self.backgroundView = backgroundView;
                 
                 array = @[line,backgroundView];
             }
             array.firstObject.centerXValue((1 - progress) * fromCell.centerX + progress * toCell.centerX);
             
             return array;
+        })
+        .clickItemAtIndex(^BOOL(NSInteger currentIndex, BOOL isRepeat){
+            __strong typeof(_self) self = _self;
+            if (!isRepeat) {
+                BOOL animated = [self.cyclePageView.didLoadIndexs containsIndex:currentIndex];
+                [self.cyclePageView scrollToIndex:currentIndex animated:animated];
+            }
+            return NO;
         });
     };
 }

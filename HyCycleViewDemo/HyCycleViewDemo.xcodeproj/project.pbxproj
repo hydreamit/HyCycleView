@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		044BC52224CD78AD00E9AC40 /* CycleControllerDemoTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 044BC52124CD78AD00E9AC40 /* CycleControllerDemoTestController.m */; };
+		044BC52524CD7A5300E9AC40 /* CyclePageViewDemoTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 044BC52424CD7A5300E9AC40 /* CyclePageViewDemoTestController.m */; };
+		04C526CE24D057AB00599272 /* CyclePageViewTikTokDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C526CD24D057AB00599272 /* CyclePageViewTikTokDemoController.m */; };
 		1AEA90624DDB0AA22A165462 /* Pods_HyCycleViewDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D57DCD1953C0CD8956492AA /* Pods_HyCycleViewDemo.framework */; };
 		5107AE0722EDB96400D05857 /* CyclePageViewTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5107AE0622EDB96400D05857 /* CyclePageViewTestController.m */; };
 		517580C822EED9B800D5AC85 /* CyclePageViewStyleDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517580C722EED9B800D5AC85 /* CyclePageViewStyleDemoController.m */; };
@@ -23,7 +26,7 @@
 		517D85EF22E2FCEA001F1059 /* CyclePageViewBaseDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85EE22E2FCEA001F1059 /* CyclePageViewBaseDemoController.m */; };
 		517D85F222E2FCFD001F1059 /* CyclePageViewAnimationDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85F122E2FCFD001F1059 /* CyclePageViewAnimationDemoController.m */; };
 		517D85F522E46CCD001F1059 /* CyclePageViewLoadStyleDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85F422E46CCD001F1059 /* CyclePageViewLoadStyleDemoController.m */; };
-		517D85F822E46CE3001F1059 /* CyclePageViewNotCycleLoopDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85F722E46CE3001F1059 /* CyclePageViewNotCycleLoopDemoController.m */; };
+		517D85F822E46CE3001F1059 /* CyclePageViewCycleLoopDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85F722E46CE3001F1059 /* CyclePageViewCycleLoopDemoController.m */; };
 		517D85FB22E46CF7001F1059 /* CyclePageViewHoverOffsetDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85FA22E46CF7001F1059 /* CyclePageViewHoverOffsetDemoController.m */; };
 		517D85FE22E46D23001F1059 /* CyclePageViewNoHeaderViewDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D85FD22E46D23001F1059 /* CyclePageViewNoHeaderViewDemoController.m */; };
 		517D860122E46D3A001F1059 /* CyclePageViewCustomViewDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 517D860022E46D3A001F1059 /* CyclePageViewCustomViewDemoController.m */; };
@@ -45,6 +48,9 @@
 		51CF6146231901D800D99A63 /* CyclePageViewSpecialOneDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CF6145231901D800D99A63 /* CyclePageViewSpecialOneDemoController.m */; };
 		51CF6149231CCAE400D99A63 /* CyclePageViewTaoBaoDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CF6148231CCAE400D99A63 /* CyclePageViewTaoBaoDemoController.m */; };
 		51CF614C231D0DAB00D99A63 /* CyclePageViewTaoBaoDemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CF614B231D0DAB00D99A63 /* CyclePageViewTaoBaoDemoCell.m */; };
+		B5A06FF224CFF7D800C5C4B8 /* CyclePageViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A06FF124CFF7D800C5C4B8 /* CyclePageViewHeaderView.m */; };
+		B5A06FF524D01CE100C5C4B8 /* CyclePageViewTikTokHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A06FF424D01CE100C5C4B8 /* CyclePageViewTikTokHeaderView.m */; };
+		B5A0700124D15E1A00C5C4B8 /* CyclePageViewTikTokCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A0700024D15E1A00C5C4B8 /* CyclePageViewTikTokCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +71,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		044BC52024CD78AD00E9AC40 /* CycleControllerDemoTestController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CycleControllerDemoTestController.h; sourceTree = "<group>"; };
+		044BC52124CD78AD00E9AC40 /* CycleControllerDemoTestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CycleControllerDemoTestController.m; sourceTree = "<group>"; };
+		044BC52324CD7A5300E9AC40 /* CyclePageViewDemoTestController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewDemoTestController.h; sourceTree = "<group>"; };
+		044BC52424CD7A5300E9AC40 /* CyclePageViewDemoTestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewDemoTestController.m; sourceTree = "<group>"; };
+		04C526CC24D057AB00599272 /* CyclePageViewTikTokDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewTikTokDemoController.h; sourceTree = "<group>"; };
+		04C526CD24D057AB00599272 /* CyclePageViewTikTokDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewTikTokDemoController.m; sourceTree = "<group>"; };
 		5107AE0522EDB96400D05857 /* CyclePageViewTestController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewTestController.h; sourceTree = "<group>"; };
 		5107AE0622EDB96400D05857 /* CyclePageViewTestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewTestController.m; sourceTree = "<group>"; };
 		517580C622EED9B800D5AC85 /* CyclePageViewStyleDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewStyleDemoController.h; sourceTree = "<group>"; };
@@ -95,8 +107,8 @@
 		517D85F122E2FCFD001F1059 /* CyclePageViewAnimationDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewAnimationDemoController.m; sourceTree = "<group>"; };
 		517D85F322E46CCD001F1059 /* CyclePageViewLoadStyleDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewLoadStyleDemoController.h; sourceTree = "<group>"; };
 		517D85F422E46CCD001F1059 /* CyclePageViewLoadStyleDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewLoadStyleDemoController.m; sourceTree = "<group>"; };
-		517D85F622E46CE3001F1059 /* CyclePageViewNotCycleLoopDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewNotCycleLoopDemoController.h; sourceTree = "<group>"; };
-		517D85F722E46CE3001F1059 /* CyclePageViewNotCycleLoopDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewNotCycleLoopDemoController.m; sourceTree = "<group>"; };
+		517D85F622E46CE3001F1059 /* CyclePageViewCycleLoopDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewCycleLoopDemoController.h; sourceTree = "<group>"; };
+		517D85F722E46CE3001F1059 /* CyclePageViewCycleLoopDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewCycleLoopDemoController.m; sourceTree = "<group>"; };
 		517D85F922E46CF7001F1059 /* CyclePageViewHoverOffsetDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewHoverOffsetDemoController.h; sourceTree = "<group>"; };
 		517D85FA22E46CF7001F1059 /* CyclePageViewHoverOffsetDemoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewHoverOffsetDemoController.m; sourceTree = "<group>"; };
 		517D85FC22E46D23001F1059 /* CyclePageViewNoHeaderViewDemoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewNoHeaderViewDemoController.h; sourceTree = "<group>"; };
@@ -139,6 +151,12 @@
 		51CF614A231D0DAB00D99A63 /* CyclePageViewTaoBaoDemoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewTaoBaoDemoCell.h; sourceTree = "<group>"; };
 		51CF614B231D0DAB00D99A63 /* CyclePageViewTaoBaoDemoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewTaoBaoDemoCell.m; sourceTree = "<group>"; };
 		8D57DCD1953C0CD8956492AA /* Pods_HyCycleViewDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HyCycleViewDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5A06FF024CFF7D800C5C4B8 /* CyclePageViewHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewHeaderView.h; sourceTree = "<group>"; };
+		B5A06FF124CFF7D800C5C4B8 /* CyclePageViewHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewHeaderView.m; sourceTree = "<group>"; };
+		B5A06FF324D01CE100C5C4B8 /* CyclePageViewTikTokHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewTikTokHeaderView.h; sourceTree = "<group>"; };
+		B5A06FF424D01CE100C5C4B8 /* CyclePageViewTikTokHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewTikTokHeaderView.m; sourceTree = "<group>"; };
+		B5A06FFF24D15E1A00C5C4B8 /* CyclePageViewTikTokCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CyclePageViewTikTokCell.h; sourceTree = "<group>"; };
+		B5A0700024D15E1A00C5C4B8 /* CyclePageViewTikTokCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyclePageViewTikTokCell.m; sourceTree = "<group>"; };
 		BB13A85488DE7D209EC26C5E /* Pods-HyCycleViewDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HyCycleViewDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo.release.xcconfig"; sourceTree = "<group>"; };
 		C60487CABD1481748B4D86CD /* Pods-HyCycleViewDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HyCycleViewDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HyCycleViewDemo/Pods-HyCycleViewDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -180,6 +198,8 @@
 				517D85E522E2C0B2001F1059 /* CycleCustomViewDemoController.m */,
 				517D85E722E2C0C1001F1059 /* CycleControllerDemoController.h */,
 				517D85E822E2C0C1001F1059 /* CycleControllerDemoController.m */,
+				044BC52024CD78AD00E9AC40 /* CycleControllerDemoTestController.h */,
+				044BC52124CD78AD00E9AC40 /* CycleControllerDemoTestController.m */,
 			);
 			path = HyCycleViewDemo;
 			sourceTree = "<group>";
@@ -188,8 +208,8 @@
 			isa = PBXGroup;
 			children = (
 				517D85DB22E2BA6B001F1059 /* HyCyclePageViewDemoController.h */,
-				517580C622EED9B800D5AC85 /* CyclePageViewStyleDemoController.h */,
 				517D85DC22E2BA6B001F1059 /* HyCyclePageViewDemoController.m */,
+				517580C622EED9B800D5AC85 /* CyclePageViewStyleDemoController.h */,
 				517580C722EED9B800D5AC85 /* CyclePageViewStyleDemoController.m */,
 				517D85ED22E2FCEA001F1059 /* CyclePageViewBaseDemoController.h */,
 				517D85EE22E2FCEA001F1059 /* CyclePageViewBaseDemoController.m */,
@@ -197,8 +217,8 @@
 				517D85F122E2FCFD001F1059 /* CyclePageViewAnimationDemoController.m */,
 				517D85F322E46CCD001F1059 /* CyclePageViewLoadStyleDemoController.h */,
 				517D85F422E46CCD001F1059 /* CyclePageViewLoadStyleDemoController.m */,
-				517D85F622E46CE3001F1059 /* CyclePageViewNotCycleLoopDemoController.h */,
-				517D85F722E46CE3001F1059 /* CyclePageViewNotCycleLoopDemoController.m */,
+				517D85F622E46CE3001F1059 /* CyclePageViewCycleLoopDemoController.h */,
+				517D85F722E46CE3001F1059 /* CyclePageViewCycleLoopDemoController.m */,
 				517D85F922E46CF7001F1059 /* CyclePageViewHoverOffsetDemoController.h */,
 				517D85FA22E46CF7001F1059 /* CyclePageViewHoverOffsetDemoController.m */,
 				517D85FC22E46D23001F1059 /* CyclePageViewNoHeaderViewDemoController.h */,
@@ -215,10 +235,20 @@
 				51758333230291DB00D5AC85 /* CyclePageViewSpecialTwoDemoController.m */,
 				51CF6147231CCAE400D99A63 /* CyclePageViewTaoBaoDemoController.h */,
 				51CF6148231CCAE400D99A63 /* CyclePageViewTaoBaoDemoController.m */,
+				04C526CC24D057AB00599272 /* CyclePageViewTikTokDemoController.h */,
+				04C526CD24D057AB00599272 /* CyclePageViewTikTokDemoController.m */,
+				044BC52324CD7A5300E9AC40 /* CyclePageViewDemoTestController.h */,
+				044BC52424CD7A5300E9AC40 /* CyclePageViewDemoTestController.m */,
 				5107AE0522EDB96400D05857 /* CyclePageViewTestController.h */,
 				5107AE0622EDB96400D05857 /* CyclePageViewTestController.m */,
 				51CF614A231D0DAB00D99A63 /* CyclePageViewTaoBaoDemoCell.h */,
 				51CF614B231D0DAB00D99A63 /* CyclePageViewTaoBaoDemoCell.m */,
+				B5A06FF024CFF7D800C5C4B8 /* CyclePageViewHeaderView.h */,
+				B5A06FF124CFF7D800C5C4B8 /* CyclePageViewHeaderView.m */,
+				B5A06FF324D01CE100C5C4B8 /* CyclePageViewTikTokHeaderView.h */,
+				B5A06FF424D01CE100C5C4B8 /* CyclePageViewTikTokHeaderView.m */,
+				B5A06FFF24D15E1A00C5C4B8 /* CyclePageViewTikTokCell.h */,
+				B5A0700024D15E1A00C5C4B8 /* CyclePageViewTikTokCell.m */,
 				51B35B00230BECCC00C7E38B /* CircleRefreshView.h */,
 				51B35B01230BECCC00C7E38B /* CircleRefreshView.m */,
 			);
@@ -263,11 +293,11 @@
 			isa = PBXGroup;
 			children = (
 				5190BADA22D499F400534770 /* HyCycleView */,
-				5190BAA422D4998100534770 /* AppDelegate.h */,
-				5190BAA522D4998100534770 /* AppDelegate.m */,
 				517D85D622E2BA2D001F1059 /* HyCycleViewDemo */,
 				517D85D722E2BA37001F1059 /* HyCyclePageViewDemo */,
 				517D860522E71D17001F1059 /* HySegmentViewDemo */,
+				5190BAA422D4998100534770 /* AppDelegate.h */,
+				5190BAA522D4998100534770 /* AppDelegate.m */,
 				5190BAA722D4998100534770 /* ViewController.h */,
 				5190BAA822D4998100534770 /* ViewController.m */,
 				5190BADE22D4A09E00534770 /* HyCustomView.h */,
@@ -511,11 +541,14 @@
 				517580CB22EFF2DC00D5AC85 /* CyclePageViewTopRefreshDemoController.m in Sources */,
 				51CF6149231CCAE400D99A63 /* CyclePageViewTaoBaoDemoController.m in Sources */,
 				51758334230291DB00D5AC85 /* CyclePageViewSpecialTwoDemoController.m in Sources */,
-				517D85F822E46CE3001F1059 /* CyclePageViewNotCycleLoopDemoController.m in Sources */,
+				517D85F822E46CE3001F1059 /* CyclePageViewCycleLoopDemoController.m in Sources */,
+				B5A06FF224CFF7D800C5C4B8 /* CyclePageViewHeaderView.m in Sources */,
 				517D85EF22E2FCEA001F1059 /* CyclePageViewBaseDemoController.m in Sources */,
+				044BC52224CD78AD00E9AC40 /* CycleControllerDemoTestController.m in Sources */,
 				517D860822E71D31001F1059 /* HySegmentViewDemoController.m in Sources */,
 				5190BAA922D4998100534770 /* ViewController.m in Sources */,
 				5190BAB422D4998200534770 /* main.m in Sources */,
+				B5A0700124D15E1A00C5C4B8 /* CyclePageViewTikTokCell.m in Sources */,
 				517D85E622E2C0B2001F1059 /* CycleCustomViewDemoController.m in Sources */,
 				517D85D222DC6408001F1059 /* HyCyclePageView.m in Sources */,
 				517D85DD22E2BA6B001F1059 /* HyCyclePageViewDemoController.m in Sources */,
@@ -523,13 +556,16 @@
 				517D85F222E2FCFD001F1059 /* CyclePageViewAnimationDemoController.m in Sources */,
 				517D860122E46D3A001F1059 /* CyclePageViewCustomViewDemoController.m in Sources */,
 				5190BAE222D4A09E00534770 /* HyCustomView.m in Sources */,
+				04C526CE24D057AB00599272 /* CyclePageViewTikTokDemoController.m in Sources */,
 				517D860B22E949F7001F1059 /* HyDrawTextColorLabel.m in Sources */,
 				517D860422E550D0001F1059 /* HySegmentView.m in Sources */,
 				517D85D522DC8927001F1059 /* UIView+HyFrame.m in Sources */,
 				517D85E322E2C0A1001F1059 /* CycleImageViewDemoController.m in Sources */,
 				51CF6146231901D800D99A63 /* CyclePageViewSpecialOneDemoController.m in Sources */,
+				044BC52524CD7A5300E9AC40 /* CyclePageViewDemoTestController.m in Sources */,
 				517D85FB22E46CF7001F1059 /* CyclePageViewHoverOffsetDemoController.m in Sources */,
 				51B35B02230BECCD00C7E38B /* CircleRefreshView.m in Sources */,
+				B5A06FF524D01CE100C5C4B8 /* CyclePageViewTikTokHeaderView.m in Sources */,
 				517D85E922E2C0C1001F1059 /* CycleControllerDemoController.m in Sources */,
 				517D85DA22E2BA57001F1059 /* HyCycleViewDemoController.m in Sources */,
 				5190BAA622D4998100534770 /* AppDelegate.m in Sources */,
@@ -709,6 +745,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L5TRHD689W;
 				INFOPLIST_FILE = HyCycleViewDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -727,6 +764,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L5TRHD689W;
 				INFOPLIST_FILE = HyCycleViewDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

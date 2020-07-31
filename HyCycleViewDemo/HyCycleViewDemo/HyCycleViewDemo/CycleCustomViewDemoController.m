@@ -13,7 +13,7 @@
 #import "HySegmentView.h"
 
 
-@interface CycleCustomViewDemoController ()
+@interface CycleCustomViewDemoController ()<HyCycleViewProviderProtocol>
 @property (nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,strong) NSArray<NSDictionary *> *dataArray;
 @end
@@ -33,6 +33,25 @@
     
     self.scrollView.contentSize = CGSizeMake(0, self.scrollView.subviews.lastObject.bottom + 20);
 }
+
+- (void)configCycleView:(HyCycleViewProvider<HyCycleView *> *)provider index:(NSInteger)index {
+    [provider view:^UIView * _Nonnull(HyCycleView * _Nonnull cycleView) {
+        if (cycleView.tag == 1) {
+           return [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass(HyCustomView.class) owner:nil options:nil] lastObject];
+        } else if (cycleView.tag == 2) {
+           if (index == 1 || index == 3) {
+               UIImageView *imageView = [[UIImageView alloc] init];
+               imageView.contentMode = UIViewContentModeScaleAspectFill;
+               imageView.clipsToBounds = YES;
+               return imageView;
+           }
+           return [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass(HyCustomView.class) owner:nil options:nil] lastObject];
+        } else {
+          return UILabel.new;
+        }
+    }];
+}
+
 
 - (void)createCycleCustomView {
     
@@ -59,32 +78,28 @@
     HySegmentView *segment = [self segment];
     segment.backgroundColor = UIColor.clearColor;
     
-    [self.scrollView addSubview:
-     [HyCycleView cycleViewWithFrame:CGRectMake(30, 10, self.scrollView.width - 60, 180)
-                      configureBlock:^(HyCycleViewConfigure *configure) {
-                          configure
-                          .cycleClasses(@[HyCustomView.class])
-                          .totalPage(dataArray.count)
-                          .viewWillAppear(^(HyCycleView *cycleView,
-                                            HyCustomView *customView,
-                                            NSInteger index,
-                                            BOOL isfirstLoad){
-                              if (isfirstLoad) {
-                                  [customView setDict:dataArray[index]];
-                              }
-                          })
-                          .roundingPageChange(^(HyCycleView *cycleView,
-                                                NSInteger totalPage,
-                                                NSInteger currentPage){
-                              
-                              if (!segment.superview) {
-                                  segment.leftValue(cycleView.width - segment.width);
-                                  segment.bottomValue(cycleView.height - 5);
-                                  [cycleView addSubview:segment];
-                              }
-                              [segment clickItemAtIndex:currentPage];
-                          });
-                      }]];
+    __weak typeof(self) _self = self;
+    HyCycleView *cycleView = [[HyCycleView alloc] initWithFrame:CGRectMake(30, 10, self.scrollView.width - 60, 180)];
+    cycleView.tag = 1;
+    [[[[[[cycleView.configure totalIndexs:^NSInteger(HyCycleView * _Nonnull cycleView) {
+        return dataArray.count;
+    }] roundingIndexChange:^(HyCycleView * _Nonnull cycleView, NSInteger indexs, NSInteger roundingIndex) {
+        if (!segment.superview) {
+            segment.leftValue(cycleView.width - segment.width);
+            segment.bottomValue(cycleView.height - 5);
+            [cycleView addSubview:segment];
+        }
+        [segment clickItemAtIndex:roundingIndex];
+    }] viewWillAppearAtIndex:^(HyCycleView * _Nonnull cycleView, HyCustomView *view, NSInteger index, BOOL isFirstLoad) {
+        if (isFirstLoad) {
+            [view setDict:dataArray[index]];
+        }
+    }] viewProviderAtIndex:^id<HyCycleViewProviderProtocol> _Nonnull(HyCycleView * _Nonnull cycleView, NSInteger index) {
+        __strong typeof(_self) self = _self;
+        return self;
+    }] isAutoCycle:YES] isCycle:YES];
+    [self.scrollView addSubview:cycleView];
+    [cycleView reloadData];
 }
 
 - (void)createMutiCycleCustomView {
@@ -110,43 +125,34 @@
     HySegmentView *segment = [self segment];
     segment.backgroundColor = UIColor.clearColor;
     
-    [self.scrollView addSubview:
-     [HyCycleView cycleViewWithFrame:CGRectMake(30, self.scrollView.subviews.lastObject.bottom + 10, self.scrollView.width - 60, 180)
-                      configureBlock:^(HyCycleViewConfigure *configure) {
-                          
-                          configure
-                          .scrollDirection(1)
-                          .totalPage(dataArray.count)
-                          .cycleClass(^Class(HyCycleView *cycleView,
-                                             NSInteger currentPage){
-                              return currentPage % 2 ? UIImageView.class : HyCustomView.class;
-                          })
-                          .viewWillAppear(^(HyCycleView *cycleView,
-                                            UIView *contentView,
-                                            NSInteger index,
-                                            BOOL isfirstLoad){
-                              if (isfirstLoad) {
-                                  if ([contentView isKindOfClass:HyCustomView.class]) {
-                                      [((HyCustomView *)contentView) setDict:dataArray[index]];
-                                  } else {
-                                      ((UIImageView *)contentView).image = [UIImage imageNamed:dataArray[index][@"image"]];
-                                  }
-                              }
-                          })
-                          .roundingPageChange(^(HyCycleView *cycleView,
-                                                NSInteger totalPage,
-                                                NSInteger currentPage){
-                              
-                              if (!segment.superview) {
-                                  segment.leftValue(cycleView.width - segment.width);
-                                  segment.bottomValue(cycleView.height - 5);
-                                  [cycleView addSubview:segment];
-                              }
-                              [segment clickItemAtIndex:totalPage - 1 - currentPage];
-                          });
-                      }]];
+    HyCycleView *cycleView = [[HyCycleView alloc] initWithFrame:CGRectMake(30, self.scrollView.subviews.lastObject.bottom + 20, self.scrollView.width - 60, 180)];
+    cycleView.tag =2;
+    __weak typeof(self) _self = self;
+    [[[[[[[cycleView.configure totalIndexs:^NSInteger(HyCycleView * _Nonnull cycleView) {
+        return dataArray.count;
+    }] direction:HyCycleViewDirectionTop] viewProviderAtIndex:^id<HyCycleViewProviderProtocol> _Nonnull(HyCycleView * _Nonnull cycleView, NSInteger index) {
+        __strong typeof(_self) self = _self;
+        return self;
+    }] viewWillAppearAtIndex:^(HyCycleView * _Nonnull cycleView, UIView *contentView, NSInteger index, BOOL isFirstLoad) {
+        if (isFirstLoad) {
+            if ([contentView isKindOfClass:HyCustomView.class]) {
+                [((HyCustomView *)contentView) setDict:dataArray[index]];
+            } else {
+                ((UIImageView *)contentView).contentMode = UIViewContentModeScaleAspectFill;
+                ((UIImageView *)contentView).image = [UIImage imageNamed:dataArray[index][@"image"]];
+            }
+        }
+    }] roundingIndexChange:^(HyCycleView * _Nonnull cycleView, NSInteger indexs, NSInteger roundingIndex) {
+        if (!segment.superview) {
+            segment.leftValue(cycleView.width - segment.width);
+            segment.bottomValue(cycleView.height - 5);
+            [cycleView addSubview:segment];
+        }
+        [segment clickItemAtIndex:indexs - 1 - roundingIndex];
+    }] isCycle:YES] isAutoCycle:YES];
+    [self.scrollView addSubview:cycleView];
+    [cycleView reloadData];
 }
-
 
 - (void)createNoticeCycleView {
     
@@ -155,33 +161,29 @@
                              @"☪ 春眠不觉晓, 处处闻啼鸟, 夜来风雨声",
                              @"☪ 春眠不觉晓, 处处闻啼鸟, 夜来风雨声, 花落知多少"];
     
-    HyCycleView *cycleView =
-    [HyCycleView cycleViewWithFrame:CGRectMake(30, self.scrollView.subviews.lastObject.bottom + 20, self.scrollView.width - 60, 45) configureBlock:^(HyCycleViewConfigure *configure) {
-        
-        configure
-        .totalPage(noticeArray.count)
-        .cycleClasses(@[UILabel.class])
-        .scrollDirection(2)
-        .viewWillAppear(^(HyCycleView *cycleView,
-                          UILabel *label,
-                          NSInteger index,
-                          BOOL isfirstLoad){
-            
-            if (isfirstLoad) {
-                label.textColor = UIColor.purpleColor;
-                label.textAlignment = NSTextAlignmentCenter;
-                label.font = [UIFont systemFontOfSize:13];
-            }
-            label.text = noticeArray[index];
-        });
-    }];
+    HyCycleView *cycleView = [[HyCycleView alloc] initWithFrame:CGRectMake(30, self.scrollView.subviews.lastObject.bottom + 20, self.scrollView.width - 60, 45)];
+    cycleView.tag = 3;
+    __weak typeof(self) _self = self;
+    [[[[[[cycleView.configure totalIndexs:^NSInteger(HyCycleView * _Nonnull cycleView) {
+        return noticeArray.count;
+    }] direction:HyCycleViewDirectionBottom] viewProviderAtIndex:^id<HyCycleViewProviderProtocol> _Nonnull(HyCycleView * _Nonnull cycleView, NSInteger index) {
+        __strong typeof(_self) self = _self;
+        return self;
+    }] viewWillAppearAtIndex:^(HyCycleView * _Nonnull cycleView, UILabel *label, NSInteger index, BOOL isFirstLoad) {
+        if (isFirstLoad) {
+            label.textColor = UIColor.purpleColor;
+            label.textAlignment = NSTextAlignmentCenter;
+            label.font = [UIFont systemFontOfSize:13];
+        }
+        label.text = noticeArray[index];
+    }] isCycle:YES] isAutoCycle:YES];
     
     cycleView.layer.borderColor = UIColor.purpleColor.CGColor;
     cycleView.layer.borderWidth = .5;
     cycleView.layer.cornerRadius = 5.0;
     cycleView.layer.masksToBounds = YES;
-    
     [self.scrollView addSubview:cycleView];
+    [cycleView reloadData];
 }
 
 - (CGRect)cycleViewFrame {
@@ -234,7 +236,6 @@
             
         }).clickItemAtIndex(^BOOL(NSInteger page,
                                   BOOL isRepeat){
-            
             return NO;
         });
     }];

@@ -9,10 +9,11 @@
 
 #import "CyclePageViewCustomViewDemoController.h"
 #import "CyclePageViewTestController.h"
+#import "CyclePageViewDemoTestController.h"
 #import <objc/message.h>
 
 
-@interface CyclePageViewCustomViewDemoController ()<UICollectionViewDataSource, UICollectionViewDelegate>
+@interface CyclePageViewCustomViewDemoController ()<UICollectionViewDataSource, UICollectionViewDelegate, HyCyclePageViewProviderProtocol>
 @property (nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,assign) CGFloat lastAlpha;
 @end
@@ -36,50 +37,48 @@
     [self.navigationController.navigationBar setAlpha:1.f];
 }
 
+- (void)configCyclePageView:(HyCycleViewProvider<HyCyclePageView *> *)provider index:(NSInteger)index {
+    __weak typeof(self) _self = self;
+    [provider view:^UIView * _Nonnull(HyCyclePageView * _Nonnull cycleView) {
+        __strong typeof(_self) self = _self;
+        if (index == 1) {
+            return [self collectionView];
+        }
+        return [self customView];
+    }];
+}
+
 - (void (^)(HyCyclePageViewConfigure * _Nonnull))configPageView {
     return ^(HyCyclePageViewConfigure * _Nonnull configure) {
         
-        __weak typeof(self) weakSelf = self;
+        __weak typeof(self) _self = self;
         
         CGFloat naviHeight = 64;
         if ([[UIApplication sharedApplication].keyWindow respondsToSelector:NSSelectorFromString(@"safeAreaInsets")]) {
             naviHeight = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.top + 44;
         }
-        
         CGFloat headerViewH = 250;
-        
-        configure
-        .hoverOffset(naviHeight)
-        .loadStyle(HyCycleViewScrollLoadStyleDidAppear)
-        .headerViewUpAnimation(HyCyclePageViewHeaderViewUpAnimationCover)
-        .headerViewDownAnimation(HyCyclePageViewHeaderViewDownAnimationScale)
-        .cyclePageInstance(^id(HyCyclePageView *pageView, NSInteger currentPage){
-            
-            if (currentPage == 1) {
-                return [weakSelf collectionView];
-            } else if (currentPage == 2) {
-                return [[CyclePageViewTestController alloc] init];
-            } else if (currentPage == 3) {
-                return [weakSelf customView];
-            } else {
-                return
-                ((id (*)(id, SEL, NSInteger))objc_msgSend)(weakSelf, NSSelectorFromString(@"creatTableViewWithPageNumber:"), currentPage);
+        [[[[[[configure hoverViewOffset:naviHeight] loadStyle:HyCycleViewLoadStyleDidAppear] headerViewUpAnimation:HyCyclePageViewHeaderViewUpAnimationCover] headerViewDownAnimation:HyCyclePageViewHeaderViewDownAnimationScale] verticalScrollProgress:^(HyCyclePageView * _Nonnull cyclePageView, UIView * _Nonnull view, NSInteger index, CGFloat offset) {
+                __strong typeof(_self) self = _self;
+                CGFloat margin = headerViewH - naviHeight;
+                if (offset >= margin) {
+                    [self.navigationController.navigationBar setAlpha:1.0f];
+                }else if (offset < 0) {
+                    [self.navigationController.navigationBar setAlpha:.0f];
+                }else {
+                    [self.navigationController.navigationBar setAlpha:(offset / margin)];
+                }
+                self.lastAlpha = self.navigationController.navigationBar.alpha;
+        }] viewProviderAtIndex:^id<HyCyclePageViewProviderProtocol> _Nonnull(HyCyclePageView * _Nonnull cycleView, NSInteger index) {
+            __strong typeof(_self) self = _self;
+            if (index == 1 || index == 2) {
+                return self;
             }
-        })
-        .verticalScroll(^(HyCyclePageView *cyclePageView,
-                          CGFloat offsetY,
-                          NSInteger currentPage){
-            
-            CGFloat margin = headerViewH - naviHeight;
-            if (offsetY >= margin) {
-                [weakSelf.navigationController.navigationBar setAlpha:1.0f];
-            }else if (offsetY < 0) {
-                [weakSelf.navigationController.navigationBar setAlpha:.0f];
-            }else {
-                [weakSelf.navigationController.navigationBar setAlpha:(offsetY / margin)];
+            if (index == 3) {
+                return CyclePageViewTestController.new;
             }
-            weakSelf.lastAlpha = weakSelf.navigationController.navigationBar.alpha;
-        });
+            return CyclePageViewDemoTestController.new;
+        }];
     };
 }
 
@@ -110,7 +109,8 @@
 - (UIView *)customView {
     
     UIView *view = [[UIView alloc] init];
-    view.sizeValue(self.view.width, self.view.height - ([[UIApplication sharedApplication] delegate].window.safeAreaInsets.top + 44 + 100));
+//    view.sizeValue(self.view.width, self.view.height - ([[UIApplication sharedApplication] delegate].window.safeAreaInsets.top + 44 + 100));
+    view.sizeValue(self.view.width, 400);
     view.backgroundColor = UIColor.groupTableViewBackgroundColor;
     
     UILabel *testLabel = [[UILabel alloc] init];

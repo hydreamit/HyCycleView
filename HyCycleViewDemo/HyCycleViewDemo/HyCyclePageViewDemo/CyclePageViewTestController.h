@@ -8,9 +8,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HyCyclePageView.h"
 
-
-@interface CyclePageViewTestController : UIViewController
+@interface CyclePageViewTestController : UIViewController<HyCyclePageViewProviderProtocol>
 
 @end
 

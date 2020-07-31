@@ -45,14 +45,14 @@
 
 - (void (^)(HyCyclePageViewConfigure * _Nonnull))configPageView {
     return ^(HyCyclePageViewConfigure * _Nonnull configure) {
-        configure.totalPage(3);
+        [configure totalIndexs:^NSInteger(HyCyclePageView * _Nonnull cycleView) {
+            return 3;
+        }];
     };
 }
 
 - (void (^)(HySegmentViewConfigure * _Nonnull))configSegmentView {
-    
-    __weak typeof(self) weakSelf = self;
-    
+    __weak typeof(self) _self = self;
     return ^(HySegmentViewConfigure * _Nonnull configure) {
         
         configure
@@ -65,11 +65,12 @@
                                       HySegmentViewItemPosition position,
                                       NSArray<UIView *> *animationViews){
 
+                        __strong typeof(_self) self = _self;
                         HyDrawTextColorLabel *label = (HyDrawTextColorLabel *)currentView;
                        if (!label) {
                            label = [HyDrawTextColorLabel new];
                            label.tag = 99;
-                           label.text = weakSelf.titleArray[currentIndex];
+                           label.text = self.titleArray[currentIndex];
                            label.textAlignment = NSTextAlignmentCenter;
                            [label sizeToFit];
                            label.width += 8;
@@ -119,7 +120,6 @@
                     }
                 }];
             }
-      
             return array;
         });
     };

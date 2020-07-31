@@ -15,7 +15,7 @@
 - (void (^)(HyCyclePageViewConfigure * _Nonnull))configPageView {
     return ^(HyCyclePageViewConfigure * _Nonnull configure){
         
-        configure.headerView(nil);
+        [configure headerView:nil];
     };
 }
 

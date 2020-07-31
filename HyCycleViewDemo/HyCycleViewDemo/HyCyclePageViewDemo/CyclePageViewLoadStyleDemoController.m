@@ -13,9 +13,7 @@
 
 - (void (^)(HyCyclePageViewConfigure * _Nonnull))configPageView {
     return ^(HyCyclePageViewConfigure * _Nonnull configure){
-        
-        configure
-        .loadStyle(HyCycleViewScrollLoadStyleDidAppear);
+        [configure loadStyle:HyCycleViewLoadStyleWillAppear];
     };
 }
 

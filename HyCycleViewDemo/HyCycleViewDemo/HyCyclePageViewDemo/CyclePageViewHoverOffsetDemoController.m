@@ -42,27 +42,22 @@
     
     CGFloat headerViewH = 250;
     
-    __weak typeof(self) weakSelf = self;
-    return ^(HyCyclePageViewConfigure * _Nonnull configure){
+    __weak typeof(self) _self = self;
+    return ^(HyCyclePageViewConfigure * _Nonnull configure) {
         
-        configure
-        .hoverOffset(naviHeight)
-        .headerViewUpAnimation(HyCyclePageViewHeaderViewUpAnimationCover)
-        .headerViewDownAnimation(HyCyclePageViewHeaderViewDownAnimationScale)
-        .verticalScroll(^(HyCyclePageView * cyclePageView,
-                          CGFloat offsetY,
-                          NSInteger currentPage) {
-                        
+        [[[[configure hoverViewOffset:naviHeight] headerViewDownAnimation:HyCyclePageViewHeaderViewDownAnimationScale] headerViewUpAnimation:HyCyclePageViewHeaderViewUpAnimationCover] verticalScrollProgress:^(HyCyclePageView * _Nonnull cyclePageView, UIView * _Nonnull view, NSInteger index, CGFloat offset) {
+            
+            __strong typeof(_self) self = _self;
             CGFloat margin = headerViewH - naviHeight;
-            if (offsetY >= margin) {
-                [weakSelf.navigationController.navigationBar setAlpha:1.0f];
-            }else if (offsetY < 0) {
-                [weakSelf.navigationController.navigationBar setAlpha:.0f];
+            if (offset >= margin) {
+                [self.navigationController.navigationBar setAlpha:1.0f];
+            }else if (offset < 0) {
+                [self.navigationController.navigationBar setAlpha:.0f];
             }else {
-                [weakSelf.navigationController.navigationBar setAlpha:(offsetY / margin)];
+                [self.navigationController.navigationBar setAlpha:(offset / margin)];
             }
-            weakSelf.lastAlpha = weakSelf.navigationController.navigationBar.alpha;
-        });
+            self.lastAlpha = self.navigationController.navigationBar.alpha;
+        }];
     };
 }
 

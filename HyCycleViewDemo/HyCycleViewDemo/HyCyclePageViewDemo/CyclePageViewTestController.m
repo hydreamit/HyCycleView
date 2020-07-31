@@ -25,6 +25,18 @@
     [testLabel sizeToFit];
     testLabel.centerXValue(self.view.width / 2).centerYValue(self.view.height / 2);
     [self.view addSubview:testLabel];
+    
+}
+
+- (void)configCyclePageView:(HyCycleViewProvider<HyCyclePageView *> *)provider index:(NSInteger)index {
+//    provider.retainProvider = YES;
+    [provider view:^UIView * _Nonnull(HyCyclePageView * _Nonnull cycleView) {
+        return self.view;
+    }];
+}
+
+- (void)dealloc {
+    NSLog(@"%s", __func__);
 }
 
 @end

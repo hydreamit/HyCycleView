@@ -6,7 +6,7 @@
 //  Created by Hy on 2016/5/20.
 //  Copyright © 2016年 Hy. All rights reserved.
 //
-
+#import "CycleControllerDemoTestController.h"
 #import "CycleControllerDemoController.h"
 #import "HySegmentView.h"
 #import "HyCycleView.h"
@@ -24,11 +24,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    __weak typeof(self) weakSelf = self;
+    __weak typeof(self) _self = self;
     self.view.backgroundColor = UIColor.whiteColor;
     [self.view addSubview:self.scrollView];
-    
-    
+
     NSArray *titleArray = @[@"体育", @"资讯快报", @"社区", @"个人中心"];
     
     self.segmentView =
@@ -37,6 +36,7 @@
                              
                              configure
                              .numberOfItems(4)
+        .startIndex(2)
                              .viewForItemAtIndex(^UIView *(UIView *currentView,
                                                            NSInteger currentIndex,
                                                            CGFloat progress,
@@ -56,7 +56,6 @@
                                  return label;
                              })
                              .animationViews(^NSArray<UIView *> *(NSArray<UIView *> *currentAnimations, UICollectionViewCell *fromCell, UICollectionViewCell *toCell, NSInteger fromIndex, NSInteger toIndex, CGFloat progress){
-                                 
                                  NSArray<UIView *> *array = currentAnimations;
                                  if (!array.count) {
                                      UIView *line = [UIView new];
@@ -75,43 +74,33 @@
                                  return array;
                              })
                              .clickItemAtIndex(^BOOL(NSInteger currentIndex, BOOL isRepeat){
-                                 
+                                 __strong typeof(_self) self = _self;
                                  if (!isRepeat) {
-                                     [weakSelf.cycleView scrollToPage:currentIndex animated:YES];
+                                     [self.cycleView scrollToIndex:currentIndex animated:YES];
                                  }
                                  return NO;
                              });
     }];
+    [self.scrollView addSubview:self.segmentView];
     
-    UIViewController *vc1 = [[UIViewController alloc] init];
-    vc1.view.backgroundColor = UIColor.purpleColor;
-    UIViewController *vc2 = [[UIViewController alloc] init];
-    vc2.view.backgroundColor = UIColor.redColor;
-    UIViewController *vc3 = [[UIViewController alloc] init];
-    vc3.view.backgroundColor = UIColor.greenColor;
-    UIViewController *vc4 = [[UIViewController alloc] init];
-    vc4.view.backgroundColor = UIColor.blueColor;
     
-    self.cycleView =
-    [HyCycleView cycleViewWithFrame:self.scrollView.bounds
-                     configureBlock:^(HyCycleViewConfigure *configure) {
-                         
-                         configure
-                         .scrollStyle(HyCycleViewScrollStatic)
-                         .cycleInstances(@[vc1, vc2, vc3,vc4])
-                         .scrollProgress(^(HyCycleView *cycleView,
-                                             NSInteger fromPage,
-                                             NSInteger toPage,
-                                             CGFloat progress) {
-                             
-                             [weakSelf.segmentView clickItemFromIndex:fromPage
-                                                              toIndex:toPage
-                                                             progress:progress];
-                         });
-                     }];
+    self.cycleView = [[HyCycleView alloc] initWithFrame:CGRectMake(30, 10, self.scrollView.width - 60, 180)];
+    [[[self.cycleView.configure totalIndexs:^NSInteger(HyCycleView * _Nonnull cycleView) {
+        return 4;
+    }] viewProviderAtIndex:^id<HyCycleViewProviderProtocol> _Nonnull(HyCycleView * _Nonnull cycleView, NSInteger index) {
+        return [CycleControllerDemoTestController new];
+    }] scrollProgress:^(HyCycleView * _Nonnull cycleView, NSInteger fromIndex, NSInteger toIndex, CGFloat progress) {
+        __strong typeof(_self) self = _self;
+        [self.segmentView clickItemFromIndex:fromIndex
+                                         toIndex:toIndex
+                                        progress:progress];
+    }];
     
     [self.scrollView addSubview:self.cycleView];
-    [self.scrollView addSubview:self.segmentView];
+    [self.cycleView reloadData];
+    
+    [self.cycleView.configure loadStyle:HyCycleViewLoadStyleDidAppear];
+    
 }
 
 - (void)viewDidLayoutSubviews {

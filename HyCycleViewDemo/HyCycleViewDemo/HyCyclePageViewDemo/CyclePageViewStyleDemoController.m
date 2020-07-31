@@ -19,7 +19,7 @@
     self.titles = @[@"CyclePageViewBaseDemo",
                     @"CyclePageViewAnimationDemo",
                     @"CyclePageViewLoadStyleDemo",
-                    @"CyclePageViewNotCycleLoopDemo",
+                    @"CyclePageViewCycleLoopDemo",
                     @"CyclePageViewHoverOffsetDemo",
                     @"CyclePageViewNoHeaderViewDemo",
                     @"CyclePageViewCustomViewDemo",
@@ -27,17 +27,6 @@
                     @"CyclePageViewCenterRefreshDemo",
                     @"CyclePageViewSpecialOneDemo",
                     @"CyclePageViewSpecialTwoDemo"];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    NSString *classString = [self.titles[indexPath.row] stringByAppendingString:@"Controller"];
-    CyclePageViewBaseDemoController *viewController = [[NSClassFromString(classString) alloc] init];
-    viewController.navigationItem.title = self.titles[indexPath.row];
-    viewController.gestureStyle = self.gestureStyle;
-    [self.navigationController pushViewController:viewController
-                                         animated:YES];
 }
 
 @end

@@ -20,7 +20,7 @@
 @implementation ViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-       
+
     self.titles = @[@"HyCycleViewDemo", @"HyCyclePageViewDemo", @"HySegmentViewDemo"];
     [self.view addSubview:self.tableView];
 }

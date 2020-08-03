@@ -29,13 +29,12 @@
 }
 
 - (void)configCyclePageView:(HyCycleViewProvider<HyCyclePageView *> *)provider index:(NSInteger)index {
-//    self.index = index;
+   self.index = index;
     // 主动设置引用
     // provider.retainProvider = YES;
     // __weak typeof(self) weakSelf = self;
     // block 自动引用
     [provider view:^UIView * _Nonnull(HyCyclePageView * _Nonnull cycleView) {
-        self.index = provider.index;
         return self.view;
     }];
 }

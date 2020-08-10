@@ -376,25 +376,28 @@
 }
 
 - (void)scrollToCenterWithIndex:(NSInteger)index {
-    
+
     if (self.collectionView.contentSize.width <= self.collectionView.width ||
         !self.configure.hy_items ||
         self.collectionView.isDragging) {
         return;
     }
     
-    UICollectionViewLayoutAttributes *layoutAttr =
-    [self.layout layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]];
+//    UICollectionViewLayoutAttributes *layoutAttr =
+//    [self.layout layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]];
+//    CGFloat centerX = layoutAttr.frame.origin.x + layoutAttr.frame.size.width / 2;
+//    CGFloat offsetX = centerX - self.collectionView.width / 2;
+//    if (offsetX < 0) { offsetX = 0;}
+//
+//    if (offsetX > self.collectionView.contentSize.width - self.collectionView.width) {
+//        offsetX = self.collectionView.contentSize.width - self.collectionView.width;
+//    }
+//     [self.collectionView setContentOffset:CGPointMake(offsetX, 0)
+//                                    animated:!self.collectionView.hidden];
     
-    CGFloat centerX = layoutAttr.frame.origin.x + layoutAttr.frame.size.width / 2;
-    CGFloat offsetX = centerX - self.collectionView.width / 2;
-    if (offsetX < 0) { offsetX = 0;}
-    
-    if (offsetX > self.collectionView.contentSize.width - self.collectionView.width) {
-        offsetX = self.collectionView.contentSize.width - self.collectionView.width;
-    }
-    [self.collectionView setContentOffset:CGPointMake(offsetX, 0)
-                                 animated:!self.collectionView.hidden];
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]
+                                atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                        animated:!self.collectionView.hidden];
 }
 
 - (UIView *)getItemViewWithIndex:(NSInteger)index {

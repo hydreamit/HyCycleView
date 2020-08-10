@@ -213,8 +213,8 @@
         .clickItemAtIndex(^BOOL(NSInteger currentIndex, BOOL isRepeat){
             __strong typeof(_self) self = _self;
             if (!isRepeat) {
-                BOOL animated = [self.cyclePageView.didLoadIndexs containsIndex:currentIndex];
-                [self.cyclePageView scrollToIndex:currentIndex animated:animated];
+//                BOOL animated = [self.cyclePageView.didLoadIndexs containsIndex:currentIndex];
+                [self.cyclePageView scrollToIndex:currentIndex animated:YES];
             }
             return NO;
         });

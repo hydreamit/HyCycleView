@@ -20,6 +20,6 @@ __手动导入__
 
 ## Demo图片
 <div>
-<img src="https://github.com/hydreamit/HyCycleView/blob/master/Pictures/taobao.gif"  width="50%"/>
-<img src="https://github.com/hydreamit/HyCycleView/blob/master/Pictures/tiktok.gif"  width="50%"/>
+<img src="https://github.com/hydreamit/HyCycleView/blob/master/Pictures/taobao.gif"  width="45%"/>
+<img src="https://github.com/hydreamit/HyCycleView/blob/master/Pictures/tiktok.gif"  width="45%"/>
 </div>

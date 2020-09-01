@@ -228,6 +228,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
     UICollectionViewScrollDirectionHorizontal :
     UICollectionViewScrollDirectionVertical;
     [self.collectionView reloadData];
+    if (!self.totalIndexs) { return;}
     dispatch_async(dispatch_get_main_queue(), ^{
         [self _scrollToIndex:self.totalIndexs * self.currentCycleIndex + self.indexWithIndex(startIndex)  animated:NO];
         if (self.isAutoCycle) {

@@ -180,7 +180,7 @@
 #pragma mark — private methods
 - (void)updateHeaderViewWithNewView:(UIView *)newView
                             oldView:(UIView *)oldView {
-    
+        
     [oldView removeFromSuperview];
     CGRect tempRect;
     if (newView) {
@@ -196,6 +196,7 @@
     tempRect = self.headerContentView.frame;
     tempRect.size.height = CGRectGetHeight(newView.bounds) + CGRectGetHeight(self.configure.hy_hoverView.bounds);
     self.headerContentView.frame = tempRect;
+    [self checkHeaderContentViewPosition];
     [self updateCyclePageScrollViewContentInset];
 }
 
@@ -204,7 +205,7 @@
     if (!self.configure.hy_headerView) {
         return;
     }
-    
+        
     CGRect tempRect = self.configure.hy_headerView.frame;
     tempRect.size.height = self.configure.hy_headerViewHeight;
     self.configure.hy_headerView.frame = tempRect;
@@ -216,6 +217,7 @@
     tempRect = self.headerContentView.frame;
     tempRect.size.height = CGRectGetHeight(self.configure.hy_headerView.bounds) + CGRectGetHeight(self.configure.hy_hoverView.bounds);
     self.headerContentView.frame = tempRect;
+    [self checkHeaderContentViewPosition];
     [self updateCyclePageScrollViewContentInset];
 }
 
@@ -250,6 +252,13 @@
     [self updateCyclePageScrollViewContentInset];
 }
 
+- (void)updateHoverViewOffset {
+    if (self.superview) {
+        [self checkHeaderContentViewPosition];
+        [self updateCyclePageScrollViewContentInset];
+    }
+}
+
 - (void)updateCyclePageScrollViewContentInset {
     [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj,
                                                                      NSUInteger idx,
@@ -259,6 +268,17 @@
             obj.contentOffset = [self getCurrentContentOffset];
         }
     }];
+}
+
+- (void)checkHeaderContentViewPosition {
+    
+    CGFloat contentTop = CGRectGetHeight(self.headerContentView.bounds);
+    CGFloat hoverOffset = (CGRectGetHeight(self.configure.hy_hoverView.bounds) + self.configure.hy_hoverOffset);
+    if (contentTop + CGRectGetMinY(self.headerContentView.frame) < hoverOffset) {
+        CGRect rect = self.headerContentView.frame;
+        rect.origin.y = - (contentTop - hoverOffset);
+        self.headerContentView.frame = rect;
+    }
 }
 
 - (CGPoint)getCurrentContentOffset {
@@ -556,11 +576,6 @@
                         for (UIGestureRecognizer *gestureRecognizer in list) {
                             [self.contentScrollView removeGestureRecognizer:gestureRecognizer];
                         }
-                        [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                            for (UIGestureRecognizer *gestureRecognizer in panGes) {
-                                [obj addGestureRecognizer:gestureRecognizer];
-                            };
-                        }];
                         for (UIGestureRecognizer *gestureRecognizer in panGes) {
                             [self.contentScrollView addGestureRecognizer:gestureRecognizer];
                         };
@@ -730,10 +745,14 @@
 - (instancetype)hoverViewHeight:(CGFloat)height {
     self.hy_hoverViewHeight = height;
     [self.cyclePageView updateHoverViewHeight];
-   return self;
+    return self;
 }
 - (instancetype)hoverViewOffset:(CGFloat)offset {
+    BOOL change = offset != self.hy_hoverOffset;
     self.hy_hoverOffset = offset;
+    if (change) {
+        [self.cyclePageView updateHoverViewOffset];
+    }
     return self;
 }
 - (instancetype)verticalScrollProgress:(void(^)(HyCyclePageView *cyclePageView, UIView *view, NSInteger index, CGFloat offset))block {

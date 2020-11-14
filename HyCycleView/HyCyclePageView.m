@@ -118,9 +118,9 @@
     
     self.contentScrollView.frame = self.bounds;
     
-    self.headerContentView.frame = CGRectMake(0, self.headerContentView.top, CGRectGetWidth(self.contentScrollView.bounds), CGRectGetHeight(self.configure.hy_headerView.bounds) + CGRectGetHeight(self.configure.hy_hoverView.bounds));
+    self.headerContentView.frame = CGRectMake(0, CGRectGetMinY(self.headerContentView.frame), CGRectGetWidth(self.contentScrollView.bounds), CGRectGetHeight(self.configure.hy_headerView.bounds) + CGRectGetHeight(self.configure.hy_hoverView.bounds));
     if (self.configure.hy_headerView) {
-        self.configure.hy_headerView.frame = CGRectMake(0, self.configure.hy_headerView.top, CGRectGetWidth(self.headerContentView.bounds), CGRectGetHeight(self.configure.hy_headerView.bounds));
+        self.configure.hy_headerView.frame = CGRectMake(0, CGRectGetMinY(self.configure.hy_headerView.frame), CGRectGetWidth(self.headerContentView.bounds), CGRectGetHeight(self.configure.hy_headerView.bounds));
     }
     if (self.configure.hy_hoverView) {
         self.configure.hy_hoverView.frame = CGRectMake(0, CGRectGetMaxY(self.configure.hy_headerView.frame), CGRectGetWidth(self.headerContentView.bounds), CGRectGetHeight(self.configure.hy_hoverView.bounds));

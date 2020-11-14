@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "HyCyclePageView.h"
 #import "HySegmentView.h"
+#import "UIView+HyFrame.h"
 
 @interface CyclePageViewBaseDemoController : UIViewController
 

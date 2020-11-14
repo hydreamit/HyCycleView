@@ -11,6 +11,7 @@
 #import "HyCustomView.h"
 #import "HyCycleView.h"
 #import "HySegmentView.h"
+#import "UIView+HyFrame.h"
 
 
 @interface CycleCustomViewDemoController ()<HyCycleViewProviderProtocol>

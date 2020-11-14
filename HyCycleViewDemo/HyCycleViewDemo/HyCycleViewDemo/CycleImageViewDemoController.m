@@ -9,6 +9,7 @@
 
 #import "CycleImageViewDemoController.h"
 #import "HyCycleView.h"
+#import "UIView+HyFrame.h"
 
 
 @interface CycleImageViewDemoController ()<HyCycleViewProviderProtocol>

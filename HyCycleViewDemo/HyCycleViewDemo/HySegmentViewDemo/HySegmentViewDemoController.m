@@ -11,6 +11,7 @@
 #import "HyDrawTextColorLabel.h"
 #import "HySegmentView.h"
 #import "HyCycleView.h"
+#import "UIView+HyFrame.h"
 
 
 @interface HySegmentViewDemoController ()<HyCycleViewProviderProtocol>

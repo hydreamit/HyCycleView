@@ -8,7 +8,6 @@
 //
 
 #import "HySegmentView.h"
-#import "UIView+HyFrame.h"
 
 
 @interface HySegmentViewAnimate : NSObject
@@ -139,7 +138,7 @@
     if (self.noNeedsLayout) {
         return;
     }
-    self.collectionView.containTo(self);
+    self.collectionView.frame = self.bounds;
     [self handleLayout];
 }
 
@@ -205,9 +204,13 @@
                 progress = self.currentSelectedIndex == i ? 1 : 0;
             }
             UIView *view = self.configure.hy_viewForItemAtIndex(nil, i, progress, HySegmentViewItemPositionCenter, nil);
-            if (i == 0) { view.width += 0.0001; }
+            if (i == 0) {
+                CGRect tempRect = view.frame;
+                tempRect.size.width += 0.0001;
+                view.frame = tempRect;
+            }
             if (view) {
-                totalWith += view.width;
+                totalWith += CGRectGetWidth(view.frame);
                 [self.itemViews addObject:view];
             }
         }
@@ -216,7 +219,7 @@
             
             if (UIEdgeInsetsEqualToEdgeInsets(self.configure.hy_inset, UIEdgeInsetsZero)) {
                 
-                CGFloat overWith = self.width - totalWith;
+                CGFloat overWith = CGRectGetWidth(self.bounds) - totalWith;
                 if (overWith >= 0) {
                     self.configure.hy_itemMargin = overWith / (self.configure.hy_items - 1 + self.configure.hy_insetAndMarginRatio * 2);
                 } else {
@@ -228,7 +231,7 @@
             } else {
                 
                 CGFloat insetLR = self.configure.hy_inset.left + self.configure.hy_inset.right;
-                CGFloat overWith = self.width - totalWith - insetLR;
+                CGFloat overWith = CGRectGetWidth(self.bounds) - totalWith - insetLR;
                 if (overWith >= 0) {
                     self.configure.hy_itemMargin = overWith / (self.configure.hy_items - 1);
                 } else {
@@ -368,8 +371,7 @@
             }
         }
         currentCell.contentView.frame = currentCell.bounds;
-        currentItemView.centerYValue(currentCell.contentView.height / 2);
-        currentItemView.centerXValue(currentCell.contentView.width / 2);
+        currentItemView.center = CGPointMake(CGRectGetWidth(currentCell.contentView.bounds) / 2, CGRectGetHeight(currentCell.contentView.bounds) / 2);
     } else {
         [currentCell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     }
@@ -377,7 +379,7 @@
 
 - (void)scrollToCenterWithIndex:(NSInteger)index {
 
-    if (self.collectionView.contentSize.width <= self.collectionView.width ||
+    if (self.collectionView.contentSize.width <= CGRectGetWidth(self.collectionView.bounds) ||
         !self.configure.hy_items ||
         self.collectionView.isDragging) {
         return;
@@ -417,9 +419,9 @@
         if (CGRectEqualToRect(rect, CGRectZero) && index < self.itemViews.count) {
             CGFloat totalWith = 0.0;
             for (NSInteger i = 0; i < index; i++) {
-                totalWith += self.itemViews[i].width + self.configure.hy_itemMargin;
+                totalWith += CGRectGetWidth(self.itemViews[i].bounds) + self.configure.hy_itemMargin;
             }
-            rect = CGRectMake(self.configure.hy_inset.left + totalWith, self.configure.hy_inset.top, self.itemViews[index].width, self.height - self.configure.hy_inset.top - self.configure.hy_inset.bottom);
+            rect = CGRectMake(self.configure.hy_inset.left + totalWith, self.configure.hy_inset.top, CGRectGetWidth(self.itemViews[index].bounds), CGRectGetHeight(self.bounds) - self.configure.hy_inset.top - self.configure.hy_inset.bottom);
         }
         cell = [[UICollectionViewCell alloc] initWithFrame:rect];
     }
@@ -503,7 +505,7 @@
                   layout:(UICollectionViewLayout*)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    return CGSizeMake(self.itemViews[indexPath.row].width, collectionView.height - self.configure.hy_inset.top - self.configure.hy_inset.bottom);
+    return CGSizeMake(CGRectGetWidth(self.itemViews[indexPath.row].bounds), CGRectGetHeight(collectionView.bounds) - self.configure.hy_inset.top - self.configure.hy_inset.bottom);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {

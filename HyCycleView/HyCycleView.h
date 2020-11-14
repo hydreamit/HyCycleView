@@ -8,18 +8,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIView+HyFrame.h"
+
 
 @class HyCycleView;
 
 NS_ASSUME_NONNULL_BEGIN
 
-
+/// 加载方式
 typedef NS_ENUM(NSUInteger, HyCycleViewLoadStyle) {
     HyCycleViewLoadStyleWillAppear,
     HyCycleViewLoadStyleDidAppear
 };
 
+/// 滚动方向
 typedef NS_ENUM(NSUInteger, HyCycleViewDirection) {
     HyCycleViewDirectionLeft,
     HyCycleViewDirectionRight,

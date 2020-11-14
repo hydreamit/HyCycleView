@@ -9,19 +9,21 @@
 
 #import <UIKit/UIKit.h>
 #import "HyCycleView.h"
-#import "UIView+HyFrame.h"
 
 
+/// 向上滚动头部动画
 typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderViewUpAnimation) {
     HyCyclePageViewHeaderViewUpAnimationNone,
     HyCyclePageViewHeaderViewUpAnimationCover
 };
 
+/// 向下滚动头部动画
 typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderViewDownAnimation) {
     HyCyclePageViewHeaderViewDownAnimationNone,
     HyCyclePageViewHeaderViewDownAnimationScale
 };
 
+// 刷新位置
 typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderRefreshPosition) {
     HyCyclePageViewHeaderRefreshPositionTop,
     HyCyclePageViewHeaderRefreshPositionCenter

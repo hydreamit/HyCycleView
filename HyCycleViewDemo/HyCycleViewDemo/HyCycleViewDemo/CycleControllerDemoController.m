@@ -10,6 +10,7 @@
 #import "CycleControllerDemoController.h"
 #import "HySegmentView.h"
 #import "HyCycleView.h"
+#import "UIView+HyFrame.h"
 
 
 @interface CycleControllerDemoController ()
@@ -85,16 +86,16 @@
     
     
     self.cycleView = [[HyCycleView alloc] initWithFrame:CGRectMake(30, 10, self.scrollView.width - 60, 180)];
-    [[[self.cycleView.configure totalIndexs:^NSInteger(HyCycleView * _Nonnull cycleView) {
-        return 4;
-    }] viewProviderAtIndex:^id<HyCycleViewProviderProtocol> _Nonnull(HyCycleView * _Nonnull cycleView, NSInteger index) {
-        return [CycleControllerDemoTestController new];
-    }] scrollProgress:^(HyCycleView * _Nonnull cycleView, NSInteger fromIndex, NSInteger toIndex, CGFloat progress) {
-        __strong typeof(_self) self = _self;
-        [self.segmentView clickItemFromIndex:fromIndex
-                                         toIndex:toIndex
-                                        progress:progress];
-    }];
+    [[[[self.cycleView.configure totalIndexs:^NSInteger(HyCycleView * _Nonnull cycleView) {
+            return 4;
+        }] viewProviderAtIndex:^id<HyCycleViewProviderProtocol> _Nonnull(HyCycleView * _Nonnull cycleView, NSInteger index) {
+            return [CycleControllerDemoTestController new];
+        }] scrollProgress:^(HyCycleView * _Nonnull cycleView, NSInteger fromIndex, NSInteger toIndex, CGFloat progress) {
+            __strong typeof(_self) self = _self;
+            [self.segmentView clickItemFromIndex:fromIndex
+                                             toIndex:toIndex
+                                            progress:progress];
+    }] isCycle:YES];
     
     [self.scrollView addSubview:self.cycleView];
     [self.cycleView reloadData];

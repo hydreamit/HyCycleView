@@ -28,9 +28,10 @@
     self.imageViews = @[self.imageView1, self.imageView2, self.iamgeView3];
 }
 
-- (void)setDict:(NSDictionary *)dict {
-    _dict = dict;
-
+- (void)cycleViewReloadDataAtIndex:(NSInteger)index parameter:(id)parameter {
+    
+    NSDictionary *dict = parameter;
+    
     self.titleL.text = dict[@"title"];
     self.subL.text = dict[@"subTitle"];
     NSArray *images = dict[@"content"];

@@ -158,6 +158,10 @@
     dispatch_semaphore_signal(self.semaphore);
 }
 
+- (void)reloadDataAtIndex:(NSInteger)index parameter:(id)parameter {
+    [self.cycleView reloadDataAtIndex:index parameter:parameter];
+}
+
 - (void)updateContentInsetTop:(CGFloat)top {
     self.insetTop = top;
     [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj,

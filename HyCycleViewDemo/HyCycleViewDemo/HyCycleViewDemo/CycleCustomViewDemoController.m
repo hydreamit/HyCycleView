@@ -93,7 +93,7 @@
         [segment clickItemAtIndex:roundingIndex];
     }] viewWillAppearAtIndex:^(HyCycleView * _Nonnull cycleView, HyCustomView *view, NSInteger index, BOOL isFirstLoad) {
         if (isFirstLoad) {
-            [view setDict:dataArray[index]];
+            [cycleView reloadDataAtIndex:index parameter:dataArray[index]];
         }
     }] viewProviderAtIndex:^id<HyCycleViewProviderProtocol> _Nonnull(HyCycleView * _Nonnull cycleView, NSInteger index) {
         __strong typeof(_self) self = _self;
@@ -137,7 +137,7 @@
     }] viewWillAppearAtIndex:^(HyCycleView * _Nonnull cycleView, UIView *contentView, NSInteger index, BOOL isFirstLoad) {
         if (isFirstLoad) {
             if ([contentView isKindOfClass:HyCustomView.class]) {
-                [((HyCustomView *)contentView) setDict:dataArray[index]];
+                [cycleView reloadDataAtIndex:index parameter:dataArray[index]];
             } else {
                 ((UIImageView *)contentView).contentMode = UIViewContentModeScaleAspectFill;
                 ((UIImageView *)contentView).image = [UIImage imageNamed:dataArray[index][@"image"]];

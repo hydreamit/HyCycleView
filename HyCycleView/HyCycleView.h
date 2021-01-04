@@ -41,6 +41,13 @@ typedef NS_ENUM(NSUInteger, HyCycleViewDirection) {
 @end
 
 
+/// 刷新数据协议 自定义分页view遵循 当HyCycleView实例调用 reloadDataAtIndex:parameter:会回调协议里的方法
+@protocol HyCycleViewReloadDataProtocol <NSObject>
+@optional
+- (void)cycleViewReloadDataAtIndex:(NSInteger)index parameter:(id _Nullable)parameter;
+@end
+
+
 @interface HyCycleViewProvider<__covariant CycleViewType> : NSObject
 /// 是否引用数据源对象(已被其他对象引用不用设)
 @property (nonatomic,assign) BOOL retainProvider;
@@ -52,6 +59,8 @@ typedef NS_ENUM(NSUInteger, HyCycleViewDirection) {
 - (instancetype)viewDidDisAppear:(void(^)(CycleViewType cycleView, id view))block;
 /// 点击事件回调
 - (instancetype)viewClickAction:(void(^)(CycleViewType cycleView, id view))block;
+///  reloadDataAtIndex:parameter:： 事件回调
+- (instancetype)viewReloadData:(void(^)(CycleViewType cycleView, id view, id _Nullable parameter))block;
 @end
 @protocol HyCycleViewProviderProtocol <NSObject>
 - (void)configCycleView:(HyCycleViewProvider<HyCycleView *> *)provider index:(NSInteger)index;
@@ -89,7 +98,7 @@ typedef NS_ENUM(NSUInteger, HyCycleViewDirection) {
 - (instancetype)roundingIndexChange:(void(^)(CycleViewType cycleView, NSInteger indexs, NSInteger roundingIndex))block;
 /// 滚动回调
 - (instancetype)scrollProgress:(void(^)(CycleViewType cycleView, NSInteger fromIndex, NSInteger toIndex, CGFloat progress))block;
-// 滚动代理
+/// 滚动代理
 - (instancetype)scrollDelegate:(id<HyCycleViewScrollDelegate>)delegate;
 @end
 
@@ -97,21 +106,41 @@ typedef NS_ENUM(NSUInteger, HyCycleViewDirection) {
 
 @interface HyCycleView : UIView
 
+/// 配置
 @property (nonatomic, strong, readonly) HyCycleViewConfigure<HyCycleView *,
                                                           id<HyCycleViewProviderProtocol>> *configure;
 
+/// 当前下标
 @property (nonatomic, assign, readonly) NSInteger currentIndex;
+/// 当前可见视图
 @property (nonatomic, strong, readonly) NSArray<UIView *> *visibleViews;
+/// 当前可见视图的下标
 @property (nonatomic, strong, readonly) NSArray<NSNumber *> *visibleIndexs;
+/// 已经加载过的下标
 @property (nonatomic, strong, readonly) NSIndexSet *didLoadIndexs;
-@property (nonatomic, copy, readonly) UIView *(^viewAtIndex)(NSInteger);
+/// 根据下标去获取对应的视图，没加载过的返回nil
+@property (nonatomic, copy, readonly, nullable) UIView *(^viewAtIndex)(NSInteger);
 
 
+/// 刷新整个视图
 - (void)reloadData;
+/// 刷新某个视图
+- (void)reloadDataAtIndex:(NSInteger)index parameter:(id _Nullable)parameter;
 
+
+/// 滚动到下一页
+/// @param animated 是否动画
 - (void)scrollToNextIndexWithAnimated:(BOOL)animated;
+
+/// 滚动到上一页
+/// @param animated 是否动画
 - (void)scrollToLastIndexWithAnimated:(BOOL)animated;
+
+/// 滚动到指定页
+/// @param index 指定下标
+/// @param animated 是否动画
 - (void)scrollToIndex:(NSInteger)index animated:(BOOL)animated;
+
 
 @end
 

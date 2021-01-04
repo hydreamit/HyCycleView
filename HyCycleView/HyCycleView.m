@@ -19,6 +19,7 @@
 @property (nonatomic, copy) void (^hy_viewWillAppear)(id, id, BOOL);
 @property (nonatomic, copy) void (^hy_viewDidDisAppear)(id, id);
 @property (nonatomic, copy) void (^hy_viewClickAction)(id, id);
+@property (nonatomic, copy) void (^hy_viewReloadData)(id, id, id);
 @end
 @implementation HyCycleViewProvider
 - (instancetype)view:(UIView * _Nonnull (^)(id _Nonnull))block {
@@ -35,6 +36,10 @@
 }
 - (instancetype)viewClickAction:(void (^)(id _Nonnull, id _Nonnull))block {
     self.hy_viewClickAction = [block copy];
+    return self;
+}
+- (instancetype)viewReloadData:(void (^)(id _Nonnull, id _Nonnull, id _Nullable))block {
+    self.hy_viewReloadData = [block copy];
     return self;
 }
 @end
@@ -235,6 +240,25 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
             [self startTimer];
         }
     });
+    
+    dispatch_semaphore_signal(self.semaphore);
+}
+
+- (void)reloadDataAtIndex:(NSInteger)index parameter:(id)parameter {
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    
+    UIView *atView = self.viewAtIndex(index);
+    if (!atView) { return; }
+    
+    [self viewProviderWithIndex:index handler:^(HyCycleViewProvider *provider) {
+        !provider.hy_viewReloadData ?: provider.hy_viewReloadData(self, atView, parameter);
+    }];
+    
+    if (atView &&
+        [atView conformsToProtocol:@protocol(HyCycleViewReloadDataProtocol)] &&
+        [atView respondsToSelector:@selector(cycleViewReloadDataAtIndex:parameter:)]) {
+        [(id<HyCycleViewReloadDataProtocol>)atView cycleViewReloadDataAtIndex:index parameter:parameter];
+    }
     
     dispatch_semaphore_signal(self.semaphore);
 }
@@ -918,5 +942,6 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 - (NSIndexSet *)didLoadIndexs {
     return self.didLoadIndexSet.copy;
 }
+
 
 @end

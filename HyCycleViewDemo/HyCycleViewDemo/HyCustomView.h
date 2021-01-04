@@ -8,9 +8,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HyCycleView.h"
 
-@interface HyCustomView : UIView
-
-@property (nonatomic,strong) NSDictionary *dict;
+@interface HyCustomView : UIView<HyCycleViewReloadDataProtocol>
 
 @end

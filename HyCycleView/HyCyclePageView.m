@@ -149,6 +149,7 @@
                                                                      NSUInteger idx,
                                                                      BOOL *stop) {
         [obj removeObserver:self forKeyPath:@"contentOffset"];
+        [obj removeObserver:self forKeyPath:@"contentSize"];
     }];
     [self.pageScrollViewsDict removeAllObjects];
     [self.viewProviderDict removeAllObjects];
@@ -270,6 +271,7 @@
         if ([obj isKindOfClass:UIScrollView.class]) {
             obj.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.headerContentView.bounds) + self.insetTop, 0, 0, 0);
             obj.contentOffset = [self getCurrentContentOffset];
+            obj.contentSize = [self getCurrentContentSizeWithScrollView:obj];
         }
     }];
 }
@@ -296,6 +298,15 @@
 //    }
 
     return CGPointMake(0, contentOffsetY >= hoverContentOffsetY ? hoverContentOffsetY : contentOffsetY);
+}
+
+- (CGSize)getCurrentContentSizeWithScrollView:(UIScrollView *)scrollView {
+    CGFloat hoverOffset = (CGRectGetHeight(self.configure.hy_hoverView.bounds) + self.configure.hy_hoverOffset);
+    CGSize contentSize = scrollView.contentSize;
+    if (contentSize.height < scrollView.bounds.size.height - hoverOffset) {
+        contentSize.height = scrollView.bounds.size.height - hoverOffset;
+    }
+    return contentSize;
 }
 
 - (void)handleViewWithContainScrollView:(UIScrollView *)containScrollView
@@ -341,6 +352,7 @@
         
         UIScrollView *scrollView = (UIScrollView *)view;
         scrollView.alwaysBounceVertical = YES;
+      
         if (@available(iOS 11.0, *)) {
             scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
         }
@@ -381,13 +393,20 @@
         [self.panGesturesDict setObject:observeScrollView.gestureRecognizers forKey:@(index)];
         [self.pageScrollViewsDict setObject:observeScrollView forKey:@(index)];
         [self handleRefreshWithScrollView:observeScrollView index:index];
-        
-        observeScrollView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.headerContentView.bounds) + self.insetTop, 0, 0, 0);
-        observeScrollView.contentOffset = [self getCurrentContentOffset];
-        [observeScrollView addObserver:self
-                            forKeyPath:@"contentOffset"
-                               options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-                               context:(__bridge void * _Nullable)(@(index))];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            observeScrollView.contentSize = [self getCurrentContentSizeWithScrollView:observeScrollView];
+            [observeScrollView addObserver:self
+                                forKeyPath:@"contentSize"
+                                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                                   context:(__bridge void * _Nullable)(@(index))];
+            
+            observeScrollView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.headerContentView.bounds) + self.insetTop, 0, 0, 0);
+            observeScrollView.contentOffset = [self getCurrentContentOffset];
+            [observeScrollView addObserver:self
+                                forKeyPath:@"contentOffset"
+                                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                                   context:(__bridge void * _Nullable)(@(index))];
+        });
     }
 }
 
@@ -423,108 +442,120 @@
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context {
     
-    CGPoint newContentOffset = [change[NSKeyValueChangeNewKey] CGPointValue];
-    CGPoint oldContentOffset = [change[NSKeyValueChangeOldKey] CGPointValue];
-    NSInteger currentIndex =  [((NSNumber *)(__bridge typeof(NSNumber *))context) integerValue];
-    
-    if (newContentOffset.y == oldContentOffset.y) {return;}
-    if (CGRectGetHeight(self.configure.hy_headerView.bounds)) {
+    if ([keyPath isEqualToString:@"contentSize"]) {
         
-        CGFloat contentTop = CGRectGetHeight(self.headerContentView.bounds);
+        CGSize newContentSize = [change[NSKeyValueChangeNewKey] CGSizeValue];
+        CGSize oldContentSize = [change[NSKeyValueChangeOldKey] CGSizeValue];
+        if (CGSizeEqualToSize(newContentSize, oldContentSize) || !newContentSize.width) {
+            return;
+        }
+        object.contentSize = [self getCurrentContentSizeWithScrollView:object];
+
+    } else if ([keyPath isEqualToString:@"contentOffset"]) {
         
-        if (contentTop) {
+        CGPoint newContentOffset = [change[NSKeyValueChangeNewKey] CGPointValue];
+        CGPoint oldContentOffset = [change[NSKeyValueChangeOldKey] CGPointValue];
+        NSInteger currentIndex =  [((NSNumber *)(__bridge typeof(NSNumber *))context) integerValue];
+        
+        if (newContentOffset.y == oldContentOffset.y) {return;}
+        if (CGRectGetHeight(self.configure.hy_headerView.bounds)) {
             
-            CGFloat hoverOffset = (CGRectGetHeight(self.configure.hy_hoverView.bounds) + self.configure.hy_hoverOffset);
-            if (newContentOffset.y >= - hoverOffset) {
+            CGFloat contentTop = CGRectGetHeight(self.headerContentView.bounds);
+            
+            if (contentTop) {
                 
-                CGRect rect = self.headerContentView.frame;
-                rect.origin.y = - (contentTop - hoverOffset);
-                self.headerContentView.frame = rect;
-                
-            } else if (newContentOffset.y <= - contentTop) {
-                
-                if (self.configure.hy_headerRefreshPosition == HyCyclePageViewHeaderRefreshPositionCenter) {
-                    self.headerContentView.frame = CGRectMake(0, 0, CGRectGetWidth(self.contentScrollView.bounds), CGRectGetHeight(self.configure.hy_headerView.bounds) + CGRectGetHeight(self.configure.hy_hoverView.bounds));
-                    self.configure.hy_headerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.headerContentView.bounds), CGRectGetHeight(self.configure.hy_headerView.bounds));
-                    self.configure.hy_hoverView.frame = CGRectMake(0, CGRectGetMaxY(self.configure.hy_headerView.frame), CGRectGetWidth(self.headerContentView.bounds), CGRectGetHeight(self.configure.hy_hoverView.bounds));
+                CGFloat hoverOffset = (CGRectGetHeight(self.configure.hy_hoverView.bounds) + self.configure.hy_hoverOffset);
+                if (newContentOffset.y >= - hoverOffset) {
                     
-                  } else {
-                      
-                      CGRect tempRect = self.headerContentView.frame;
-                      tempRect.origin.y = - contentTop - newContentOffset.y;;
-                      self.headerContentView.frame = tempRect;
-                      if (self.configure.hy_headerViewDownAnimation == HyCyclePageViewHeaderViewDownAnimationScale) {
-                          self.headerContentView.clipsToBounds = NO;
-                          if (self.configure.hy_headerView) {
-                              CGFloat heigth = CGRectGetHeight(self.headerContentView.bounds) - CGRectGetHeight(self.configure.hy_hoverView.bounds);
-                              CGFloat top = CGRectGetMinY(self.headerContentView.frame);
-                              CGFloat width = CGRectGetWidth(self.headerContentView.frame);
-                              self.configure.hy_headerView.frame = CGRectMake(- top / 2, - top, width + top, heigth + top);
-                          }
-                          if (self.configure.hy_hoverView) {
-                              tempRect = self.configure.hy_hoverView.frame;
-                              tempRect.origin.y = CGRectGetMaxY(self.configure.hy_headerView.frame);
-                              self.configure.hy_hoverView.frame = tempRect;
+                    CGRect rect = self.headerContentView.frame;
+                    rect.origin.y = - (contentTop - hoverOffset);
+                    self.headerContentView.frame = rect;
+                    
+                } else if (newContentOffset.y <= - contentTop) {
+                    
+                    if (self.configure.hy_headerRefreshPosition == HyCyclePageViewHeaderRefreshPositionCenter) {
+                        self.headerContentView.frame = CGRectMake(0, 0, CGRectGetWidth(self.contentScrollView.bounds), CGRectGetHeight(self.configure.hy_headerView.bounds) + CGRectGetHeight(self.configure.hy_hoverView.bounds));
+                        self.configure.hy_headerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.headerContentView.bounds), CGRectGetHeight(self.configure.hy_headerView.bounds));
+                        self.configure.hy_hoverView.frame = CGRectMake(0, CGRectGetMaxY(self.configure.hy_headerView.frame), CGRectGetWidth(self.headerContentView.bounds), CGRectGetHeight(self.configure.hy_hoverView.bounds));
+                        
+                      } else {
+                          
+                          CGRect tempRect = self.headerContentView.frame;
+                          tempRect.origin.y = - contentTop - newContentOffset.y;;
+                          self.headerContentView.frame = tempRect;
+                          if (self.configure.hy_headerViewDownAnimation == HyCyclePageViewHeaderViewDownAnimationScale) {
+                              self.headerContentView.clipsToBounds = NO;
+                              if (self.configure.hy_headerView) {
+                                  CGFloat heigth = CGRectGetHeight(self.headerContentView.bounds) - CGRectGetHeight(self.configure.hy_hoverView.bounds);
+                                  CGFloat top = CGRectGetMinY(self.headerContentView.frame);
+                                  CGFloat width = CGRectGetWidth(self.headerContentView.frame);
+                                  self.configure.hy_headerView.frame = CGRectMake(- top / 2, - top, width + top, heigth + top);
+                              }
+                              if (self.configure.hy_hoverView) {
+                                  tempRect = self.configure.hy_hoverView.frame;
+                                  tempRect.origin.y = CGRectGetMaxY(self.configure.hy_headerView.frame);
+                                  self.configure.hy_hoverView.frame = tempRect;
+                              }
                           }
                       }
-                  }
-            } else {
-                
-                CGRect tempRect = self.headerContentView.frame;
-                tempRect.origin.y = - contentTop - newContentOffset.y;;
-                self.headerContentView.frame = tempRect;
-                CGFloat topValue = CGRectGetMinY(self.configure.hy_headerView.frame);
-                if (self.configure.hy_headerViewUpAnimation == HyCyclePageViewHeaderViewUpAnimationCover &&
-                    self.configure.hy_headerView) {
-                    self.headerContentView.clipsToBounds = YES;
-                    topValue = - CGRectGetMinY(self.headerContentView.frame) * 2 / 3;
+                } else {
+                    
+                    CGRect tempRect = self.headerContentView.frame;
+                    tempRect.origin.y = - contentTop - newContentOffset.y;;
+                    self.headerContentView.frame = tempRect;
+                    CGFloat topValue = CGRectGetMinY(self.configure.hy_headerView.frame);
+                    if (self.configure.hy_headerViewUpAnimation == HyCyclePageViewHeaderViewUpAnimationCover &&
+                        self.configure.hy_headerView) {
+                        self.headerContentView.clipsToBounds = YES;
+                        topValue = - CGRectGetMinY(self.headerContentView.frame) * 2 / 3;
+                    }
+                    tempRect = self.configure.hy_headerView.frame;
+                    tempRect.size.height = CGRectGetHeight(self.headerContentView.frame) - CGRectGetHeight(self.configure.hy_hoverView.frame);
+                    tempRect.origin.y = topValue;
+                    self.configure.hy_headerView.frame = tempRect;
                 }
-                tempRect = self.configure.hy_headerView.frame;
-                tempRect.size.height = CGRectGetHeight(self.headerContentView.frame) - CGRectGetHeight(self.configure.hy_hoverView.frame);
-                tempRect.origin.y = topValue;
-                self.configure.hy_headerView.frame = tempRect;
-            }
-            
-            if (currentIndex == self.cycleView.currentIndex) {
-                if (newContentOffset.y <= - hoverOffset) {
-                    if (newContentOffset.y >= - CGRectGetHeight(self.headerContentView.frame)) {
+                
+                if (currentIndex == self.cycleView.currentIndex) {
+                    if (newContentOffset.y <= - hoverOffset) {
+                        if (newContentOffset.y >= - CGRectGetHeight(self.headerContentView.frame)) {
+                            [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                                if (object != obj) {
+                                    if (obj.contentOffset.y >= - CGRectGetHeight(self.headerContentView.frame)) {
+                                        obj.contentOffset = newContentOffset;
+                                    }
+                                }
+                            }];
+                        }
+                        
+                    } else {
                         [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                             if (object != obj) {
-                                if (obj.contentOffset.y >= - CGRectGetHeight(self.headerContentView.frame)) {
-                                    obj.contentOffset = newContentOffset;
-                                }
+                                if (obj.contentOffset.y < - hoverOffset) {
+                                    obj.contentOffset = CGPointMake(0, -hoverOffset);
+                                };
                             }
                         }];
                     }
-                    
-                } else {
-                    [self.pageScrollViewsDict.allValues enumerateObjectsUsingBlock:^(UIScrollView *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        if (object != obj) {
-                            if (obj.contentOffset.y < - hoverOffset) {
-                                obj.contentOffset = CGPointMake(0, -hoverOffset);
-                            };
-                        }
-                    }];
                 }
             }
         }
-    }
-        
-    if (currentIndex == self.cycleView.currentIndex) {
-        
-        !self.configure.hy_verticalScrollProgress ?:
-        self.configure.hy_verticalScrollProgress(self, self.viewAtIndex(currentIndex), currentIndex, newContentOffset.y + object.contentInset.top);
-        
-        if ([self.headerView conformsToProtocol:@protocol(HyCyclePageViewScrollProgressProtocol)] &&
-           [self.headerView respondsToSelector:@selector(hy_verticalScrollProgress)]) {
-            !((id<HyCyclePageViewScrollProgressProtocol>)self.headerView).hy_verticalScrollProgress ?:
-           ((id<HyCyclePageViewScrollProgressProtocol>)self.headerView).hy_verticalScrollProgress(self, self.viewAtIndex(currentIndex), currentIndex, newContentOffset.y + object.contentInset.top);
-        }
-        
-        if ([self.hoverView conformsToProtocol:@protocol(HyCyclePageViewScrollProgressProtocol)] &&
-           [self.hoverView respondsToSelector:@selector(hy_verticalScrollProgress)]) {
-           !((id<HyCyclePageViewScrollProgressProtocol>)self.hoverView).hy_verticalScrollProgress ?:
-           ((id<HyCyclePageViewScrollProgressProtocol>)self.hoverView).hy_verticalScrollProgress(self, self.viewAtIndex(currentIndex), currentIndex, newContentOffset.y + object.contentInset.top);
+            
+        if (currentIndex == self.cycleView.currentIndex) {
+            
+            !self.configure.hy_verticalScrollProgress ?:
+            self.configure.hy_verticalScrollProgress(self, self.viewAtIndex(currentIndex), currentIndex, newContentOffset.y + object.contentInset.top);
+            
+            if ([self.headerView conformsToProtocol:@protocol(HyCyclePageViewScrollProgressProtocol)] &&
+               [self.headerView respondsToSelector:@selector(hy_verticalScrollProgress)]) {
+                !((id<HyCyclePageViewScrollProgressProtocol>)self.headerView).hy_verticalScrollProgress ?:
+               ((id<HyCyclePageViewScrollProgressProtocol>)self.headerView).hy_verticalScrollProgress(self, self.viewAtIndex(currentIndex), currentIndex, newContentOffset.y + object.contentInset.top);
+            }
+            
+            if ([self.hoverView conformsToProtocol:@protocol(HyCyclePageViewScrollProgressProtocol)] &&
+               [self.hoverView respondsToSelector:@selector(hy_verticalScrollProgress)]) {
+               !((id<HyCyclePageViewScrollProgressProtocol>)self.hoverView).hy_verticalScrollProgress ?:
+               ((id<HyCyclePageViewScrollProgressProtocol>)self.hoverView).hy_verticalScrollProgress(self, self.viewAtIndex(currentIndex), currentIndex, newContentOffset.y + object.contentInset.top);
+            }
         }
     }
 }
@@ -559,6 +590,8 @@
             if (isFirstLoad) {
                 [self handleViewWithContainScrollView:view
                                                 index:index];
+            } else {
+                
             }
             !self.configure.hy_viewWillAppearAtIndex ?:
             self.configure.hy_viewWillAppearAtIndex(self, self.viewAtIndex(index), index, isFirstLoad);
@@ -702,6 +735,7 @@
                                                                      NSUInteger idx,
                                                                      BOOL *stop) {
         [obj removeObserver:self forKeyPath:@"contentOffset"];
+        [obj removeObserver:self forKeyPath:@"contentSize"];
     }];
 }
 

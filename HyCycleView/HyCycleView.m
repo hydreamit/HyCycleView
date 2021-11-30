@@ -266,6 +266,10 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
     dispatch_semaphore_signal(self.semaphore);
 }
 
+- (void)setScrollEnabled:(BOOL)flag {
+    self.collectionView.scrollEnabled = flag;
+}
+
 - (void)scrollToNextIndexWithAnimated:(BOOL)animated {
     NSInteger index = self.currentIndex + 1;
     if (index > self.totalIndexs - 1) {

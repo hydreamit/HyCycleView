@@ -77,6 +77,7 @@
 @property (nonatomic, assign) NSInteger currentProgress;
 @property (nonatomic,assign) BOOL noNeedsLayout;
 @property (nonatomic,strong) NSArray *observers;
+@property (nonatomic,assign) BOOL clickEnabled;
 @end
 
 
@@ -86,6 +87,7 @@
                       configureBlock:(void (^)(HySegmentViewConfigure *configure))configureBlock {
     
     HySegmentView *segmentView = [[self alloc] initWithFrame:frame];
+    segmentView.clickEnabled = YES;
     segmentView.currentProgress = 1;
     segmentView.backgroundColor = UIColor.whiteColor;
     segmentView.configureBlock = [configureBlock copy];
@@ -164,6 +166,10 @@
                                       progress:progress];
         dispatch_semaphore_signal(self.semaphore);
     }
+}
+
+- (void)setClickItemEnabled:(BOOL)flag {
+    self.clickEnabled = flag;
 }
 
 - (void)reloadData {
@@ -476,6 +482,10 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (!self.clickEnabled) {
+        return;
+    }
     
     if (self.currentProgress != 1) { return;}
     

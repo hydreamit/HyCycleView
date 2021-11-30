@@ -127,6 +127,8 @@ typedef NS_ENUM(NSUInteger, HyCycleViewDirection) {
 /// 刷新某个视图
 - (void)reloadDataAtIndex:(NSInteger)index parameter:(id _Nullable)parameter;
 
+/// 是否能水平滚动
+- (void)setScrollEnabled:(BOOL)flag;
 
 /// 滚动到下一页
 /// @param animated 是否动画

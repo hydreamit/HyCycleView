@@ -59,6 +59,9 @@ typedef NS_ENUM(NSUInteger, HySegmentViewItemPosition) {
 
 - (void)reloadData;
 
+- (void)setClickItemEnabled:(BOOL)flag;
+
+
 @end
 
 

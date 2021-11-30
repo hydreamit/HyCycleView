@@ -23,10 +23,17 @@ typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderViewDownAnimation) {
     HyCyclePageViewHeaderViewDownAnimationScale
 };
 
-// 刷新位置
+/// 刷新位置
 typedef NS_ENUM(NSUInteger, HyCyclePageViewHeaderRefreshPosition) {
     HyCyclePageViewHeaderRefreshPositionTop,
     HyCyclePageViewHeaderRefreshPositionCenter
+};
+
+
+/// 内容模式(当内容数据不够铺满时）
+typedef NS_ENUM(NSUInteger, HyCyclePageViewContentMode) {
+    HyCyclePageViewContentModeDefault,
+    HyCyclePageViewContentModeExpandToFill
 };
 
 
@@ -63,6 +70,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)hoverViewHeight:(CGFloat)height;
 /// 悬停偏移量
 - (instancetype)hoverViewOffset:(CGFloat)offset;
+
+/// 内容模式(默认： HyCyclePageViewContentModeExpandToFill)
+- (instancetype)contentMode:(HyCyclePageViewContentMode)mode;
 
 /// 垂直滑动回调
 - (instancetype)verticalScrollProgress:(void(^)(HyCyclePageView *cyclePageView, UIView *view, NSInteger index, CGFloat offset))block;
@@ -105,6 +115,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 刷新某个视图
 - (void)reloadDataAtIndex:(NSInteger)index parameter:(id _Nullable)parameter;
 
+/// 是否能水平滚动
+- (void)setScrollEnabled:(BOOL)flag;
 
 /// 跟新contentInset.top
 - (void)updateContentInsetTop:(CGFloat)top;

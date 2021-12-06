@@ -188,11 +188,12 @@
     [self.itemViews removeAllObjects];
     [self.animationViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.animationViews removeAllObjects];
-    if (self.configure.hy_startIndex < self.configure.hy_items) {
-        self.currentSelectedIndex = self.configure.hy_startIndex;
-    }
     [self handleLayout];
     [self.collectionView reloadData];
+    self.currentSelectedIndex = self.configure.hy_startIndex < self.configure.hy_items ? self.configure.hy_startIndex : 0;
+    [self handleAnimationViewWithFromIndex:self.currentSelectedIndex
+                                   toIndex:self.currentSelectedIndex
+                                  progress:1];
 }
 
 - (void)handleLayout {

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = 'HyCycleView'
-s.version      = '1.0.7'
+s.version      = '1.0.8'
 s.summary      = 'HyCycleView HyCyclePageView HySegmentView'
 s.homepage     = 'https://github.com/hydreamit/HyCycleView'
 s.license      = 'MIT'
